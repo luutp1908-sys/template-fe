@@ -1,0 +1,44 @@
+.menu-bar {
+  width: 80px;
+  height: 100vh;
+  background: white;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 0;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.menu-item {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  transition: all 0.2s ease;
+  background: #f5f8fc;
+  color: #666;
+}
+
+.menu-item:hover {
+  background: #e3f0ff;
+  color: #0066cc;
+}
+
+.menu-item.active {
+  background: #0066cc;
+  color: white;
+}
+
+.menu-divider {
+  width: 40px;
+  height: 1px;
+  background: #e5e7eb;
+  margin: 8px 0;
+}
