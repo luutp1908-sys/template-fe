@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import Moveable from 'react-moveable'
 
@@ -43,7 +43,7 @@ const CanvasObject = styled.div`
   user-select: none;
   background: white;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  transition: all 0.15s ease;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
@@ -71,8 +71,19 @@ const ShapeBox = styled.div`
 
 export const Canvas = ({ objects, selectedId, onSelectObject, onUpdateObject }) => {
   const targetRefs = useRef({})
+  const moveableRef = useRef(null)
 
   const selectedObject = objects.find((obj) => obj.id === selectedId)
+
+  useEffect(() => {
+    if (!selectedObject) return
+
+    const frame = requestAnimationFrame(() => {
+      moveableRef.current?.updateRect()
+    })
+
+    return () => cancelAnimationFrame(frame)
+  }, [selectedObject])
 
   return (
     <CanvasWrapper>
@@ -109,11 +120,14 @@ export const Canvas = ({ objects, selectedId, onSelectObject, onUpdateObject }) 
 
         {selectedObject && (
           <Moveable
+            ref={moveableRef}
             target={targetRefs.current[selectedId]}
             draggable
             resizable
             rotatable
             keepRatio={false}
+            useResizeObserver
+            useMutationObserver
             throttleDrag={0}
             throttleResize={0}
             throttleRotate={0}
@@ -122,6 +136,9 @@ export const Canvas = ({ objects, selectedId, onSelectObject, onUpdateObject }) 
               target.style.top = `${top}px`
               onUpdateObject(selectedId, { x: left, y: top })
             }}
+            onDragEnd={() => {
+              moveableRef.current?.updateRect()
+            }}
             onResize={({ target, width, height, left, top }) => {
               target.style.width = `${width}px`
               target.style.height = `${height}px`
@@ -129,9 +146,15 @@ export const Canvas = ({ objects, selectedId, onSelectObject, onUpdateObject }) 
               target.style.top = `${top}px`
               onUpdateObject(selectedId, { width, height, x: left, y: top })
             }}
+            onResizeEnd={() => {
+              moveableRef.current?.updateRect()
+            }}
             onRotate={({ target, rotate }) => {
               target.style.transform = `rotate(${rotate}deg)`
               onUpdateObject(selectedId, { rotate })
+            }}
+            onRotateEnd={() => {
+              moveableRef.current?.updateRect()
             }}
           />
         )}
