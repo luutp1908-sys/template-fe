@@ -1,6 +1,6 @@
 # Test Implementation Status
 
-Last updated: 2026-07-14 (phase 1 complete, phase 2 complete, phase 3 complete)
+Last updated: 2026-07-15 (phase 1-3 complete, phase 4 in progress)
 Owner: Team
 
 ## Phase 1: Tooling Setup
@@ -34,11 +34,11 @@ Next action: start E2E geometry test harness
 - [ ] Drag-release alignment test
 - [ ] Resize-release alignment test
 - [ ] Rotate-release alignment test
-- [ ] Backdrop deselection test
+- [x] Backdrop deselection test
 - [ ] Viewport resize recenter test
-Status: not started
-Blocker: waiting for interaction test harness
-Next action: choose browser runner and add first smoke spec
+Status: in progress
+Blocker: headless drag/resize/rotate automation for react-moveable needs stable pointer strategy
+Next action: add robust drag/resize/rotate interaction helpers and implement remaining geometry specs
 
 ## Phase 5: CI Integration
 - [ ] Add unit and integration tests to pull request checks
