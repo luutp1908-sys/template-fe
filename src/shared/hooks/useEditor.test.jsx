@@ -103,4 +103,50 @@ describe('useEditor', () => {
 
     expect(result.current.activeTool).toBe('text')
   })
+
+  it('does not change objects when updating a missing id', () => {
+    const { result } = renderHook(() => useEditor(initialObjects))
+    const before = result.current.objects
+
+    act(() => {
+      result.current.updateObject(999999, { x: 999, y: 999 })
+    })
+
+    expect(result.current.objects).toEqual(before)
+    expect(result.current.selectedId).toBe(1)
+  })
+
+  it('does not change objects or selection when deleting a missing id', () => {
+    const { result } = renderHook(() => useEditor(initialObjects))
+
+    act(() => {
+      result.current.deleteObject(999999)
+    })
+
+    expect(result.current.objects).toHaveLength(2)
+    expect(result.current.selectedId).toBe(1)
+    expect(result.current.selectedObject?.id).toBe(1)
+  })
+
+  it('initializes with null selection when starting from an empty list', () => {
+    const { result } = renderHook(() => useEditor([]))
+
+    expect(result.current.objects).toHaveLength(0)
+    expect(result.current.selectedId).toBeNull()
+    expect(result.current.selectedObject).toBeUndefined()
+  })
+
+  it('can add object from empty state and select the new object', () => {
+    const { result } = renderHook(() => useEditor([]))
+
+    let created
+    act(() => {
+      created = result.current.addObject('text', { text: 'First' })
+    })
+
+    expect(result.current.objects).toHaveLength(1)
+    expect(result.current.selectedId).toBe(created.id)
+    expect(result.current.selectedObject?.id).toBe(created.id)
+    expect(result.current.selectedObject?.text).toBe('First')
+  })
 })

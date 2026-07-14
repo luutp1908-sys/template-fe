@@ -1,6 +1,6 @@
 # Test Implementation Status
 
-Last updated: 2026-07-14 (phase 1 complete, phase 2 started)
+Last updated: 2026-07-14 (phase 1 complete, phase 2 complete)
 Owner: Team
 
 ## Phase 1: Tooling Setup
@@ -17,17 +17,17 @@ Next action: continue with broader unit test coverage
 - [x] Add tests for update object behavior
 - [x] Add tests for delete object behavior
 - [x] Add tests for selected object transitions
-- [ ] Add edge-case tests for missing ids and empty lists
-Status: in progress
+- [x] Add edge-case tests for missing ids and empty lists
+Status: completed
 Blocker: none
-Next action: add missing-id and empty-initial-state unit tests
+Next action: begin integration test scaffolding
 
 ## Phase 3: Integration Tests
 - [ ] Canvas selection and deselection flow
 - [ ] Sidebar selection sync
 - [ ] App-level add and delete wiring
 Status: not started
-Blocker: waiting for Phase 1 and Phase 2
+Blocker: none
 Next action: scaffold component test files
 
 ## Phase 4: E2E Geometry Tests
