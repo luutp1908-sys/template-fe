@@ -1,6 +1,6 @@
 # Test Implementation Status
 
-Last updated: 2026-07-14 (phase 1 complete, phase 2 complete)
+Last updated: 2026-07-14 (phase 1 complete, phase 2 complete, phase 3 complete)
 Owner: Team
 
 ## Phase 1: Tooling Setup
@@ -23,12 +23,12 @@ Blocker: none
 Next action: begin integration test scaffolding
 
 ## Phase 3: Integration Tests
-- [ ] Canvas selection and deselection flow
-- [ ] Sidebar selection sync
-- [ ] App-level add and delete wiring
-Status: not started
+- [x] Canvas selection and deselection flow
+- [x] Sidebar selection sync
+- [x] App-level add and delete wiring
+Status: completed
 Blocker: none
-Next action: scaffold component test files
+Next action: start E2E geometry test harness
 
 ## Phase 4: E2E Geometry Tests
 - [ ] Drag-release alignment test

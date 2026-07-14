@@ -87,12 +87,13 @@ export const Canvas = ({ objects, selectedId, onSelectObject, onUpdateObject }) 
 
   return (
     <CanvasWrapper>
-      <CanvasArea onClick={() => onSelectObject(null)}>
+      <CanvasArea data-testid="canvas-area" onClick={() => onSelectObject(null)}>
         <CanvasGrid />
 
         {objects.map((object) => (
           <CanvasObject
             key={object.id}
+            data-testid={`canvas-object-${object.id}`}
             ref={(node) => {
               if (node) targetRefs.current[object.id] = node
               else delete targetRefs.current[object.id]
