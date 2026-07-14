@@ -1,8 +1,14 @@
-import './App.css'
+import styled from 'styled-components'
 import { useEditor } from './shared/hooks/useEditor'
 import { MenuBar } from './widgets/MenuBar'
 import { Sidebar } from './widgets/Sidebar'
 import { Canvas } from './features/canvas/Canvas'
+
+const AppContainer = styled.div`
+  display: flex;
+  min-height: 100vh;
+  background: #f5f8fc;
+`
 
 const initialObjects = [
   {
@@ -51,7 +57,7 @@ function App() {
   }
 
   return (
-    <div className="app-container">
+    <AppContainer>
       <MenuBar
         activeTool={editor.activeTool}
         onToolSelect={editor.setActiveTool}
@@ -73,7 +79,7 @@ function App() {
         onSelectObject={editor.setSelectedId}
         onUpdateObject={editor.updateObject}
       />
-    </div>
+    </AppContainer>
   )
 }
 
