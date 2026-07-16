@@ -93,8 +93,8 @@ export const Canvas = ({
             onDrag={({ target, left, top }) => {
               const normalizedLeft = left / zoom
               const normalizedTop = top / zoom
-              target.style.left = `${normalizedLeft}px`
-              target.style.top = `${normalizedTop}px`
+              target.style.left = `${left}px`
+              target.style.top = `${top}px`
               onUpdateObject(selectedId, { x: normalizedLeft, y: normalizedTop })
             }}
             onDragEnd={() => {
@@ -105,10 +105,10 @@ export const Canvas = ({
               const normalizedHeight = height / zoom
               const normalizedLeft = left / zoom
               const normalizedTop = top / zoom
-              target.style.width = `${normalizedWidth}px`
-              target.style.height = `${normalizedHeight}px`
-              target.style.left = `${normalizedLeft}px`
-              target.style.top = `${normalizedTop}px`
+              target.style.width = `${width}px`
+              target.style.height = `${height}px`
+              target.style.left = `${left}px`
+              target.style.top = `${top}px`
               onUpdateObject(selectedId, {
                 width: normalizedWidth,
                 height: normalizedHeight,
