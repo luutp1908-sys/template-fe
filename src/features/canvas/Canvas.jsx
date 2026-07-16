@@ -2,6 +2,9 @@ import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import Moveable from 'react-moveable'
 
+const PAGE_WIDTH = 1200
+const PAGE_HEIGHT = 800
+
 const CanvasWrapper = styled.div`
   flex: 1;
   display: flex;
@@ -14,22 +17,37 @@ const CanvasArea = styled.div`
   position: relative;
   flex: 1;
   overflow: auto;
-  background: linear-gradient(45deg, #f9fafb 25%, transparent 25%, transparent 75%, #f9fafb 75%, #f9fafb),
-              linear-gradient(45deg, #f9fafb 25%, transparent 25%, transparent 75%, #f9fafb 75%, #f9fafb);
-  background-size: 40px 40px;
-  background-position: 0 0, 20px 20px;
-  background-color: white;
+  background: #eef2f7;
 `
 
-const CanvasGrid = styled.div`
+const Workspace = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: ${PAGE_WIDTH + 480}px;
+  min-height: ${PAGE_HEIGHT + 320}px;
+  padding: 160px 240px;
+`
+
+const BackdropGrid = styled.div`
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(#e5e7eb 1px, transparent 1px),
-    linear-gradient(90deg, #e5e7eb 1px, transparent 1px);
-  background-size: 20px 20px;
-  opacity: 0.3;
+    linear-gradient(rgba(133, 146, 166, 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(133, 146, 166, 0.16) 1px, transparent 1px);
+  background-size: 24px 24px;
   pointer-events: none;
+`
+
+const PageSurface = styled.div`
+  position: relative;
+  width: ${PAGE_WIDTH}px;
+  height: ${PAGE_HEIGHT}px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 18px 45px rgba(19, 35, 65, 0.12), 0 2px 8px rgba(19, 35, 65, 0.08);
+  overflow: hidden;
 `
 
 const CanvasObject = styled.div`
@@ -88,36 +106,40 @@ export const Canvas = ({ objects, selectedId, onSelectObject, onUpdateObject }) 
   return (
     <CanvasWrapper>
       <CanvasArea data-testid="canvas-area" onClick={() => onSelectObject(null)}>
-        <CanvasGrid />
+        <Workspace>
+          <BackdropGrid />
 
-        {objects.map((object) => (
-          <CanvasObject
-            key={object.id}
-            data-testid={`canvas-object-${object.id}`}
-            ref={(node) => {
-              if (node) targetRefs.current[object.id] = node
-              else delete targetRefs.current[object.id]
-            }}
-            selected={selectedId === object.id}
-            style={{
-              left: object.x,
-              top: object.y,
-              width: object.width,
-              height: object.height,
-              transform: `rotate(${object.rotate}deg)`,
-            }}
-            onClick={(e) => {
-              e.stopPropagation()
-              onSelectObject(object.id)
-            }}
-          >
-            {object.type === 'text' ? (
-              <ObjectText>{object.text}</ObjectText>
-            ) : (
-              <ShapeBox style={{ background: object.color }} />
-            )}
-          </CanvasObject>
-        ))}
+          <PageSurface data-testid="page-surface">
+            {objects.map((object) => (
+              <CanvasObject
+                key={object.id}
+                data-testid={`canvas-object-${object.id}`}
+                ref={(node) => {
+                  if (node) targetRefs.current[object.id] = node
+                  else delete targetRefs.current[object.id]
+                }}
+                selected={selectedId === object.id}
+                style={{
+                  left: object.x,
+                  top: object.y,
+                  width: object.width,
+                  height: object.height,
+                  transform: `rotate(${object.rotate}deg)`,
+                }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onSelectObject(object.id)
+                }}
+              >
+                {object.type === 'text' ? (
+                  <ObjectText>{object.text}</ObjectText>
+                ) : (
+                  <ShapeBox style={{ background: object.color }} />
+                )}
+              </CanvasObject>
+            ))}
+          </PageSurface>
+        </Workspace>
 
         {selectedObject && (
           <Moveable
