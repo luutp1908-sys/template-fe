@@ -58,4 +58,54 @@ test.describe('Canvas E2E interactions', () => {
     expect(deltaX).toBeLessThan(80)
     expect(deltaY).toBeLessThan(80)
   })
+
+  test('edits text on double click and commits on blur', async ({ page }) => {
+    await page.goto('/')
+
+    const textObject = page.getByText('Your design')
+    await textObject.dblclick()
+
+    const editor = page.getByLabel('Text Editor')
+    await expect(editor).toBeVisible()
+    await editor.fill('Edited title')
+
+    const canvasArea = page.getByTestId('canvas-area')
+    await canvasArea.click({ position: { x: 20, y: 20 } })
+
+    await expect(page.getByText('Edited title')).toBeVisible()
+  })
+
+  test('cancels text edit on Escape', async ({ page }) => {
+    await page.goto('/')
+
+    const textObject = page.getByText('Your design')
+    await textObject.dblclick()
+
+    const editor = page.getByLabel('Text Editor')
+    await editor.fill('Temporary value')
+    await editor.press('Escape')
+
+    await expect(page.getByText('Your design')).toBeVisible()
+    await expect(page.getByText('Temporary value')).toHaveCount(0)
+  })
+
+  test('auto-grows text layer height while editing', async ({ page }) => {
+    await page.goto('/')
+
+    const textLayer = page.getByTestId('canvas-object-2')
+    const before = await textLayer.boundingBox()
+    if (!before) throw new Error('Text layer bounding box unavailable before edit')
+
+    await page.getByText('Your design').dblclick()
+    const editor = page.getByLabel('Text Editor')
+    await editor.fill('Line 1\nLine 2\nLine 3\nLine 4\nLine 5\nLine 6')
+
+    const canvasArea = page.getByTestId('canvas-area')
+    await canvasArea.click({ position: { x: 20, y: 20 } })
+
+    const after = await textLayer.boundingBox()
+    if (!after) throw new Error('Text layer bounding box unavailable after edit')
+
+    expect(after.height).toBeGreaterThan(before.height)
+  })
 })

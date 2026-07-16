@@ -1,12 +1,19 @@
 import styled from 'styled-components'
 import { SIDEBAR_WIDTH } from '../shared/constants/layout'
 import type { EditorObject } from '../shared/types/editor'
+import {
+  DEFAULT_TEXT_ALIGN,
+  DEFAULT_TEXT_COLOR,
+  DEFAULT_TEXT_FONT_SIZE,
+  DEFAULT_TEXT_FONT_WEIGHT,
+} from '../shared/constants/editorGeometry'
 
 type SidebarProps = {
   selectedObject?: EditorObject
   objects: EditorObject[]
   onSelectObject: (id: number) => void
   onDeleteObject: (id: number) => void
+  onUpdateObject: (id: number, updates: Partial<EditorObject>) => void
 }
 
 const StyledSidebar = styled.div`
@@ -149,12 +156,57 @@ const PropertyGroup = styled.div`
   }
 `
 
+const PropertyInput = styled.input`
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #1a1a1a;
+  background: #ffffff;
+`
+
+const PropertySelect = styled.select`
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #1a1a1a;
+  background: #ffffff;
+`
+
+const AlignButtonRow = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+`
+
+const AlignButton = styled.button<{ $active: boolean }>`
+  border: 1px solid ${({ $active }) => ($active ? '#0066cc' : '#d1d5db')};
+  background: ${({ $active }) => ($active ? '#e3f0ff' : '#ffffff')};
+  color: ${({ $active }) => ($active ? '#0066cc' : '#1a1a1a')};
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 4px;
+`
+
 export const Sidebar = ({
   selectedObject,
   objects,
   onSelectObject,
   onDeleteObject,
+  onUpdateObject,
 }: SidebarProps) => {
+  const handleTextUpdate = (updates: Partial<EditorObject>) => {
+    if (!selectedObject || selectedObject.type !== 'text') return
+    onUpdateObject(selectedObject.id, updates)
+  }
+
   return (
     <StyledSidebar>
       <SidebarHeader>
@@ -213,6 +265,83 @@ export const Sidebar = ({
             <label>Rotation</label>
             <p>{Math.round(selectedObject.rotate)}°</p>
           </PropertyGroup>
+
+          {selectedObject.type === 'text' && (
+            <>
+              <PropertyGroup>
+                <label htmlFor="text-font-size">Font Size</label>
+                <PropertyInput
+                  id="text-font-size"
+                  aria-label="Font Size"
+                  type="number"
+                  min={8}
+                  max={200}
+                  value={selectedObject.fontSize ?? DEFAULT_TEXT_FONT_SIZE}
+                  onChange={(e) => {
+                    handleTextUpdate({ fontSize: Number(e.target.value) || DEFAULT_TEXT_FONT_SIZE })
+                  }}
+                />
+              </PropertyGroup>
+
+              <PropertyGroup>
+                <label htmlFor="text-font-weight">Font Weight</label>
+                <PropertySelect
+                  id="text-font-weight"
+                  aria-label="Font Weight"
+                  value={selectedObject.fontWeight ?? DEFAULT_TEXT_FONT_WEIGHT}
+                  onChange={(e) => {
+                    handleTextUpdate({ fontWeight: e.target.value === 'bold' ? 'bold' : 'normal' })
+                  }}
+                >
+                  <option value="normal">Normal</option>
+                  <option value="bold">Bold</option>
+                </PropertySelect>
+              </PropertyGroup>
+
+              <PropertyGroup>
+                <label>Alignment</label>
+                <AlignButtonRow>
+                  <AlignButton
+                    type="button"
+                    aria-label="Align Left"
+                    $active={(selectedObject.textAlign ?? DEFAULT_TEXT_ALIGN) === 'left'}
+                    onClick={() => handleTextUpdate({ textAlign: 'left' })}
+                  >
+                    Left
+                  </AlignButton>
+                  <AlignButton
+                    type="button"
+                    aria-label="Align Center"
+                    $active={(selectedObject.textAlign ?? DEFAULT_TEXT_ALIGN) === 'center'}
+                    onClick={() => handleTextUpdate({ textAlign: 'center' })}
+                  >
+                    Center
+                  </AlignButton>
+                  <AlignButton
+                    type="button"
+                    aria-label="Align Right"
+                    $active={(selectedObject.textAlign ?? DEFAULT_TEXT_ALIGN) === 'right'}
+                    onClick={() => handleTextUpdate({ textAlign: 'right' })}
+                  >
+                    Right
+                  </AlignButton>
+                </AlignButtonRow>
+              </PropertyGroup>
+
+              <PropertyGroup>
+                <label htmlFor="text-color">Text Color</label>
+                <PropertyInput
+                  id="text-color"
+                  aria-label="Text Color"
+                  type="color"
+                  value={selectedObject.textColor ?? DEFAULT_TEXT_COLOR}
+                  onChange={(e) => {
+                    handleTextUpdate({ textColor: e.target.value })
+                  }}
+                />
+              </PropertyGroup>
+            </>
+          )}
         </PropertiesPanel>
       )}
     </StyledSidebar>

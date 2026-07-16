@@ -79,12 +79,47 @@ export const CanvasObject = styled.div<{ selected: boolean }>`
   `}
 `
 
-export const ObjectText = styled.span`
-  font-size: 1rem;
-  font-weight: 500;
-  color: #1a1a1a;
+type ObjectTextProps = {
+  $fontSize?: number
+  $fontWeight?: 'normal' | 'bold'
+  $textAlign?: 'left' | 'center' | 'right'
+  $textColor?: string
+  $lineHeight?: number
+  $fontFamily?: string
+}
+
+export const ObjectText = styled.span<ObjectTextProps>`
+  width: 100%;
+  font-size: ${({ $fontSize = 32 }) => `${$fontSize}px`};
+  font-weight: ${({ $fontWeight = 'normal' }) => $fontWeight};
+  font-family: ${({ $fontFamily = 'Arial, sans-serif' }) => $fontFamily};
+  color: ${({ $textColor = '#1a1a1a' }) => $textColor};
   padding: 8px;
-  text-align: center;
+  text-align: ${({ $textAlign = 'left' }) => $textAlign};
+  line-height: ${({ $lineHeight = 1.2 }) => $lineHeight};
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+`
+
+export const EditableText = styled.textarea<ObjectTextProps>`
+  width: 100%;
+  height: 100%;
+  resize: none;
+  border: 2px solid #0066cc;
+  border-radius: 6px;
+  outline: none;
+  box-sizing: border-box;
+  background: #ffffff;
+  font-size: ${({ $fontSize = 32 }) => `${$fontSize}px`};
+  font-weight: ${({ $fontWeight = 'normal' }) => $fontWeight};
+  font-family: ${({ $fontFamily = 'Arial, sans-serif' }) => $fontFamily};
+  color: ${({ $textColor = '#1a1a1a' }) => $textColor};
+  padding: 8px;
+  text-align: ${({ $textAlign = 'left' }) => $textAlign};
+  line-height: ${({ $lineHeight = 1.2 }) => $lineHeight};
+  overflow: hidden;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 `
 
 export const ShapeBox = styled.div`

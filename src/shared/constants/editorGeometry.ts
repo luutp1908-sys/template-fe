@@ -4,3 +4,12 @@ export const MAX_ZOOM = 4
 export const PAGE_WIDTH = 1200
 export const PAGE_HEIGHT = 800
 export const WORKSPACE_PADDING = 24
+
+export const DEFAULT_TEXT_WIDTH = 220
+export const DEFAULT_TEXT_HEIGHT = 60
+export const DEFAULT_TEXT_FONT_FAMILY = 'Arial, sans-serif'
+export const DEFAULT_TEXT_FONT_SIZE = 32
+export const DEFAULT_TEXT_FONT_WEIGHT = 'normal'
+export const DEFAULT_TEXT_ALIGN = 'left'
+export const DEFAULT_TEXT_LINE_HEIGHT = 1.2
+export const DEFAULT_TEXT_COLOR = '#1a1a1a'

@@ -5,6 +5,7 @@ type CanvasInteractionsInput = {
   objects: EditorObject[]
   selectedId: number | null
   zoom: number
+  editingId: number | null
   onUpdateObject: (id: number, updates: Partial<EditorObject>) => void
 }
 
@@ -12,6 +13,7 @@ export const useCanvasInteractions = ({
   objects,
   selectedId,
   zoom,
+  editingId,
   onUpdateObject,
 }: CanvasInteractionsInput) => {
   const targetRefs = useRef<Record<number, HTMLDivElement>>({})
@@ -46,7 +48,7 @@ export const useCanvasInteractions = ({
 
   const handleDrag = useCallback(
     ({ target, left, top }: any) => {
-      if (!selectedId) return
+      if (!selectedId || editingId !== null) return
 
       const normalizedLeft = left / zoom
       const normalizedTop = top / zoom
@@ -54,12 +56,12 @@ export const useCanvasInteractions = ({
       target.style.top = `${top}px`
       onUpdateObject(selectedId, { x: normalizedLeft, y: normalizedTop })
     },
-    [onUpdateObject, selectedId, zoom],
+    [editingId, onUpdateObject, selectedId, zoom],
   )
 
   const handleResize = useCallback(
     ({ target, width, height, left, top }: any) => {
-      if (!selectedId) return
+      if (!selectedId || editingId !== null) return
 
       const normalizedWidth = width / zoom
       const normalizedHeight = height / zoom
@@ -78,17 +80,17 @@ export const useCanvasInteractions = ({
         y: normalizedTop,
       })
     },
-    [onUpdateObject, selectedId, zoom],
+    [editingId, onUpdateObject, selectedId, zoom],
   )
 
   const handleRotate = useCallback(
     ({ target, rotate }: any) => {
-      if (!selectedId) return
+      if (!selectedId || editingId !== null) return
 
       target.style.transform = `rotate(${rotate}deg)`
       onUpdateObject(selectedId, { rotate })
     },
-    [onUpdateObject, selectedId],
+    [editingId, onUpdateObject, selectedId],
   )
 
   return {

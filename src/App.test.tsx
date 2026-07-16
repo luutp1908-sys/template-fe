@@ -46,4 +46,76 @@ describe('App integration', () => {
     expect(screen.queryByText('Text 3')).not.toBeInTheDocument()
     expect(screen.getAllByTitle('Delete')).toHaveLength(2)
   })
+
+  it('updates text style from sidebar controls', () => {
+    render(<App />)
+
+    const textNode = screen.getByText('Your design')
+    fireEvent.click(textNode)
+
+    fireEvent.change(screen.getByLabelText('Font Size'), { target: { value: '48' } })
+    fireEvent.change(screen.getByLabelText('Font Weight'), { target: { value: 'bold' } })
+    fireEvent.click(screen.getByLabelText('Align Right'))
+    fireEvent.change(screen.getByLabelText('Text Color'), { target: { value: '#ff0000' } })
+
+    expect(textNode).toHaveStyle({
+      fontSize: '48px',
+      fontWeight: 'bold',
+      textAlign: 'right',
+      color: 'rgb(255, 0, 0)',
+    })
+  })
+
+  it('enters text edit mode on double click and saves on blur', () => {
+    render(<App />)
+
+    const textNode = screen.getByText('Your design')
+    fireEvent.doubleClick(textNode)
+
+    const editor = screen.getByLabelText('Text Editor')
+    fireEvent.change(editor, { target: { value: 'Edited title' } })
+    fireEvent.blur(editor)
+
+    expect(screen.getByText('Edited title')).toBeInTheDocument()
+  })
+
+  it('cancels text edit on Escape and restores previous value', () => {
+    render(<App />)
+
+    const textNode = screen.getByText('Your design')
+    fireEvent.doubleClick(textNode)
+
+    const editor = screen.getByLabelText('Text Editor')
+    fireEvent.change(editor, { target: { value: 'Temp value' } })
+    fireEvent.keyDown(editor, { key: 'Escape' })
+
+    expect(screen.getByText('Your design')).toBeInTheDocument()
+    expect(screen.queryByText('Temp value')).not.toBeInTheDocument()
+  })
+
+  it('auto-grows text box height while typing long wrapped content', () => {
+    render(<App />)
+
+    const textObject = screen.getByTestId('canvas-object-2')
+    const initialHeight = Number.parseFloat(textObject.style.height)
+
+    fireEvent.doubleClick(screen.getByText('Your design'))
+    const editor = screen.getByLabelText('Text Editor')
+
+    Object.defineProperty(editor, 'scrollHeight', {
+      configurable: true,
+      get: () => 220,
+    })
+
+    fireEvent.change(editor, {
+      target: {
+        value: 'Long text that should wrap over multiple lines and force taller editor bounds.',
+      },
+    })
+
+    fireEvent.blur(editor)
+
+    const updatedHeight = Number.parseFloat(screen.getByTestId('canvas-object-2').style.height)
+    expect(updatedHeight).toBeGreaterThan(initialHeight)
+  })
 })

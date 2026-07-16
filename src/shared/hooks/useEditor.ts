@@ -1,6 +1,72 @@
 import { useState } from 'react'
-import { MAX_ZOOM, MIN_ZOOM } from '../constants/editorGeometry'
-import type { ActiveTool, EditorObject, EditorObjectType, FitZoomInput } from '../types/editor'
+import {
+  DEFAULT_TEXT_ALIGN,
+  DEFAULT_TEXT_COLOR,
+  DEFAULT_TEXT_FONT_FAMILY,
+  DEFAULT_TEXT_FONT_SIZE,
+  DEFAULT_TEXT_FONT_WEIGHT,
+  DEFAULT_TEXT_HEIGHT,
+  DEFAULT_TEXT_LINE_HEIGHT,
+  DEFAULT_TEXT_WIDTH,
+  MAX_ZOOM,
+  MIN_ZOOM,
+} from '../constants/editorGeometry'
+import type {
+  ActiveTool,
+  EditorObject,
+  EditorObjectType,
+  FitZoomInput,
+  TextLayer,
+} from '../types/editor'
+
+const getDefaultLayerProps = (type: EditorObjectType): Omit<EditorObject, 'id'> => {
+  const base = {
+    type,
+    x: 200,
+    y: 200,
+    width: 140,
+    height: 100,
+    rotate: 0,
+    visible: true,
+    locked: false,
+  }
+
+  if (type === 'text') {
+    return {
+      ...base,
+      width: DEFAULT_TEXT_WIDTH,
+      height: DEFAULT_TEXT_HEIGHT,
+      text: 'New text',
+      textColor: DEFAULT_TEXT_COLOR,
+      fontFamily: DEFAULT_TEXT_FONT_FAMILY,
+      fontSize: DEFAULT_TEXT_FONT_SIZE,
+      fontWeight: DEFAULT_TEXT_FONT_WEIGHT,
+      textAlign: DEFAULT_TEXT_ALIGN,
+      lineHeight: DEFAULT_TEXT_LINE_HEIGHT,
+      wrapMode: 'fixed',
+    } satisfies Omit<TextLayer, 'id'>
+  }
+
+  if (type === 'image') {
+    return {
+      ...base,
+      src: '',
+    }
+  }
+
+  if (type === 'frame') {
+    return {
+      ...base,
+      borderColor: '#e5e7eb',
+      borderWidth: 1,
+    }
+  }
+
+  return {
+    ...base,
+    color: '#0066cc',
+  }
+}
 
 export const computeFitZoom = ({
   viewportWidth,
@@ -38,14 +104,9 @@ export const useEditor = (initialObjects: EditorObject[]) => {
     const newId = Date.now()
     const newObject = {
       id: newId,
-      type,
-      x: 200,
-      y: 200,
-      width: 140,
-      height: 100,
-      rotate: 0,
+      ...getDefaultLayerProps(type),
       ...defaults,
-    }
+    } as EditorObject
 
     setObjects((current) => [...current, newObject])
     setSelectedId(newId)

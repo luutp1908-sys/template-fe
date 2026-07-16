@@ -105,6 +105,26 @@ describe('useEditor', () => {
     expect(result.current.activeTool).toBe('text')
   })
 
+  it('adds text with base layer defaults', () => {
+    const { result } = renderHook(() => useEditor([]))
+
+    act(() => {
+      result.current.addObject('text')
+    })
+
+    const created = result.current.objects[0]
+    expect(created.type).toBe('text')
+    expect(created.visible).toBe(true)
+    expect(created.locked).toBe(false)
+    if (created.type === 'text') {
+      expect(created.text).toBe('New text')
+      expect(created.fontSize).toBe(32)
+      expect(created.fontWeight).toBe('normal')
+      expect(created.textAlign).toBe('left')
+      expect(created.wrapMode).toBe('fixed')
+    }
+  })
+
   it('does not change objects when updating a missing id', () => {
     const { result } = renderHook(() => useEditor(initialObjects))
     const before = result.current.objects

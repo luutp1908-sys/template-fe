@@ -97,7 +97,7 @@ const initialObjects: EditorObject[] = [
     height: 60,
     rotate: 0,
     text: 'Your design',
-    color: '#1a1a1a',
+    textColor: '#1a1a1a',
   },
 ]
 
@@ -151,7 +151,7 @@ function App() {
   const handleAddText = () => {
     editor.addObject('text', {
       text: 'New text',
-      color: '#1a1a1a',
+      textColor: '#1a1a1a',
     })
   }
 
@@ -195,6 +195,7 @@ function App() {
           objects={editor.objects}
           onSelectObject={editor.setSelectedId}
           onDeleteObject={editor.deleteObject}
+          onUpdateObject={editor.updateObject}
         />
 
         <Canvas
