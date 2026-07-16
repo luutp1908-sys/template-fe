@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { MAX_ZOOM, MIN_ZOOM } from '../constants/editorGeometry'
+import type { ActiveTool, EditorObject, EditorObjectType, FitZoomInput } from '../types/editor'
 
 export const computeFitZoom = ({
   viewportWidth,
@@ -7,7 +8,7 @@ export const computeFitZoom = ({
   pageWidth,
   pageHeight,
   padding = 0,
-}) => {
+}: FitZoomInput): number | null => {
   if (!viewportWidth || !viewportHeight || !pageWidth || !pageHeight) return null
   const usableWidth = viewportWidth - padding * 2
   const usableHeight = viewportHeight - padding * 2
@@ -19,21 +20,21 @@ export const computeFitZoom = ({
   return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, fitZoom))
 }
 
-export const useEditor = (initialObjects) => {
-  const [objects, setObjects] = useState(initialObjects)
-  const [selectedId, setSelectedId] = useState(initialObjects[0]?.id || null)
-  const [activeTool, setActiveTool] = useState(null)
+export const useEditor = (initialObjects: EditorObject[]) => {
+  const [objects, setObjects] = useState<EditorObject[]>(initialObjects)
+  const [selectedId, setSelectedId] = useState<number | null>(initialObjects[0]?.id || null)
+  const [activeTool, setActiveTool] = useState<ActiveTool>(null)
   const [zoom, setZoomState] = useState(1)
 
   const selectedObject = objects.find((obj) => obj.id === selectedId)
 
-  const updateObject = (id, updates) => {
+  const updateObject = (id: number, updates: Partial<EditorObject>) => {
     setObjects((current) =>
       current.map((obj) => (obj.id === id ? { ...obj, ...updates } : obj)),
     )
   }
 
-  const addObject = (type, defaults = {}) => {
+  const addObject = (type: EditorObjectType, defaults: Partial<EditorObject> = {}) => {
     const newId = Date.now()
     const newObject = {
       id: newId,
@@ -51,7 +52,7 @@ export const useEditor = (initialObjects) => {
     return newObject
   }
 
-  const deleteObject = (id) => {
+  const deleteObject = (id: number) => {
     const remaining = objects.filter((obj) => obj.id !== id)
     setObjects(remaining)
     if (selectedId === id) {
@@ -65,7 +66,7 @@ export const useEditor = (initialObjects) => {
     }
   }
 
-  const setZoom = (nextZoom) => {
+  const setZoom = (nextZoom: number) => {
     const numericZoom = Number(nextZoom)
     if (Number.isNaN(numericZoom)) return
     setZoomState(Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, numericZoom)))

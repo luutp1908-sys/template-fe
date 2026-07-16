@@ -1,5 +1,13 @@
 import styled from 'styled-components'
 import { SIDEBAR_WIDTH } from '../shared/constants/layout'
+import type { EditorObject } from '../shared/types/editor'
+
+type SidebarProps = {
+  selectedObject?: EditorObject
+  objects: EditorObject[]
+  onSelectObject: (id: number) => void
+  onDeleteObject: (id: number) => void
+}
 
 const StyledSidebar = styled.div`
   width: ${SIDEBAR_WIDTH}px;
@@ -49,7 +57,7 @@ const EmptyMessage = styled.p`
   margin: 0;
 `
 
-const LayerItem = styled.div`
+const LayerItem = styled.div<{ active: boolean }>`
   display: flex;
   align-items: center;
   gap: 10px;
@@ -141,7 +149,12 @@ const PropertyGroup = styled.div`
   }
 `
 
-export const Sidebar = ({ selectedObject, objects, onSelectObject, onDeleteObject }) => {
+export const Sidebar = ({
+  selectedObject,
+  objects,
+  onSelectObject,
+  onDeleteObject,
+}: SidebarProps) => {
   return (
     <StyledSidebar>
       <SidebarHeader>

@@ -1,6 +1,7 @@
 import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { useEditor } from './useEditor'
+import type { EditorObject } from '../types/editor'
 
 const initialObjects = [
   {
@@ -49,7 +50,7 @@ describe('useEditor', () => {
   it('adds a new object and selects it', () => {
     const { result } = renderHook(() => useEditor(initialObjects))
 
-    let newObject
+    let newObject: EditorObject
     act(() => {
       newObject = result.current.addObject('rect', { color: '#ff0000' })
     })
@@ -139,7 +140,7 @@ describe('useEditor', () => {
   it('can add object from empty state and select the new object', () => {
     const { result } = renderHook(() => useEditor([]))
 
-    let created
+    let created: EditorObject
     act(() => {
       created = result.current.addObject('text', { text: 'First' })
     })

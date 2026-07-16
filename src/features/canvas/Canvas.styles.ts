@@ -24,7 +24,7 @@ export const CanvasArea = styled.div`
   background: #eef2f7;
 `
 
-export const Workspace = styled.div`
+export const Workspace = styled.div<{ $zoom?: number }>`
   position: relative;
   display: flex;
   align-items: center;
@@ -44,7 +44,7 @@ export const BackdropGrid = styled.div`
   pointer-events: none;
 `
 
-export const PageSurface = styled.div`
+export const PageSurface = styled.div<{ $zoom?: number }>`
   position: relative;
   width: ${PAGE_WIDTH}px;
   height: ${PAGE_HEIGHT}px;
@@ -56,7 +56,7 @@ export const PageSurface = styled.div`
   overflow: hidden;
 `
 
-export const CanvasObject = styled.div`
+export const CanvasObject = styled.div<{ selected: boolean }>`
   position: absolute;
   display: flex;
   align-items: center;

@@ -1,8 +1,21 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
+import type { EditorObject } from '../../shared/types/editor'
 
-export const useCanvasInteractions = ({ objects, selectedId, zoom, onUpdateObject }) => {
-  const targetRefs = useRef({})
-  const moveableRef = useRef(null)
+type CanvasInteractionsInput = {
+  objects: EditorObject[]
+  selectedId: number | null
+  zoom: number
+  onUpdateObject: (id: number, updates: Partial<EditorObject>) => void
+}
+
+export const useCanvasInteractions = ({
+  objects,
+  selectedId,
+  zoom,
+  onUpdateObject,
+}: CanvasInteractionsInput) => {
+  const targetRefs = useRef<Record<number, HTMLDivElement>>({})
+  const moveableRef = useRef<any>(null)
 
   const selectedObject = useMemo(
     () => objects.find((obj) => obj.id === selectedId),
@@ -23,7 +36,7 @@ export const useCanvasInteractions = ({ objects, selectedId, zoom, onUpdateObjec
     return () => cancelAnimationFrame(frame)
   }, [selectedObject, zoom, updateMoveableRect])
 
-  const setTargetRef = useCallback((id, node) => {
+  const setTargetRef = useCallback((id: number, node: HTMLDivElement | null) => {
     if (node) {
       targetRefs.current[id] = node
       return
@@ -32,7 +45,7 @@ export const useCanvasInteractions = ({ objects, selectedId, zoom, onUpdateObjec
   }, [])
 
   const handleDrag = useCallback(
-    ({ target, left, top }) => {
+    ({ target, left, top }: any) => {
       if (!selectedId) return
 
       const normalizedLeft = left / zoom
@@ -45,7 +58,7 @@ export const useCanvasInteractions = ({ objects, selectedId, zoom, onUpdateObjec
   )
 
   const handleResize = useCallback(
-    ({ target, width, height, left, top }) => {
+    ({ target, width, height, left, top }: any) => {
       if (!selectedId) return
 
       const normalizedWidth = width / zoom
@@ -69,7 +82,7 @@ export const useCanvasInteractions = ({ objects, selectedId, zoom, onUpdateObjec
   )
 
   const handleRotate = useCallback(
-    ({ target, rotate }) => {
+    ({ target, rotate }: any) => {
       if (!selectedId) return
 
       target.style.transform = `rotate(${rotate}deg)`

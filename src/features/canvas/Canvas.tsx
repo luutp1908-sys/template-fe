@@ -1,4 +1,5 @@
 import Moveable from 'react-moveable'
+import type { RefObject } from 'react'
 import {
   BackdropGrid,
   CanvasArea,
@@ -10,6 +11,16 @@ import {
   Workspace,
 } from './Canvas.styles'
 import { useCanvasInteractions } from './useCanvasInteractions'
+import type { EditorObject } from '../../shared/types/editor'
+
+type CanvasProps = {
+  objects: EditorObject[]
+  selectedId: number | null
+  onSelectObject: (id: number | null) => void
+  onUpdateObject: (id: number, updates: Partial<EditorObject>) => void
+  zoom?: number
+  viewportRef?: RefObject<HTMLDivElement | null>
+}
 
 export const Canvas = ({
   objects,
@@ -18,7 +29,7 @@ export const Canvas = ({
   onUpdateObject,
   zoom = 1,
   viewportRef,
-}) => {
+}: CanvasProps) => {
   const {
     moveableRef,
     selectedObject,

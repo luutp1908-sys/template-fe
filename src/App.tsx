@@ -10,6 +10,7 @@ import { HEADER_HEIGHT } from './shared/constants/layout'
 import { MenuBar } from './widgets/MenuBar'
 import { Sidebar } from './widgets/Sidebar'
 import { Canvas } from './features/canvas/Canvas'
+import type { EditorObject } from './shared/types/editor'
 
 const AppShell = styled.div`
   height: 100vh;
@@ -76,7 +77,7 @@ const AppContainer = styled.div`
   overflow: hidden;
 `
 
-const initialObjects = [
+const initialObjects: EditorObject[] = [
   {
     id: 1,
     type: 'rect',
@@ -102,10 +103,10 @@ const initialObjects = [
 
 function App() {
   const editor = useEditor(initialObjects)
-  const canvasViewportRef = useRef(null)
+  const canvasViewportRef = useRef<HTMLDivElement | null>(null)
   const hasAutoFitApplied = useRef(false)
 
-  const centerCanvasViewport = (viewportEl) => {
+  const centerCanvasViewport = (viewportEl: HTMLDivElement) => {
     const left = Math.max(0, (viewportEl.scrollWidth - viewportEl.clientWidth) / 2)
     const top = Math.max(0, (viewportEl.scrollHeight - viewportEl.clientHeight) / 2)
     viewportEl.scrollTo({ left, top, behavior: 'auto' })
@@ -119,7 +120,6 @@ function App() {
       if (!viewportEl) return
 
       const rect = viewportEl.getBoundingClientRect()
-      console.log('rect', rect, rect.width, rect.height)
       const fitZoom = computeFitZoom({
         viewportWidth: rect.width,
         viewportHeight: rect.height,

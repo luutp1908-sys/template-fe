@@ -1,5 +1,14 @@
 import styled from 'styled-components'
 import { MENU_BAR_WIDTH } from '../shared/constants/layout'
+import type { ActiveTool } from '../shared/types/editor'
+
+type MenuBarProps = {
+  activeTool: ActiveTool
+  onToolSelect: (tool: Exclude<ActiveTool, null>) => void
+  onAddShape: () => void
+  onAddText: () => void
+  onAddImage: () => void
+}
 
 const StyledMenuBar = styled.div`
   width: ${MENU_BAR_WIDTH}px;
@@ -46,7 +55,13 @@ const MenuDivider = styled.div`
   margin: 8px 0;
 `
 
-export const MenuBar = ({ activeTool, onToolSelect, onAddShape, onAddText, onAddImage }) => {
+export const MenuBar = ({
+  activeTool,
+  onToolSelect,
+  onAddShape,
+  onAddText,
+  onAddImage,
+}: MenuBarProps) => {
   return (
     <StyledMenuBar>
       <MenuItem
