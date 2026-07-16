@@ -1,7 +1,5 @@
 import { useState } from 'react'
-
-const MIN_ZOOM = 0.1
-const MAX_ZOOM = 4
+import { MAX_ZOOM, MIN_ZOOM } from '../constants/editorGeometry'
 
 export const computeFitZoom = ({
   viewportWidth,

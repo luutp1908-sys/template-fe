@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react'
 import Moveable from 'react-moveable'
 import {
   BackdropGrid,
@@ -10,6 +9,7 @@ import {
   ShapeBox,
   Workspace,
 } from './Canvas.styles'
+import { useCanvasInteractions } from './useCanvasInteractions'
 
 export const Canvas = ({
   objects,
@@ -19,20 +19,16 @@ export const Canvas = ({
   zoom = 1,
   viewportRef,
 }) => {
-  const targetRefs = useRef({})
-  const moveableRef = useRef(null)
-
-  const selectedObject = objects.find((obj) => obj.id === selectedId)
-
-  useEffect(() => {
-    if (!selectedObject) return
-
-    const frame = requestAnimationFrame(() => {
-      moveableRef.current?.updateRect()
-    })
-
-    return () => cancelAnimationFrame(frame)
-  }, [selectedObject, zoom])
+  const {
+    moveableRef,
+    selectedObject,
+    setTargetRef,
+    targetRefs,
+    updateMoveableRect,
+    handleDrag,
+    handleResize,
+    handleRotate,
+  } = useCanvasInteractions({ objects, selectedId, zoom, onUpdateObject })
 
   return (
     <CanvasWrapper>
@@ -49,10 +45,7 @@ export const Canvas = ({
               <CanvasObject
                 key={object.id}
                 data-testid={`canvas-object-${object.id}`}
-                ref={(node) => {
-                  if (node) targetRefs.current[object.id] = node
-                  else delete targetRefs.current[object.id]
-                }}
+                ref={(node) => setTargetRef(object.id, node)}
                 selected={selectedId === object.id}
                 style={{
                   left: object.x,
@@ -90,42 +83,12 @@ export const Canvas = ({
             throttleDrag={0}
             throttleResize={0}
             throttleRotate={0}
-            onDrag={({ target, left, top }) => {
-              const normalizedLeft = left / zoom
-              const normalizedTop = top / zoom
-              target.style.left = `${left}px`
-              target.style.top = `${top}px`
-              onUpdateObject(selectedId, { x: normalizedLeft, y: normalizedTop })
-            }}
-            onDragEnd={() => {
-              moveableRef.current?.updateRect()
-            }}
-            onResize={({ target, width, height, left, top }) => {
-              const normalizedWidth = width / zoom
-              const normalizedHeight = height / zoom
-              const normalizedLeft = left / zoom
-              const normalizedTop = top / zoom
-              target.style.width = `${width}px`
-              target.style.height = `${height}px`
-              target.style.left = `${left}px`
-              target.style.top = `${top}px`
-              onUpdateObject(selectedId, {
-                width: normalizedWidth,
-                height: normalizedHeight,
-                x: normalizedLeft,
-                y: normalizedTop,
-              })
-            }}
-            onResizeEnd={() => {
-              moveableRef.current?.updateRect()
-            }}
-            onRotate={({ target, rotate }) => {
-              target.style.transform = `rotate(${rotate}deg)`
-              onUpdateObject(selectedId, { rotate })
-            }}
-            onRotateEnd={() => {
-              moveableRef.current?.updateRect()
-            }}
+            onDrag={handleDrag}
+            onDragEnd={updateMoveableRect}
+            onResize={handleResize}
+            onResizeEnd={updateMoveableRect}
+            onRotate={handleRotate}
+            onRotateEnd={updateMoveableRect}
           />
         )}
       </CanvasArea>

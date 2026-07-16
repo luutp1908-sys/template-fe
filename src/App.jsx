@@ -1,11 +1,15 @@
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { computeFitZoom, useEditor } from './shared/hooks/useEditor'
+import {
+  PAGE_HEIGHT,
+  PAGE_WIDTH,
+  WORKSPACE_PADDING,
+} from './shared/constants/editorGeometry'
 import { HEADER_HEIGHT } from './shared/constants/layout'
 import { MenuBar } from './widgets/MenuBar'
 import { Sidebar } from './widgets/Sidebar'
 import { Canvas } from './features/canvas/Canvas'
-import { PAGE_HEIGHT, PAGE_WIDTH, WORKSPACE_PADDING } from './features/canvas/Canvas.styles'
 
 const AppShell = styled.div`
   height: 100vh;

@@ -1,8 +1,9 @@
 import styled from 'styled-components'
-
-export const PAGE_WIDTH = 1200
-export const PAGE_HEIGHT = 800
-export const WORKSPACE_PADDING = 24
+import {
+  PAGE_HEIGHT,
+  PAGE_WIDTH,
+  WORKSPACE_PADDING,
+} from '../../shared/constants/editorGeometry'
 
 export const CanvasWrapper = styled.div`
   flex: 1;
@@ -91,3 +92,5 @@ export const ShapeBox = styled.div`
   height: 100%;
   border-radius: 4px;
 `
+
+export { PAGE_WIDTH, PAGE_HEIGHT, WORKSPACE_PADDING }
