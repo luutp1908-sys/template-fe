@@ -1,13 +1,16 @@
+import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import { useEditor } from './shared/hooks/useEditor'
+import { computeFitZoom, useEditor } from './shared/hooks/useEditor'
+import { HEADER_HEIGHT } from './shared/constants/layout'
 import { MenuBar } from './widgets/MenuBar'
 import { Sidebar } from './widgets/Sidebar'
 import { Canvas } from './features/canvas/Canvas'
-
-const HEADER_HEIGHT = 60
+import { PAGE_HEIGHT, PAGE_WIDTH, WORKSPACE_PADDING } from './features/canvas/Canvas.styles'
 
 const AppShell = styled.div`
-  min-height: 100vh;
+  height: 100vh;
+  box-sizing: border-box;
+  padding-top: ${HEADER_HEIGHT}px;
   background: #f5f8fc;
 `
 
@@ -63,9 +66,10 @@ const ZoomSlider = styled.input`
 
 const AppContainer = styled.div`
   display: flex;
-  height: calc(100vh - ${HEADER_HEIGHT}px);
-  padding-top: ${HEADER_HEIGHT}px;
+  width: 100%;
+  height: 100%;
   background: #f5f8fc;
+  overflow: hidden;
 `
 
 const initialObjects = [
@@ -94,6 +98,45 @@ const initialObjects = [
 
 function App() {
   const editor = useEditor(initialObjects)
+  const canvasViewportRef = useRef(null)
+  const hasAutoFitApplied = useRef(false)
+
+  const centerCanvasViewport = (viewportEl) => {
+    const left = Math.max(0, (viewportEl.scrollWidth - viewportEl.clientWidth) / 2)
+    const top = Math.max(0, (viewportEl.scrollHeight - viewportEl.clientHeight) / 2)
+    viewportEl.scrollTo({ left, top, behavior: 'auto' })
+  }
+
+  useEffect(() => {
+    if (hasAutoFitApplied.current) return
+
+    const frame = requestAnimationFrame(() => {
+      const viewportEl = canvasViewportRef.current
+      if (!viewportEl) return
+
+      const rect = viewportEl.getBoundingClientRect()
+      console.log('rect', rect, rect.width, rect.height)
+      const fitZoom = computeFitZoom({
+        viewportWidth: rect.width,
+        viewportHeight: rect.height,
+        pageWidth: PAGE_WIDTH,
+        pageHeight: PAGE_HEIGHT,
+        padding: WORKSPACE_PADDING,
+      })
+      if (!fitZoom) return
+      editor.setZoom(fitZoom)
+      hasAutoFitApplied.current = true
+
+      // Wait for zoom-driven layout to flush, then center viewport scroll.
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          centerCanvasViewport(viewportEl)
+        })
+      })
+    })
+
+    return () => cancelAnimationFrame(frame)
+  }, [])
 
   const handleAddShape = () => {
     editor.addObject('rect', {
@@ -156,6 +199,7 @@ function App() {
           onSelectObject={editor.setSelectedId}
           onUpdateObject={editor.updateObject}
           zoom={editor.zoom}
+          viewportRef={canvasViewportRef}
         />
       </AppContainer>
     </AppShell>

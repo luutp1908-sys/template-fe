@@ -2,11 +2,14 @@ import styled from 'styled-components'
 
 export const PAGE_WIDTH = 1200
 export const PAGE_HEIGHT = 800
+export const WORKSPACE_PADDING = 24
 
 export const CanvasWrapper = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  height: 100%;
   background: #f5f8fc;
   overflow: hidden;
 `
@@ -14,6 +17,8 @@ export const CanvasWrapper = styled.div`
 export const CanvasArea = styled.div`
   position: relative;
   flex: 1;
+  min-width: 0;
+  height: 100%;
   overflow: auto;
   background: #eef2f7;
 `
@@ -23,9 +28,9 @@ export const Workspace = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: ${({ $zoom = 1 }) => PAGE_WIDTH * $zoom + 480}px;
-  min-height: ${({ $zoom = 1 }) => PAGE_HEIGHT * $zoom + 320}px;
-  padding: 160px 240px;
+  min-width: ${({ $zoom = 1 }) => PAGE_WIDTH * $zoom + WORKSPACE_PADDING * 2}px;
+  min-height: ${({ $zoom = 1 }) => PAGE_HEIGHT * $zoom + WORKSPACE_PADDING * 2}px;
+  padding: ${WORKSPACE_PADDING}px;
 `
 
 export const BackdropGrid = styled.div`

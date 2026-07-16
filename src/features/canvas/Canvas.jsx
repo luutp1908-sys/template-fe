@@ -11,7 +11,14 @@ import {
   Workspace,
 } from './Canvas.styles'
 
-export const Canvas = ({ objects, selectedId, onSelectObject, onUpdateObject, zoom = 1 }) => {
+export const Canvas = ({
+  objects,
+  selectedId,
+  onSelectObject,
+  onUpdateObject,
+  zoom = 1,
+  viewportRef,
+}) => {
   const targetRefs = useRef({})
   const moveableRef = useRef(null)
 
@@ -29,7 +36,11 @@ export const Canvas = ({ objects, selectedId, onSelectObject, onUpdateObject, zo
 
   return (
     <CanvasWrapper>
-      <CanvasArea data-testid="canvas-area" onClick={() => onSelectObject(null)}>
+      <CanvasArea
+        data-testid="canvas-area"
+        ref={viewportRef}
+        onClick={() => onSelectObject(null)}
+      >
         <Workspace $zoom={zoom}>
           <BackdropGrid />
 

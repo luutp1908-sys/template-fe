@@ -3,6 +3,24 @@ import { useState } from 'react'
 const MIN_ZOOM = 0.1
 const MAX_ZOOM = 4
 
+export const computeFitZoom = ({
+  viewportWidth,
+  viewportHeight,
+  pageWidth,
+  pageHeight,
+  padding = 0,
+}) => {
+  if (!viewportWidth || !viewportHeight || !pageWidth || !pageHeight) return null
+  const usableWidth = viewportWidth - padding * 2
+  const usableHeight = viewportHeight - padding * 2
+  if (usableWidth <= 0 || usableHeight <= 0) return null
+
+  const fitZoom = Math.min(usableWidth / pageWidth, usableHeight / pageHeight)
+  if (!Number.isFinite(fitZoom)) return null
+
+  return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, fitZoom))
+}
+
 export const useEditor = (initialObjects) => {
   const [objects, setObjects] = useState(initialObjects)
   const [selectedId, setSelectedId] = useState(initialObjects[0]?.id || null)

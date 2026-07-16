@@ -1,7 +1,8 @@
 import styled from 'styled-components'
+import { SIDEBAR_WIDTH } from '../shared/constants/layout'
 
 const StyledSidebar = styled.div`
-  width: 300px;
+  width: ${SIDEBAR_WIDTH}px;
   height: 100%;
   background: white;
   border-right: 1px solid #e5e7eb;

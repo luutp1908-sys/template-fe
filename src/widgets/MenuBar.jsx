@@ -1,7 +1,8 @@
 import styled from 'styled-components'
+import { MENU_BAR_WIDTH } from '../shared/constants/layout'
 
 const StyledMenuBar = styled.div`
-  width: 80px;
+  width: ${MENU_BAR_WIDTH}px;
   height: 100%;
   background: white;
   border-right: 1px solid #e5e7eb;
