@@ -11,7 +11,7 @@ import {
   Workspace,
 } from './Canvas.styles'
 
-export const Canvas = ({ objects, selectedId, onSelectObject, onUpdateObject }) => {
+export const Canvas = ({ objects, selectedId, onSelectObject, onUpdateObject, zoom = 1 }) => {
   const targetRefs = useRef({})
   const moveableRef = useRef(null)
 
@@ -25,15 +25,15 @@ export const Canvas = ({ objects, selectedId, onSelectObject, onUpdateObject }) 
     })
 
     return () => cancelAnimationFrame(frame)
-  }, [selectedObject])
+  }, [selectedObject, zoom])
 
   return (
     <CanvasWrapper>
       <CanvasArea data-testid="canvas-area" onClick={() => onSelectObject(null)}>
-        <Workspace>
+        <Workspace $zoom={zoom}>
           <BackdropGrid />
 
-          <PageSurface data-testid="page-surface">
+          <PageSurface $zoom={zoom} data-testid="page-surface">
             {objects.map((object) => (
               <CanvasObject
                 key={object.id}
@@ -69,6 +69,7 @@ export const Canvas = ({ objects, selectedId, onSelectObject, onUpdateObject }) 
           <Moveable
             ref={moveableRef}
             target={targetRefs.current[selectedId]}
+            zoom={zoom}
             draggable
             resizable
             rotatable
@@ -79,19 +80,30 @@ export const Canvas = ({ objects, selectedId, onSelectObject, onUpdateObject }) 
             throttleResize={0}
             throttleRotate={0}
             onDrag={({ target, left, top }) => {
-              target.style.left = `${left}px`
-              target.style.top = `${top}px`
-              onUpdateObject(selectedId, { x: left, y: top })
+              const normalizedLeft = left / zoom
+              const normalizedTop = top / zoom
+              target.style.left = `${normalizedLeft}px`
+              target.style.top = `${normalizedTop}px`
+              onUpdateObject(selectedId, { x: normalizedLeft, y: normalizedTop })
             }}
             onDragEnd={() => {
               moveableRef.current?.updateRect()
             }}
             onResize={({ target, width, height, left, top }) => {
-              target.style.width = `${width}px`
-              target.style.height = `${height}px`
-              target.style.left = `${left}px`
-              target.style.top = `${top}px`
-              onUpdateObject(selectedId, { width, height, x: left, y: top })
+              const normalizedWidth = width / zoom
+              const normalizedHeight = height / zoom
+              const normalizedLeft = left / zoom
+              const normalizedTop = top / zoom
+              target.style.width = `${normalizedWidth}px`
+              target.style.height = `${normalizedHeight}px`
+              target.style.left = `${normalizedLeft}px`
+              target.style.top = `${normalizedTop}px`
+              onUpdateObject(selectedId, {
+                width: normalizedWidth,
+                height: normalizedHeight,
+                x: normalizedLeft,
+                y: normalizedTop,
+              })
             }}
             onResizeEnd={() => {
               moveableRef.current?.updateRect()

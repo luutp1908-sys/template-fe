@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 const StyledSidebar = styled.div`
   width: 300px;
-  height: 100vh;
+  height: 100%;
   background: white;
   border-right: 1px solid #e5e7eb;
   display: flex;

@@ -1,9 +1,13 @@
 import { useState } from 'react'
 
+const MIN_ZOOM = 0.1
+const MAX_ZOOM = 4
+
 export const useEditor = (initialObjects) => {
   const [objects, setObjects] = useState(initialObjects)
   const [selectedId, setSelectedId] = useState(initialObjects[0]?.id || null)
   const [activeTool, setActiveTool] = useState(null)
+  const [zoom, setZoomState] = useState(1)
 
   const selectedObject = objects.find((obj) => obj.id === selectedId)
 
@@ -45,6 +49,12 @@ export const useEditor = (initialObjects) => {
     }
   }
 
+  const setZoom = (nextZoom) => {
+    const numericZoom = Number(nextZoom)
+    if (Number.isNaN(numericZoom)) return
+    setZoomState(Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, numericZoom)))
+  }
+
   return {
     objects,
     selectedId,
@@ -52,6 +62,8 @@ export const useEditor = (initialObjects) => {
     selectedObject,
     activeTool,
     setActiveTool,
+    zoom,
+    setZoom,
     updateObject,
     addObject,
     deleteObject,

@@ -23,8 +23,8 @@ export const Workspace = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: ${PAGE_WIDTH + 480}px;
-  min-height: ${PAGE_HEIGHT + 320}px;
+  min-width: ${({ $zoom = 1 }) => PAGE_WIDTH * $zoom + 480}px;
+  min-height: ${({ $zoom = 1 }) => PAGE_HEIGHT * $zoom + 320}px;
   padding: 160px 240px;
 `
 
@@ -42,6 +42,8 @@ export const PageSurface = styled.div`
   position: relative;
   width: ${PAGE_WIDTH}px;
   height: ${PAGE_HEIGHT}px;
+  transform: ${({ $zoom = 1 }) => `scale(${$zoom})`};
+  transform-origin: center center;
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 18px 45px rgba(19, 35, 65, 0.12), 0 2px 8px rgba(19, 35, 65, 0.08);

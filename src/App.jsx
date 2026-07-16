@@ -4,9 +4,67 @@ import { MenuBar } from './widgets/MenuBar'
 import { Sidebar } from './widgets/Sidebar'
 import { Canvas } from './features/canvas/Canvas'
 
+const HEADER_HEIGHT = 60
+
+const AppShell = styled.div`
+  min-height: 100vh;
+  background: #f5f8fc;
+`
+
+const TopHeader = styled.header`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: ${HEADER_HEIGHT}px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+
+  h1 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+`
+
+const HeaderContent = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+`
+
+const ZoomControl = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 220px;
+`
+
+const ZoomValue = styled.span`
+  min-width: 52px;
+  text-align: right;
+  font-size: 0.85rem;
+  color: #1a1a1a;
+  font-weight: 600;
+`
+
+const ZoomSlider = styled.input`
+  width: 160px;
+  accent-color: #0066cc;
+  cursor: pointer;
+`
+
 const AppContainer = styled.div`
   display: flex;
-  min-height: 100vh;
+  height: calc(100vh - ${HEADER_HEIGHT}px);
+  padding-top: ${HEADER_HEIGHT}px;
   background: #f5f8fc;
 `
 
@@ -57,29 +115,50 @@ function App() {
   }
 
   return (
-    <AppContainer>
-      <MenuBar
-        activeTool={editor.activeTool}
-        onToolSelect={editor.setActiveTool}
-        onAddShape={handleAddShape}
-        onAddText={handleAddText}
-        onAddImage={handleAddImage}
-      />
+    <AppShell>
+      <TopHeader>
+        <HeaderContent>
+          <h1>Canva Editor</h1>
+          <ZoomControl>
+            <ZoomSlider
+              type="range"
+              min="10"
+              max="400"
+              step="5"
+              value={Math.round(editor.zoom * 100)}
+              onChange={(e) => editor.setZoom(Number(e.target.value) / 100)}
+              aria-label="Zoom"
+            />
+            <ZoomValue>{Math.round(editor.zoom * 100)}%</ZoomValue>
+          </ZoomControl>
+        </HeaderContent>
+      </TopHeader>
 
-      <Sidebar
-        selectedObject={editor.selectedObject}
-        objects={editor.objects}
-        onSelectObject={editor.setSelectedId}
-        onDeleteObject={editor.deleteObject}
-      />
+      <AppContainer>
+        <MenuBar
+          activeTool={editor.activeTool}
+          onToolSelect={editor.setActiveTool}
+          onAddShape={handleAddShape}
+          onAddText={handleAddText}
+          onAddImage={handleAddImage}
+        />
 
-      <Canvas
-        objects={editor.objects}
-        selectedId={editor.selectedId}
-        onSelectObject={editor.setSelectedId}
-        onUpdateObject={editor.updateObject}
-      />
-    </AppContainer>
+        <Sidebar
+          selectedObject={editor.selectedObject}
+          objects={editor.objects}
+          onSelectObject={editor.setSelectedId}
+          onDeleteObject={editor.deleteObject}
+        />
+
+        <Canvas
+          objects={editor.objects}
+          selectedId={editor.selectedId}
+          onSelectObject={editor.setSelectedId}
+          onUpdateObject={editor.updateObject}
+          zoom={editor.zoom}
+        />
+      </AppContainer>
+    </AppShell>
   )
 }
 

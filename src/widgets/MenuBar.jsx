@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 const StyledMenuBar = styled.div`
   width: 80px;
-  height: 100vh;
+  height: 100%;
   background: white;
   border-right: 1px solid #e5e7eb;
   display: flex;
