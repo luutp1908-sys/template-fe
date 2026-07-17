@@ -80,7 +80,7 @@ export const Canvas = ({
   }, [draftText, editingId, objects, zoom])
 
   const enterTextEdit = (object: EditorObject) => {
-    if (object.type !== 'text') return
+    if (object.type !== 'text' || object.locked) return
     onSelectObject(object.id)
     setEditingId(object.id)
     const text = object.text ?? ''
@@ -131,20 +131,24 @@ export const Canvas = ({
 
           <PageSurface $zoom={zoom} data-testid="page-surface">
             {objects.map((object) => (
+              (object.visible ?? true) ? (
               <CanvasObject
                 key={object.id}
                 data-testid={`canvas-object-${object.id}`}
                 ref={(node) => setTargetRef(object.id, node)}
                 selected={selectedId === object.id}
+                $locked={object.locked ?? false}
                 style={{
                   left: object.x,
                   top: object.y,
                   width: object.width,
                   height: object.height,
                   transform: `rotate(${object.rotate}deg)`,
+                  zIndex: object.zIndex,
                 }}
                 onClick={(e) => {
                   e.stopPropagation()
+                  if (object.locked) return
                   if (editingId !== null && editingId !== object.id) {
                     commitTextEdit()
                   }
@@ -193,11 +197,12 @@ export const Canvas = ({
                   <ShapeBox style={{ background: object.color }} />
                 )}
               </CanvasObject>
+              ) : null
             ))}
           </PageSurface>
         </Workspace>
 
-        {selectedObject && editingId === null && (
+        {selectedObject && editingId === null && !selectedObject.locked && (
           <Moveable
             ref={moveableRef}
             target={targetRefs.current[selectedId]}

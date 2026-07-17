@@ -48,7 +48,7 @@ export const useCanvasInteractions = ({
 
   const handleDrag = useCallback(
     ({ target, left, top }: any) => {
-      if (!selectedId || editingId !== null) return
+      if (!selectedId || editingId !== null || selectedObject?.locked) return
 
       const normalizedLeft = left / zoom
       const normalizedTop = top / zoom
@@ -56,12 +56,12 @@ export const useCanvasInteractions = ({
       target.style.top = `${top}px`
       onUpdateObject(selectedId, { x: normalizedLeft, y: normalizedTop })
     },
-    [editingId, onUpdateObject, selectedId, zoom],
+    [editingId, onUpdateObject, selectedId, selectedObject?.locked, zoom],
   )
 
   const handleResize = useCallback(
     ({ target, width, height, left, top }: any) => {
-      if (!selectedId || editingId !== null) return
+      if (!selectedId || editingId !== null || selectedObject?.locked) return
 
       const normalizedWidth = width / zoom
       const normalizedHeight = height / zoom
@@ -80,17 +80,17 @@ export const useCanvasInteractions = ({
         y: normalizedTop,
       })
     },
-    [editingId, onUpdateObject, selectedId, zoom],
+    [editingId, onUpdateObject, selectedId, selectedObject?.locked, zoom],
   )
 
   const handleRotate = useCallback(
     ({ target, rotate }: any) => {
-      if (!selectedId || editingId !== null) return
+      if (!selectedId || editingId !== null || selectedObject?.locked) return
 
       target.style.transform = `rotate(${rotate}deg)`
       onUpdateObject(selectedId, { rotate })
     },
-    [editingId, onUpdateObject, selectedId],
+    [editingId, onUpdateObject, selectedId, selectedObject?.locked],
   )
 
   return {

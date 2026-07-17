@@ -118,4 +118,24 @@ describe('App integration', () => {
     const updatedHeight = Number.parseFloat(screen.getByTestId('canvas-object-2').style.height)
     expect(updatedHeight).toBeGreaterThan(initialHeight)
   })
+
+  it('toggles layer visibility from shared metadata controls', () => {
+    render(<App />)
+
+    fireEvent.click(screen.getByText('Your design'))
+    const visibleToggle = screen.getByLabelText('Layer Visible')
+    fireEvent.click(visibleToggle)
+
+    expect(screen.queryByText('Your design')).not.toBeInTheDocument()
+  })
+
+  it('prevents entering text edit mode while layer is locked', () => {
+    render(<App />)
+
+    fireEvent.click(screen.getByText('Your design'))
+    fireEvent.click(screen.getByLabelText('Layer Locked'))
+    fireEvent.doubleClick(screen.getByText('Your design'))
+
+    expect(screen.queryByLabelText('Text Editor')).not.toBeInTheDocument()
+  })
 })

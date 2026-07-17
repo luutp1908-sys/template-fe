@@ -56,14 +56,14 @@ export const PageSurface = styled.div<{ $zoom?: number }>`
   overflow: hidden;
 `
 
-export const CanvasObject = styled.div<{ selected: boolean }>`
+export const CanvasObject = styled.div<{ selected: boolean; $locked?: boolean }>`
   position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 2px solid transparent;
   border-radius: 6px;
-  cursor: grab;
+  cursor: ${({ $locked }) => ($locked ? 'not-allowed' : 'grab')};
   user-select: none;
   background: white;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);

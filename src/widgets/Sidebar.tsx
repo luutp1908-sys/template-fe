@@ -195,6 +195,15 @@ const AlignButton = styled.button<{ $active: boolean }>`
   padding: 6px 4px;
 `
 
+const ToggleRow = styled.label`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: #1a1a1a;
+`
+
 export const Sidebar = ({
   selectedObject,
   objects,
@@ -202,9 +211,14 @@ export const Sidebar = ({
   onDeleteObject,
   onUpdateObject,
 }: SidebarProps) => {
+  const handleLayerUpdate = (updates: Partial<EditorObject>) => {
+    if (!selectedObject) return
+    onUpdateObject(selectedObject.id, updates)
+  }
+
   const handleTextUpdate = (updates: Partial<EditorObject>) => {
     if (!selectedObject || selectedObject.type !== 'text') return
-    onUpdateObject(selectedObject.id, updates)
+    handleLayerUpdate(updates)
   }
 
   return (
@@ -264,6 +278,43 @@ export const Sidebar = ({
           <PropertyGroup>
             <label>Rotation</label>
             <p>{Math.round(selectedObject.rotate)}°</p>
+          </PropertyGroup>
+
+          <PropertyGroup>
+            <label>Layer</label>
+            <ToggleRow htmlFor="layer-visible">
+              Visible
+              <input
+                id="layer-visible"
+                aria-label="Layer Visible"
+                type="checkbox"
+                checked={selectedObject.visible ?? true}
+                onChange={(e) => handleLayerUpdate({ visible: e.target.checked })}
+              />
+            </ToggleRow>
+            <ToggleRow htmlFor="layer-locked">
+              Locked
+              <input
+                id="layer-locked"
+                aria-label="Layer Locked"
+                type="checkbox"
+                checked={selectedObject.locked ?? false}
+                onChange={(e) => handleLayerUpdate({ locked: e.target.checked })}
+              />
+            </ToggleRow>
+          </PropertyGroup>
+
+          <PropertyGroup>
+            <label htmlFor="layer-z-index">Layer Order</label>
+            <PropertyInput
+              id="layer-z-index"
+              aria-label="Layer Z-Index"
+              type="number"
+              value={selectedObject.zIndex ?? 0}
+              onChange={(e) => {
+                handleLayerUpdate({ zIndex: Number(e.target.value) || 0 })
+              }}
+            />
           </PropertyGroup>
 
           {selectedObject.type === 'text' && (

@@ -108,4 +108,14 @@ test.describe('Canvas E2E interactions', () => {
 
     expect(after.height).toBeGreaterThan(before.height)
   })
+
+  test('toggles layer visibility from metadata panel', async ({ page }) => {
+    await page.goto('/')
+
+    await page.getByText('Your design').click()
+    const visibleToggle = page.getByLabel('Layer Visible')
+    await visibleToggle.uncheck()
+
+    await expect(page.getByText('Your design')).toHaveCount(0)
+  })
 })
