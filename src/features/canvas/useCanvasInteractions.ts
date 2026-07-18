@@ -52,6 +52,13 @@ export const useCanvasInteractions = ({
     return Math.abs(normalized - current) < Math.abs(value - current) ? normalized : value
   }, [zoom])
 
+  const toSafeCanvasUnit = useCallback((value: unknown, current: number) => {
+    if (typeof value !== 'number' || Number.isNaN(value) || !Number.isFinite(value)) {
+      return current
+    }
+    return toCanvasUnit(value, current)
+  }, [toCanvasUnit])
+
   const handleDrag = useCallback(
     ({ target, left, top }: any) => {
       if (!selectedId || editingId !== null || selectedObject?.locked) return
@@ -69,10 +76,17 @@ export const useCanvasInteractions = ({
     ({ target, width, height, left, top }: any) => {
       if (!selectedId || editingId !== null || selectedObject?.locked) return
 
-      const normalizedWidth = toCanvasUnit(width, selectedObject?.width ?? width)
-      const normalizedHeight = toCanvasUnit(height, selectedObject?.height ?? height)
-      const normalizedLeft = toCanvasUnit(left, selectedObject?.x ?? left)
-      const normalizedTop = toCanvasUnit(top, selectedObject?.y ?? top)
+      const currentX = selectedObject?.x ?? 0
+      const currentY = selectedObject?.y ?? 0
+      const currentWidth = selectedObject?.width ?? 0
+      const currentHeight = selectedObject?.height ?? 0
+
+      const isSuspiciousOriginReset = left === 0 && top === 0 && (currentX !== 0 || currentY !== 0)
+
+      const normalizedWidth = toSafeCanvasUnit(width, currentWidth)
+      const normalizedHeight = toSafeCanvasUnit(height, currentHeight)
+      const normalizedLeft = isSuspiciousOriginReset ? currentX : toSafeCanvasUnit(left, currentX)
+      const normalizedTop = isSuspiciousOriginReset ? currentY : toSafeCanvasUnit(top, currentY)
 
       target.style.width = `${normalizedWidth}px`
       target.style.height = `${normalizedHeight}px`
@@ -86,7 +100,7 @@ export const useCanvasInteractions = ({
         y: normalizedTop,
       })
     },
-    [editingId, onUpdateObject, selectedId, selectedObject, toCanvasUnit],
+    [editingId, onUpdateObject, selectedId, selectedObject, toSafeCanvasUnit],
   )
 
   const handleRotate = useCallback(
