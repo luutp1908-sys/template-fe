@@ -122,6 +122,74 @@ export const EditableText = styled.textarea<ObjectTextProps>`
   white-space: pre-wrap;
 `
 
+type CanvasImageContainerProps = {
+  $opacity?: number
+  $cornerRadius?: number
+}
+
+export const CanvasImageContainer = styled.div<CanvasImageContainerProps>`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eef2f7;
+  opacity: ${({ $opacity = 1 }) => $opacity};
+  border-radius: ${({ $cornerRadius = 0 }) => `${$cornerRadius}px`};
+  overflow: hidden;
+`
+
+type CanvasImageProps = {
+  $fitMode?: 'contain' | 'cover'
+}
+
+export const CanvasImage = styled.img<CanvasImageProps>`
+  width: 100%;
+  height: 100%;
+  object-fit: ${({ $fitMode = 'contain' }) => $fitMode};
+  user-select: none;
+  -webkit-user-drag: none;
+`
+
+export const ImagePlaceholder = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #4b5563;
+  background: repeating-linear-gradient(
+    -45deg,
+    #f3f4f6,
+    #f3f4f6 8px,
+    #e5e7eb 8px,
+    #e5e7eb 16px
+  );
+`
+
+export const ImageErrorPlaceholder = styled(ImagePlaceholder)`
+  flex-direction: column;
+  gap: 8px;
+  color: #b91c1c;
+  background: #fee2e2;
+`
+
+export const RetryButton = styled.button`
+  border: none;
+  border-radius: 6px;
+  background: #b91c1c;
+  color: #ffffff;
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+`
+
 export const ShapeBox = styled.div`
   width: 100%;
   height: 100%;

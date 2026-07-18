@@ -3,18 +3,30 @@ import { useEffect, useRef, useState } from 'react'
 import type { RefObject } from 'react'
 import {
   BackdropGrid,
+  CanvasImage,
+  CanvasImageContainer,
   CanvasArea,
   CanvasObject,
   CanvasWrapper,
   EditableText,
+  ImageErrorPlaceholder,
+  ImagePlaceholder,
   ObjectText,
   PageSurface,
+  RetryButton,
   ShapeBox,
   Workspace,
 } from './Canvas.styles'
 import { useCanvasInteractions } from './useCanvasInteractions'
 import type { EditorObject } from '../../shared/types/editor'
-import { DEFAULT_TEXT_HEIGHT } from '../../shared/constants/editorGeometry'
+import {
+  DEFAULT_IMAGE_CORNER_RADIUS,
+  DEFAULT_IMAGE_FIT_MODE,
+  DEFAULT_IMAGE_OPACITY,
+  DEFAULT_TEXT_HEIGHT,
+} from '../../shared/constants/editorGeometry'
+
+type ImageLoadStatus = 'idle' | 'loading' | 'loaded' | 'error'
 
 type CanvasProps = {
   objects: EditorObject[]
@@ -38,6 +50,9 @@ export const Canvas = ({
   const originalTextRef = useRef('')
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null)
   const pendingHeightRef = useRef<number | null>(null)
+  const [imageLoadStates, setImageLoadStates] = useState<Record<number, ImageLoadStatus>>({})
+  const [imageRetryTokens, setImageRetryTokens] = useState<Record<number, number>>({})
+  const previousImageSrcRef = useRef<Record<number, string>>({})
 
   const {
     moveableRef,
@@ -78,6 +93,58 @@ export const Canvas = ({
     if (!object || object.type !== 'text') return
     updateTextHeightFromElement(object, textAreaRef.current)
   }, [draftText, editingId, objects, zoom])
+
+  useEffect(() => {
+    const currentImageSrc: Record<number, string> = {}
+
+    for (const obj of objects) {
+      if (obj.type !== 'image') continue
+      const src = obj.src ?? ''
+      currentImageSrc[obj.id] = src
+
+      const previousSrc = previousImageSrcRef.current[obj.id]
+      if (previousSrc === src) continue
+
+      if (previousSrc && previousSrc.startsWith('blob:')) {
+        URL.revokeObjectURL(previousSrc)
+      }
+
+      setImageLoadStates((current) => ({
+        ...current,
+        [obj.id]: src ? 'loading' : 'idle',
+      }))
+    }
+
+    for (const [idText, previousSrc] of Object.entries(previousImageSrcRef.current)) {
+      const id = Number(idText)
+      if (id in currentImageSrc) continue
+      if (previousSrc.startsWith('blob:')) {
+        URL.revokeObjectURL(previousSrc)
+      }
+      setImageLoadStates((current) => {
+        const next = { ...current }
+        delete next[id]
+        return next
+      })
+      setImageRetryTokens((current) => {
+        const next = { ...current }
+        delete next[id]
+        return next
+      })
+    }
+
+    previousImageSrcRef.current = currentImageSrc
+  }, [objects])
+
+  useEffect(() => {
+    return () => {
+      for (const src of Object.values(previousImageSrcRef.current)) {
+        if (src.startsWith('blob:')) {
+          URL.revokeObjectURL(src)
+        }
+      }
+    }
+  }, [])
 
   const enterTextEdit = (object: EditorObject) => {
     if (object.type !== 'text' || object.locked) return
@@ -130,75 +197,127 @@ export const Canvas = ({
           <BackdropGrid />
 
           <PageSurface $zoom={zoom} data-testid="page-surface">
-            {objects.map((object) => (
-              (object.visible ?? true) ? (
-              <CanvasObject
-                key={object.id}
-                data-testid={`canvas-object-${object.id}`}
-                ref={(node) => setTargetRef(object.id, node)}
-                selected={selectedId === object.id}
-                $locked={object.locked ?? false}
-                style={{
-                  left: object.x,
-                  top: object.y,
-                  width: object.width,
-                  height: object.height,
-                  transform: `rotate(${object.rotate}deg)`,
-                  zIndex: object.zIndex,
-                }}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  if (object.locked) return
-                  if (editingId !== null && editingId !== object.id) {
-                    commitTextEdit()
-                  }
-                  onSelectObject(object.id)
-                }}
-                onDoubleClick={(e) => {
-                  e.stopPropagation()
-                  enterTextEdit(object)
-                }}
-              >
-                {object.type === 'text' ? (
-                  editingId === object.id ? (
-                    <EditableText
-                      ref={textAreaRef}
-                      aria-label="Text Editor"
-                      value={draftText}
-                      onChange={(e) => setDraftText(e.target.value)}
-                      onBlur={commitTextEdit}
-                      onClick={(e) => e.stopPropagation()}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Escape') {
-                          e.preventDefault()
-                          cancelTextEdit()
-                        }
-                      }}
-                      $fontSize={object.fontSize}
-                      $fontWeight={object.fontWeight}
-                      $textAlign={object.textAlign}
-                      $textColor={object.textColor}
-                      $lineHeight={object.lineHeight}
-                      $fontFamily={object.fontFamily}
-                    />
-                  ) : (
-                    <ObjectText
-                      $fontSize={object.fontSize}
-                      $fontWeight={object.fontWeight}
-                      $textAlign={object.textAlign}
-                      $textColor={object.textColor}
-                      $lineHeight={object.lineHeight}
-                      $fontFamily={object.fontFamily}
+            {objects.map((object) => {
+              if (!(object.visible ?? true)) return null
+
+              return (
+                <CanvasObject
+                  key={object.id}
+                  data-testid={`canvas-object-${object.id}`}
+                  ref={(node) => setTargetRef(object.id, node)}
+                  selected={selectedId === object.id}
+                  $locked={object.locked ?? false}
+                  style={{
+                    left: object.x,
+                    top: object.y,
+                    width: object.width,
+                    height: object.height,
+                    transform: `rotate(${object.rotate}deg)`,
+                    zIndex: object.zIndex,
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    if (object.locked) return
+                    if (editingId !== null && editingId !== object.id) {
+                      commitTextEdit()
+                    }
+                    onSelectObject(object.id)
+                  }}
+                  onDoubleClick={(e) => {
+                    e.stopPropagation()
+                    enterTextEdit(object)
+                  }}
+                >
+                  {object.type === 'text' ? (
+                    editingId === object.id ? (
+                      <EditableText
+                        ref={textAreaRef}
+                        aria-label="Text Editor"
+                        value={draftText}
+                        onChange={(e) => setDraftText(e.target.value)}
+                        onBlur={commitTextEdit}
+                        onClick={(e) => e.stopPropagation()}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Escape') {
+                            e.preventDefault()
+                            cancelTextEdit()
+                          }
+                        }}
+                        $fontSize={object.fontSize}
+                        $fontWeight={object.fontWeight}
+                        $textAlign={object.textAlign}
+                        $textColor={object.textColor}
+                        $lineHeight={object.lineHeight}
+                        $fontFamily={object.fontFamily}
+                      />
+                    ) : (
+                      <ObjectText
+                        $fontSize={object.fontSize}
+                        $fontWeight={object.fontWeight}
+                        $textAlign={object.textAlign}
+                        $textColor={object.textColor}
+                        $lineHeight={object.lineHeight}
+                        $fontFamily={object.fontFamily}
+                      >
+                        {object.text}
+                      </ObjectText>
+                    )
+                  ) : object.type === 'image' ? (
+                    <CanvasImageContainer
+                      data-testid={`canvas-image-container-${object.id}`}
+                      $opacity={object.opacity ?? DEFAULT_IMAGE_OPACITY}
+                      $cornerRadius={object.cornerRadius ?? DEFAULT_IMAGE_CORNER_RADIUS}
                     >
-                      {object.text}
-                    </ObjectText>
-                  )
-                ) : (
-                  <ShapeBox style={{ background: object.color }} />
-                )}
-              </CanvasObject>
-              ) : null
-            ))}
+                      {!object.src ? (
+                        <ImagePlaceholder>No image selected</ImagePlaceholder>
+                      ) : (
+                        <>
+                          <CanvasImage
+                            key={`${object.id}-${imageRetryTokens[object.id] ?? 0}-${object.src}`}
+                            data-testid={`canvas-image-${object.id}`}
+                            src={object.src}
+                            alt="Canvas image"
+                            draggable={false}
+                            $fitMode={object.fitMode ?? DEFAULT_IMAGE_FIT_MODE}
+                            style={{ display: imageLoadStates[object.id] === 'loaded' ? 'block' : 'none' }}
+                            onLoad={() => {
+                              setImageLoadStates((current) => ({ ...current, [object.id]: 'loaded' }))
+                              updateMoveableRect()
+                            }}
+                            onError={() => {
+                              setImageLoadStates((current) => ({ ...current, [object.id]: 'error' }))
+                            }}
+                          />
+
+                          {imageLoadStates[object.id] === 'error' ? (
+                            <ImageErrorPlaceholder>
+                              Failed to load image
+                              <RetryButton
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setImageLoadStates((current) => ({ ...current, [object.id]: 'loading' }))
+                                  setImageRetryTokens((current) => ({
+                                    ...current,
+                                    [object.id]: (current[object.id] ?? 0) + 1,
+                                  }))
+                                }}
+                              >
+                                Retry
+                              </RetryButton>
+                            </ImageErrorPlaceholder>
+                          ) : imageLoadStates[object.id] !== 'loaded' ? (
+                            <ImagePlaceholder>Loading image...</ImagePlaceholder>
+                          ) : null}
+                        </>
+                      )}
+                    </CanvasImageContainer>
+                  ) : (
+                    <ShapeBox style={{ background: object.color }} />
+                  )}
+                </CanvasObject>
+              )
+            })}
           </PageSurface>
         </Workspace>
 

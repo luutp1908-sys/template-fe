@@ -13,3 +13,9 @@ export const DEFAULT_TEXT_FONT_WEIGHT = 'normal'
 export const DEFAULT_TEXT_ALIGN = 'left'
 export const DEFAULT_TEXT_LINE_HEIGHT = 1.2
 export const DEFAULT_TEXT_COLOR = '#1a1a1a'
+
+export const DEFAULT_IMAGE_WIDTH = 260
+export const DEFAULT_IMAGE_HEIGHT = 180
+export const DEFAULT_IMAGE_FIT_MODE = 'contain'
+export const DEFAULT_IMAGE_OPACITY = 1
+export const DEFAULT_IMAGE_CORNER_RADIUS = 0

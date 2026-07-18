@@ -119,6 +119,62 @@ describe('App integration', () => {
     expect(updatedHeight).toBeGreaterThan(initialHeight)
   })
 
+  it('adds image layer with placeholder and image controls', () => {
+    render(<App />)
+
+    fireEvent.click(screen.getByTitle('Add Image'))
+
+    expect(screen.getByText('image')).toBeInTheDocument()
+    expect(screen.getByText('No image selected')).toBeInTheDocument()
+    expect(screen.getByLabelText('Image Fit Mode')).toBeInTheDocument()
+    expect(screen.getByLabelText('Image Opacity')).toBeInTheDocument()
+    expect(screen.getByLabelText('Image Corner Radius')).toBeInTheDocument()
+  })
+
+  it('updates image placeholder style from image controls', () => {
+    render(<App />)
+
+    fireEvent.click(screen.getByTitle('Add Image'))
+    fireEvent.change(screen.getByLabelText('Image Opacity'), { target: { value: '0.4' } })
+    fireEvent.change(screen.getByLabelText('Image Corner Radius'), { target: { value: '12' } })
+
+    const placeholder = screen.getByText('No image selected')
+    expect(placeholder.parentElement).toHaveStyle({
+      opacity: '0.4',
+      borderRadius: '12px',
+    })
+  })
+
+  it('selects stock image from sidebar catalog', () => {
+    render(<App />)
+
+    fireEvent.click(screen.getByTitle('Add Image'))
+    fireEvent.click(screen.getByLabelText('Browse Stock'))
+    fireEvent.click(screen.getByLabelText('Stock Mountain Lake'))
+
+    const renderedImage = document.querySelector('img[data-testid^="canvas-image-"]') as HTMLImageElement
+    expect(renderedImage).toBeTruthy()
+    expect(renderedImage).toHaveAttribute('src')
+    expect(renderedImage.getAttribute('src')).toContain('picsum.photos')
+  })
+
+  it('replaces image source from local file input', () => {
+    const createObjectURLSpy = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:unit-test-image')
+
+    render(<App />)
+
+    fireEvent.click(screen.getByTitle('Add Image'))
+    const input = screen.getByLabelText('Image File Input') as HTMLInputElement
+    const file = new File(['dummy'], 'upload.png', { type: 'image/png' })
+    fireEvent.change(input, { target: { files: [file] } })
+
+    const renderedImage = document.querySelector('img[data-testid^="canvas-image-"]') as HTMLImageElement
+    expect(renderedImage).toBeTruthy()
+    expect(renderedImage).toHaveAttribute('src', 'blob:unit-test-image')
+
+    createObjectURLSpy.mockRestore()
+  })
+
   it('toggles layer visibility from shared metadata controls', () => {
     render(<App />)
 

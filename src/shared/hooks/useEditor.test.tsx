@@ -125,6 +125,26 @@ describe('useEditor', () => {
     }
   })
 
+  it('adds image with base layer defaults', () => {
+    const { result } = renderHook(() => useEditor([]))
+
+    act(() => {
+      result.current.addObject('image')
+    })
+
+    const created = result.current.objects[0]
+    expect(created.type).toBe('image')
+    expect(created.visible).toBe(true)
+    expect(created.locked).toBe(false)
+    if (created.type === 'image') {
+      expect(created.width).toBe(260)
+      expect(created.height).toBe(180)
+      expect(created.fitMode).toBe('contain')
+      expect(created.opacity).toBe(1)
+      expect(created.cornerRadius).toBe(0)
+    }
+  })
+
   it('does not change objects when updating a missing id', () => {
     const { result } = renderHook(() => useEditor(initialObjects))
     const before = result.current.objects

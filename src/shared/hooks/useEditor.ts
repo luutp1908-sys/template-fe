@@ -1,5 +1,10 @@
 import { useState } from 'react'
 import {
+  DEFAULT_IMAGE_CORNER_RADIUS,
+  DEFAULT_IMAGE_FIT_MODE,
+  DEFAULT_IMAGE_HEIGHT,
+  DEFAULT_IMAGE_OPACITY,
+  DEFAULT_IMAGE_WIDTH,
   DEFAULT_TEXT_ALIGN,
   DEFAULT_TEXT_COLOR,
   DEFAULT_TEXT_FONT_FAMILY,
@@ -50,7 +55,12 @@ const getDefaultLayerProps = (type: EditorObjectType): Omit<EditorObject, 'id'> 
   if (type === 'image') {
     return {
       ...base,
+      width: DEFAULT_IMAGE_WIDTH,
+      height: DEFAULT_IMAGE_HEIGHT,
       src: '',
+      fitMode: DEFAULT_IMAGE_FIT_MODE,
+      opacity: DEFAULT_IMAGE_OPACITY,
+      cornerRadius: DEFAULT_IMAGE_CORNER_RADIUS,
     }
   }
 

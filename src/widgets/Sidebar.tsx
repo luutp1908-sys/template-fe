@@ -1,7 +1,13 @@
+import { useRef, useState } from 'react'
+import type { ChangeEvent } from 'react'
 import styled from 'styled-components'
 import { SIDEBAR_WIDTH } from '../shared/constants/layout'
 import type { EditorObject } from '../shared/types/editor'
+import { STOCK_IMAGES } from '../shared/constants/stockImages'
 import {
+  DEFAULT_IMAGE_CORNER_RADIUS,
+  DEFAULT_IMAGE_FIT_MODE,
+  DEFAULT_IMAGE_OPACITY,
   DEFAULT_TEXT_ALIGN,
   DEFAULT_TEXT_COLOR,
   DEFAULT_TEXT_FONT_SIZE,
@@ -204,6 +210,63 @@ const ToggleRow = styled.label`
   color: #1a1a1a;
 `
 
+const ActionRow = styled.div`
+  display: flex;
+  gap: 8px;
+`
+
+const ActionButton = styled.button`
+  flex: 1;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #1a1a1a;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 8px;
+  cursor: pointer;
+`
+
+const StockPanel = styled.div`
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+`
+
+const StockCard = styled.button`
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 0;
+  overflow: hidden;
+  background: #ffffff;
+  cursor: pointer;
+  text-align: left;
+`
+
+const StockThumb = styled.img`
+  width: 100%;
+  height: 72px;
+  object-fit: cover;
+  display: block;
+`
+
+const StockMeta = styled.div`
+  padding: 6px;
+
+  strong {
+    display: block;
+    font-size: 0.72rem;
+    color: #111827;
+    margin-bottom: 2px;
+  }
+
+  span {
+    font-size: 0.66rem;
+    color: #6b7280;
+  }
+`
+
 export const Sidebar = ({
   selectedObject,
   objects,
@@ -211,6 +274,9 @@ export const Sidebar = ({
   onDeleteObject,
   onUpdateObject,
 }: SidebarProps) => {
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const [showStockPanel, setShowStockPanel] = useState(false)
+
   const handleLayerUpdate = (updates: Partial<EditorObject>) => {
     if (!selectedObject) return
     onUpdateObject(selectedObject.id, updates)
@@ -219,6 +285,22 @@ export const Sidebar = ({
   const handleTextUpdate = (updates: Partial<EditorObject>) => {
     if (!selectedObject || selectedObject.type !== 'text') return
     handleLayerUpdate(updates)
+  }
+
+  const handleImageUpdate = (updates: Partial<EditorObject>) => {
+    if (!selectedObject || selectedObject.type !== 'image') return
+    handleLayerUpdate(updates)
+  }
+
+  const handleImageFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file || !selectedObject || selectedObject.type !== 'image') return
+    if (!file.type.startsWith('image/')) return
+
+    const objectUrl = URL.createObjectURL(file)
+    handleImageUpdate({ src: objectUrl })
+    setShowStockPanel(false)
+    event.target.value = ''
   }
 
   return (
@@ -239,10 +321,10 @@ export const Sidebar = ({
               onClick={() => onSelectObject(obj.id)}
             >
               <LayerIcon>
-                {obj.type === 'text' ? '📄' : '⬜'}
+                {obj.type === 'text' ? '📄' : obj.type === 'image' ? '🖼️' : '⬜'}
               </LayerIcon>
               <LayerName>
-                {obj.type === 'text' ? 'Text' : 'Shape'} {index + 1}
+                {obj.type === 'text' ? 'Text' : obj.type === 'image' ? 'Image' : 'Shape'} {index + 1}
               </LayerName>
               <LayerDelete
                 onClick={(e) => {
@@ -316,6 +398,110 @@ export const Sidebar = ({
               }}
             />
           </PropertyGroup>
+
+          {selectedObject.type === 'image' && (
+            <>
+              <PropertyGroup>
+                <label>Image Source</label>
+                <ActionRow>
+                  <ActionButton
+                    type="button"
+                    title="Replace image"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    Replace
+                  </ActionButton>
+                  <ActionButton
+                    type="button"
+                    title="Browse stock images"
+                    aria-label="Browse Stock"
+                    onClick={() => setShowStockPanel((current) => !current)}
+                  >
+                    Stock
+                  </ActionButton>
+                </ActionRow>
+
+                {showStockPanel && (
+                  <StockPanel>
+                    {STOCK_IMAGES.map((image) => (
+                      <StockCard
+                        key={image.id}
+                        type="button"
+                        aria-label={`Stock ${image.title}`}
+                        onClick={() => {
+                          handleImageUpdate({ src: image.url })
+                          setShowStockPanel(false)
+                        }}
+                      >
+                        <StockThumb src={image.url} alt={image.title} />
+                        <StockMeta>
+                          <strong>{image.title}</strong>
+                          <span>{image.attribution}</span>
+                        </StockMeta>
+                      </StockCard>
+                    ))}
+                  </StockPanel>
+                )}
+
+                <input
+                  ref={fileInputRef}
+                  aria-label="Image File Input"
+                  type="file"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={handleImageFileChange}
+                />
+              </PropertyGroup>
+
+              <PropertyGroup>
+                <label htmlFor="image-fit-mode">Fit Mode</label>
+                <PropertySelect
+                  id="image-fit-mode"
+                  aria-label="Image Fit Mode"
+                  value={selectedObject.fitMode ?? DEFAULT_IMAGE_FIT_MODE}
+                  onChange={(e) => {
+                    handleImageUpdate({ fitMode: e.target.value === 'cover' ? 'cover' : 'contain' })
+                  }}
+                >
+                  <option value="contain">Contain</option>
+                  <option value="cover">Cover</option>
+                </PropertySelect>
+              </PropertyGroup>
+
+              <PropertyGroup>
+                <label htmlFor="image-opacity">Opacity</label>
+                <PropertyInput
+                  id="image-opacity"
+                  aria-label="Image Opacity"
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={selectedObject.opacity ?? DEFAULT_IMAGE_OPACITY}
+                  onChange={(e) => {
+                    handleImageUpdate({ opacity: Number(e.target.value) || DEFAULT_IMAGE_OPACITY })
+                  }}
+                />
+              </PropertyGroup>
+
+              <PropertyGroup>
+                <label htmlFor="image-corner-radius">Corner Radius</label>
+                <PropertyInput
+                  id="image-corner-radius"
+                  aria-label="Image Corner Radius"
+                  type="number"
+                  min={0}
+                  max={400}
+                  value={selectedObject.cornerRadius ?? DEFAULT_IMAGE_CORNER_RADIUS}
+                  onChange={(e) => {
+                    handleImageUpdate({
+                      cornerRadius: Math.max(0, Number(e.target.value) || DEFAULT_IMAGE_CORNER_RADIUS),
+                    })
+                  }}
+                />
+              </PropertyGroup>
+            </>
+          )}
 
           {selectedObject.type === 'text' && (
             <>

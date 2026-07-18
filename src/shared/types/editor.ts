@@ -36,6 +36,9 @@ export interface TextLayer extends BaseLayer {
 export interface ImageLayer extends BaseLayer {
   type: 'image'
   src?: string
+  fitMode?: 'contain' | 'cover'
+  opacity?: number
+  cornerRadius?: number
 }
 
 export interface FrameLayer extends BaseLayer {
