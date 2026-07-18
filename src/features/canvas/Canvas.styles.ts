@@ -196,4 +196,31 @@ export const ShapeBox = styled.div`
   border-radius: 4px;
 `
 
+export const InlineToolbar = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 8px;
+  background: rgba(17, 24, 39, 0.95);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  z-index: 2000;
+`
+
+export const ToolbarButton = styled.button`
+  border: none;
+  border-radius: 6px;
+  background: #1f2937;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 6px 10px;
+  cursor: pointer;
+
+  &:hover {
+    background: #374151;
+  }
+`
+
 export { PAGE_WIDTH, PAGE_HEIGHT, WORKSPACE_PADDING }

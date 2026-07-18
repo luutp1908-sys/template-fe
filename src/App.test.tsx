@@ -131,4 +131,45 @@ describe('App integration', () => {
     fireEvent.click(screen.getByTitle('Text'))
     expect(screen.queryByLabelText('Left Stock Panel')).not.toBeInTheDocument()
   })
+
+  it('shows inline toolbar for selected object and hides on backdrop click', () => {
+    render(<App />)
+
+    fireEvent.click(screen.getByText('Your design'))
+    expect(screen.getByLabelText('Inline Toolbar')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByTestId('canvas-area'))
+    expect(screen.queryByLabelText('Inline Toolbar')).not.toBeInTheDocument()
+  })
+
+  it('duplicates selected object from inline toolbar', () => {
+    render(<App />)
+
+    fireEvent.click(screen.getByText('Your design'))
+    fireEvent.click(screen.getByLabelText('Duplicate Selected'))
+
+    expect(screen.getByText('Text 3')).toBeInTheDocument()
+  })
+
+  it('toggles lock and unlock labels from inline toolbar', () => {
+    render(<App />)
+
+    fireEvent.click(screen.getByText('Your design'))
+    const lockButton = screen.getByLabelText('Lock Selected')
+    fireEvent.click(lockButton)
+
+    expect(screen.getByLabelText('Unlock Selected')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByLabelText('Unlock Selected'))
+    expect(screen.getByLabelText('Lock Selected')).toBeInTheDocument()
+  })
+
+  it('deletes selected object from inline toolbar', () => {
+    render(<App />)
+
+    fireEvent.click(screen.getByText('Your design'))
+    fireEvent.click(screen.getByLabelText('Delete Selected'))
+
+    expect(screen.queryByText('Your design')).not.toBeInTheDocument()
+  })
 })

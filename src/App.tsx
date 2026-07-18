@@ -219,6 +219,9 @@ function App() {
           selectedId={editor.selectedId}
           onSelectObject={editor.setSelectedId}
           onUpdateObject={editor.updateObject}
+          onDuplicateObject={editor.duplicateObject}
+          onDeleteObject={editor.deleteObject}
+          onToggleObjectLock={editor.toggleObjectLock}
           zoom={editor.zoom}
           viewportRef={canvasViewportRef}
         />

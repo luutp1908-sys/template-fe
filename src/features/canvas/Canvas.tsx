@@ -11,10 +11,12 @@ import {
   EditableText,
   ImageErrorPlaceholder,
   ImagePlaceholder,
+  InlineToolbar,
   ObjectText,
   PageSurface,
   RetryButton,
   ShapeBox,
+  ToolbarButton,
   Workspace,
 } from './Canvas.styles'
 import { useCanvasInteractions } from './useCanvasInteractions'
@@ -33,6 +35,9 @@ type CanvasProps = {
   selectedId: number | null
   onSelectObject: (id: number | null) => void
   onUpdateObject: (id: number, updates: Partial<EditorObject>) => void
+  onDuplicateObject: (id: number) => void
+  onDeleteObject: (id: number) => void
+  onToggleObjectLock: (id: number) => void
   zoom?: number
   viewportRef?: RefObject<HTMLDivElement | null>
 }
@@ -42,6 +47,9 @@ export const Canvas = ({
   selectedId,
   onSelectObject,
   onUpdateObject,
+  onDuplicateObject,
+  onDeleteObject,
+  onToggleObjectLock,
   zoom = 1,
   viewportRef,
 }: CanvasProps) => {
@@ -217,7 +225,6 @@ export const Canvas = ({
                   }}
                   onClick={(e) => {
                     e.stopPropagation()
-                    if (object.locked) return
                     if (editingId !== null && editingId !== object.id) {
                       commitTextEdit()
                     }
@@ -312,12 +319,56 @@ export const Canvas = ({
                         </>
                       )}
                     </CanvasImageContainer>
+                  ) : object.type === 'frame' ? (
+                    <ShapeBox
+                      style={{
+                        background: 'transparent',
+                        borderStyle: 'solid',
+                        borderWidth: `${object.borderWidth ?? 1}px`,
+                        borderColor: object.borderColor ?? '#e5e7eb',
+                      }}
+                    />
                   ) : (
-                    <ShapeBox style={{ background: object.color }} />
+                    <ShapeBox style={{ background: object.color ?? '#0066cc' }} />
                   )}
                 </CanvasObject>
               )
             })}
+
+            {selectedObject && editingId === null && (
+              <InlineToolbar
+                data-testid="inline-toolbar"
+                aria-label="Inline Toolbar"
+                style={{
+                  left: selectedObject.x + selectedObject.width / 2,
+                  top: Math.max(10, selectedObject.y - 10),
+                  transform: 'translate(-50%, -100%)',
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <ToolbarButton
+                  type="button"
+                  aria-label="Duplicate Selected"
+                  onClick={() => onDuplicateObject(selectedObject.id)}
+                >
+                  Duplicate
+                </ToolbarButton>
+                <ToolbarButton
+                  type="button"
+                  aria-label="Delete Selected"
+                  onClick={() => onDeleteObject(selectedObject.id)}
+                >
+                  Delete
+                </ToolbarButton>
+                <ToolbarButton
+                  type="button"
+                  aria-label={selectedObject.locked ? 'Unlock Selected' : 'Lock Selected'}
+                  onClick={() => onToggleObjectLock(selectedObject.id)}
+                >
+                  {selectedObject.locked ? 'Unlock' : 'Lock'}
+                </ToolbarButton>
+              </InlineToolbar>
+            )}
           </PageSurface>
         </Workspace>
 

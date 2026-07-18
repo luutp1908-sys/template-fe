@@ -20,13 +20,21 @@ import type {
   ActiveTool,
   EditorObject,
   EditorObjectType,
+  FrameLayer,
   FitZoomInput,
+  ImageLayer,
+  RectLayer,
   TextLayer,
 } from '../types/editor'
 
-const getDefaultLayerProps = (type: EditorObjectType): Omit<EditorObject, 'id'> => {
+type DefaultLayerProps =
+  | Omit<TextLayer, 'id'>
+  | Omit<ImageLayer, 'id'>
+  | Omit<FrameLayer, 'id'>
+  | Omit<RectLayer, 'id'>
+
+const getDefaultLayerProps = (type: EditorObjectType): DefaultLayerProps => {
   const base = {
-    type,
     x: 200,
     y: 200,
     width: 140,
@@ -39,6 +47,7 @@ const getDefaultLayerProps = (type: EditorObjectType): Omit<EditorObject, 'id'> 
   if (type === 'text') {
     return {
       ...base,
+      type: 'text',
       width: DEFAULT_TEXT_WIDTH,
       height: DEFAULT_TEXT_HEIGHT,
       text: 'New text',
@@ -55,27 +64,30 @@ const getDefaultLayerProps = (type: EditorObjectType): Omit<EditorObject, 'id'> 
   if (type === 'image') {
     return {
       ...base,
+      type: 'image',
       width: DEFAULT_IMAGE_WIDTH,
       height: DEFAULT_IMAGE_HEIGHT,
       src: '',
       fitMode: DEFAULT_IMAGE_FIT_MODE,
       opacity: DEFAULT_IMAGE_OPACITY,
       cornerRadius: DEFAULT_IMAGE_CORNER_RADIUS,
-    }
+    } satisfies Omit<ImageLayer, 'id'>
   }
 
   if (type === 'frame') {
     return {
       ...base,
+      type: 'frame',
       borderColor: '#e5e7eb',
       borderWidth: 1,
-    }
+    } satisfies Omit<FrameLayer, 'id'>
   }
 
   return {
     ...base,
+    type: 'rect',
     color: '#0066cc',
-  }
+  } satisfies Omit<RectLayer, 'id'>
 }
 
 export const computeFitZoom = ({
@@ -137,6 +149,33 @@ export const useEditor = (initialObjects: EditorObject[]) => {
     }
   }
 
+  const duplicateObject = (id: number) => {
+    const source = objects.find((obj) => obj.id === id)
+    if (!source) return null
+
+    const duplicateId = Date.now()
+    const duplicatedObject = {
+      ...source,
+      id: duplicateId,
+      x: source.x + 20,
+      y: source.y + 20,
+    }
+
+    setObjects((current) => [...current, duplicatedObject])
+    setSelectedId(duplicateId)
+    return duplicatedObject
+  }
+
+  const toggleObjectLock = (id: number) => {
+    setObjects((current) =>
+      current.map((obj) => (
+        obj.id === id
+          ? { ...obj, locked: !(obj.locked ?? false) }
+          : obj
+      )),
+    )
+  }
+
   const setZoom = (nextZoom: number) => {
     const numericZoom = Number(nextZoom)
     if (Number.isNaN(numericZoom)) return
@@ -154,7 +193,9 @@ export const useEditor = (initialObjects: EditorObject[]) => {
     setZoom,
     updateObject,
     addObject,
+    duplicateObject,
     deleteObject,
     deleteSelected,
+    toggleObjectLock,
   }
 }

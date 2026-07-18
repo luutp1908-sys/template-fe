@@ -143,4 +143,52 @@ test.describe('Canvas E2E interactions', () => {
     await page.getByRole('button', { name: 'Retry' }).click()
     await expect(page.getByText('Failed to load image')).toHaveCount(0)
   })
+
+  test('shows inline toolbar when selecting an object', async ({ page }) => {
+    await page.goto('/')
+
+    await page.getByText('Your design').click()
+    await expect(page.getByLabel('Inline Toolbar')).toBeVisible()
+  })
+
+  test('duplicates selected object from inline toolbar', async ({ page }) => {
+    await page.goto('/')
+
+    await page.getByText('Your design').click()
+    await page.getByLabel('Duplicate Selected').click()
+
+    await expect(page.getByText('Text 3')).toBeVisible()
+  })
+
+  test('deletes selected object from inline toolbar', async ({ page }) => {
+    await page.goto('/')
+
+    await page.getByText('Your design').click()
+    await page.getByLabel('Delete Selected').click()
+
+    await expect(page.getByText('Your design')).toHaveCount(0)
+  })
+
+  test('locks object from inline toolbar and blocks drag interactions', async ({ page }) => {
+    await page.goto('/')
+
+    const object = page.getByTestId('canvas-object-2')
+    await object.click()
+    await page.getByLabel('Lock Selected').click()
+    await expect(page.getByLabel('Unlock Selected')).toBeVisible()
+
+    const before = await object.boundingBox()
+    if (!before) throw new Error('Object bounding box unavailable before lock drag attempt')
+
+    await page.mouse.move(before.x + before.width / 2, before.y + before.height / 2)
+    await page.mouse.down()
+    await page.mouse.move(before.x + before.width / 2 + 40, before.y + before.height / 2 + 32)
+    await page.mouse.up()
+
+    const after = await object.boundingBox()
+    if (!after) throw new Error('Object bounding box unavailable after lock drag attempt')
+
+    expect(Math.abs(after.x - before.x)).toBeLessThan(1)
+    expect(Math.abs(after.y - before.y)).toBeLessThan(1)
+  })
 })

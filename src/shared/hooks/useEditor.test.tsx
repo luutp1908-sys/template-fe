@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { useEditor } from './useEditor'
 import type { EditorObject } from '../types/editor'
 
-const initialObjects = [
+const initialObjects: EditorObject[] = [
   {
     id: 1,
     type: 'rect',
@@ -58,7 +58,9 @@ describe('useEditor', () => {
     expect(result.current.objects).toHaveLength(3)
     expect(result.current.selectedId).toBe(newObject.id)
     expect(newObject.type).toBe('rect')
-    expect(newObject.color).toBe('#ff0000')
+    if (newObject.type === 'rect') {
+      expect(newObject.color).toBe('#ff0000')
+    }
   })
 
   it('deletes selected object and falls back to first remaining object', () => {
@@ -188,6 +190,40 @@ describe('useEditor', () => {
     expect(result.current.objects).toHaveLength(1)
     expect(result.current.selectedId).toBe(created.id)
     expect(result.current.selectedObject?.id).toBe(created.id)
-    expect(result.current.selectedObject?.text).toBe('First')
+    if (result.current.selectedObject?.type === 'text') {
+      expect(result.current.selectedObject.text).toBe('First')
+    }
+  })
+
+  it('duplicates an object with +20px offset and selects duplicate', () => {
+    const { result } = renderHook(() => useEditor(initialObjects))
+
+    let duplicated: EditorObject | null = null
+    act(() => {
+      duplicated = result.current.duplicateObject(1)
+    })
+
+    expect(duplicated).toBeTruthy()
+    expect(result.current.objects).toHaveLength(3)
+    expect(duplicated?.id).not.toBe(1)
+    expect(duplicated?.x).toBe(120)
+    expect(duplicated?.y).toBe(140)
+    expect(result.current.selectedId).toBe(duplicated?.id)
+  })
+
+  it('toggles lock state for an object', () => {
+    const { result } = renderHook(() => useEditor(initialObjects))
+
+    act(() => {
+      result.current.toggleObjectLock(1)
+    })
+
+    expect(result.current.objects.find((obj) => obj.id === 1)?.locked).toBe(true)
+
+    act(() => {
+      result.current.toggleObjectLock(1)
+    })
+
+    expect(result.current.objects.find((obj) => obj.id === 1)?.locked).toBe(false)
   })
 })
