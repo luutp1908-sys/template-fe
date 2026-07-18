@@ -29,14 +29,14 @@ export const useCanvasInteractions = ({
   }, [])
 
   useEffect(() => {
-    if (!selectedObject) return
+    if (selectedId === null) return
 
     const frame = requestAnimationFrame(() => {
       updateMoveableRect()
     })
 
     return () => cancelAnimationFrame(frame)
-  }, [selectedObject, zoom, updateMoveableRect])
+  }, [selectedId, zoom, updateMoveableRect])
 
   const setTargetRef = useCallback((id: number, node: HTMLDivElement | null) => {
     if (node) {
@@ -46,32 +46,38 @@ export const useCanvasInteractions = ({
     delete targetRefs.current[id]
   }, [])
 
+  const toCanvasUnit = useCallback((value: number, current: number) => {
+    if (!zoom || zoom === 1) return value
+    const normalized = value / zoom
+    return Math.abs(normalized - current) < Math.abs(value - current) ? normalized : value
+  }, [zoom])
+
   const handleDrag = useCallback(
     ({ target, left, top }: any) => {
       if (!selectedId || editingId !== null || selectedObject?.locked) return
 
-      const normalizedLeft = left / zoom
-      const normalizedTop = top / zoom
-      target.style.left = `${left}px`
-      target.style.top = `${top}px`
+      const normalizedLeft = toCanvasUnit(left, selectedObject?.x ?? left)
+      const normalizedTop = toCanvasUnit(top, selectedObject?.y ?? top)
+      target.style.left = `${normalizedLeft}px`
+      target.style.top = `${normalizedTop}px`
       onUpdateObject(selectedId, { x: normalizedLeft, y: normalizedTop })
     },
-    [editingId, onUpdateObject, selectedId, selectedObject?.locked, zoom],
+    [editingId, onUpdateObject, selectedId, selectedObject, toCanvasUnit],
   )
 
   const handleResize = useCallback(
     ({ target, width, height, left, top }: any) => {
       if (!selectedId || editingId !== null || selectedObject?.locked) return
 
-      const normalizedWidth = width / zoom
-      const normalizedHeight = height / zoom
-      const normalizedLeft = left / zoom
-      const normalizedTop = top / zoom
+      const normalizedWidth = toCanvasUnit(width, selectedObject?.width ?? width)
+      const normalizedHeight = toCanvasUnit(height, selectedObject?.height ?? height)
+      const normalizedLeft = toCanvasUnit(left, selectedObject?.x ?? left)
+      const normalizedTop = toCanvasUnit(top, selectedObject?.y ?? top)
 
-      target.style.width = `${width}px`
-      target.style.height = `${height}px`
-      target.style.left = `${left}px`
-      target.style.top = `${top}px`
+      target.style.width = `${normalizedWidth}px`
+      target.style.height = `${normalizedHeight}px`
+      target.style.left = `${normalizedLeft}px`
+      target.style.top = `${normalizedTop}px`
 
       onUpdateObject(selectedId, {
         width: normalizedWidth,
@@ -80,7 +86,7 @@ export const useCanvasInteractions = ({
         y: normalizedTop,
       })
     },
-    [editingId, onUpdateObject, selectedId, selectedObject?.locked, zoom],
+    [editingId, onUpdateObject, selectedId, selectedObject, toCanvasUnit],
   )
 
   const handleRotate = useCallback(
