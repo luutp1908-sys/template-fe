@@ -1,5 +1,5 @@
 import Moveable from 'react-moveable'
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import type { RefObject } from 'react'
 import {
   BackdropGrid,
@@ -20,12 +20,12 @@ import {
 import { useCanvasInteractions } from './useCanvasInteractions'
 import { InlineObjectToolbar } from './InlineObjectToolbar'
 import { useCanvasImageLifecycle } from './useCanvasImageLifecycle'
+import { useCanvasTextEditing } from './useCanvasTextEditing'
 import type { EditorObject } from '../../shared/types/editor'
 import {
   DEFAULT_IMAGE_CORNER_RADIUS,
   DEFAULT_IMAGE_FIT_MODE,
   DEFAULT_IMAGE_OPACITY,
-  DEFAULT_TEXT_HEIGHT,
 } from '../../shared/constants/editorGeometry'
 
 type CanvasProps = {
@@ -51,11 +51,25 @@ export const Canvas = ({
   zoom = 1,
   viewportRef,
 }: CanvasProps) => {
-  const [editingId, setEditingId] = useState<number | null>(null)
-  const [draftText, setDraftText] = useState('')
-  const originalTextRef = useRef('')
-  const textAreaRef = useRef<HTMLTextAreaElement | null>(null)
-  const pendingHeightRef = useRef<number | null>(null)
+  const updateMoveableRectRef = useRef<() => void>(() => undefined)
+
+  const {
+    editingId,
+    draftText,
+    setDraftText,
+    textAreaRef,
+    enterTextEdit,
+    commitTextEdit,
+    cancelTextEdit,
+    handleCanvasAreaClick,
+    handleObjectClick,
+  } = useCanvasTextEditing({
+    objects,
+    zoom,
+    onSelectObject,
+    onUpdateObject,
+    onAfterEditSettled: () => updateMoveableRectRef.current(),
+  })
 
   const {
     moveableRef,
@@ -67,6 +81,7 @@ export const Canvas = ({
     handleResize,
     handleRotate,
   } = useCanvasInteractions({ objects, selectedId, zoom, onUpdateObject, editingId })
+  updateMoveableRectRef.current = updateMoveableRect
 
   const {
     imageLoadStates,
@@ -79,81 +94,12 @@ export const Canvas = ({
     onImageLoaded: updateMoveableRect,
   })
 
-  useEffect(() => {
-    if (editingId === null || !textAreaRef.current) return
-    textAreaRef.current.focus()
-    textAreaRef.current.select()
-  }, [editingId])
-
-  const updateTextHeightFromElement = (object: EditorObject, element: HTMLTextAreaElement) => {
-    if (object.type !== 'text') return
-
-    element.style.height = '0px'
-    const nextHeightPx = Math.max(element.scrollHeight, DEFAULT_TEXT_HEIGHT)
-    element.style.height = `${nextHeightPx}px`
-
-    const normalizedHeight = nextHeightPx / zoom
-    if (Math.abs(object.height - normalizedHeight) < 0.5) return
-
-    pendingHeightRef.current = normalizedHeight
-    onUpdateObject(object.id, { height: normalizedHeight })
-  }
-
-  const getObjectById = (id: number | null) => objects.find((obj) => obj.id === id)
-
-  useEffect(() => {
-    if (editingId === null || !textAreaRef.current) return
-    const object = getObjectById(editingId)
-    if (!object || object.type !== 'text') return
-    updateTextHeightFromElement(object, textAreaRef.current)
-  }, [draftText, editingId, objects, zoom])
-
-  const enterTextEdit = (object: EditorObject) => {
-    if (object.type !== 'text' || object.locked) return
-    onSelectObject(object.id)
-    setEditingId(object.id)
-    const text = object.text ?? ''
-    originalTextRef.current = text
-    setDraftText(text)
-  }
-
-  const commitTextEdit = () => {
-    if (editingId === null) return
-    const pendingHeight = pendingHeightRef.current
-    onUpdateObject(editingId, {
-      text: draftText,
-      ...(pendingHeight !== null ? { height: pendingHeight } : {}),
-    })
-    pendingHeightRef.current = null
-    setEditingId(null)
-    requestAnimationFrame(() => {
-      updateMoveableRect()
-    })
-  }
-
-  const cancelTextEdit = () => {
-    if (editingId === null) return
-    onUpdateObject(editingId, { text: originalTextRef.current })
-    pendingHeightRef.current = null
-    setEditingId(null)
-    setDraftText(originalTextRef.current)
-    requestAnimationFrame(() => {
-      updateMoveableRect()
-    })
-  }
-
   return (
     <CanvasWrapper>
       <CanvasArea
         data-testid="canvas-area"
         ref={viewportRef}
-        onClick={() => {
-          if (editingId !== null) {
-            commitTextEdit()
-            return
-          }
-          onSelectObject(null)
-        }}
+        onClick={handleCanvasAreaClick}
       >
         <Workspace $zoom={zoom}>
           <BackdropGrid />
@@ -179,10 +125,7 @@ export const Canvas = ({
                   }}
                   onClick={(e) => {
                     e.stopPropagation()
-                    if (editingId !== null && editingId !== object.id) {
-                      commitTextEdit()
-                    }
-                    onSelectObject(object.id)
+                    handleObjectClick(object.id)
                   }}
                   onDoubleClick={(e) => {
                     e.stopPropagation()
