@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { computeFitZoom, useEditor } from './shared/hooks/useEditor'
 import {
@@ -103,6 +103,7 @@ const initialObjects: EditorObject[] = [
 
 function App() {
   const editor = useEditor(initialObjects)
+  const [isImageStockOpen, setIsImageStockOpen] = useState(false)
   const canvasViewportRef = useRef<HTMLDivElement | null>(null)
   const hasAutoFitApplied = useRef(false)
 
@@ -153,12 +154,26 @@ function App() {
       text: 'New text',
       textColor: '#1a1a1a',
     })
+    setIsImageStockOpen(false)
   }
 
-  const handleAddImage = () => {
+  const handleAddImageFromStock = (src: string) => {
     editor.addObject('image', {
-      src: '',
+      src,
     })
+    setIsImageStockOpen(false)
+  }
+
+  const handleToolSelect = (tool: 'element' | 'text' | 'image' | 'frame') => {
+    editor.setActiveTool(tool)
+    if (tool !== 'image') {
+      setIsImageStockOpen(false)
+    }
+  }
+
+  const handleOpenImageStock = () => {
+    editor.setActiveTool('image')
+    setIsImageStockOpen(true)
   }
 
   return (
@@ -184,10 +199,10 @@ function App() {
       <AppContainer>
         <MenuBar
           activeTool={editor.activeTool}
-          onToolSelect={editor.setActiveTool}
+          onToolSelect={handleToolSelect}
           onAddShape={handleAddShape}
           onAddText={handleAddText}
-          onAddImage={handleAddImage}
+          onOpenImageStock={handleOpenImageStock}
         />
 
         <Sidebar
@@ -195,7 +210,8 @@ function App() {
           objects={editor.objects}
           onSelectObject={editor.setSelectedId}
           onDeleteObject={editor.deleteObject}
-          onUpdateObject={editor.updateObject}
+          showImageStockPanel={isImageStockOpen}
+          onSelectStockImage={handleAddImageFromStock}
         />
 
         <Canvas

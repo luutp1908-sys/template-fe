@@ -7,24 +7,17 @@ vi.mock('react-moveable', () => ({
 }))
 
 describe('App integration', () => {
-  it('syncs sidebar properties when selecting object from canvas', () => {
+  it('renders initial layers in sidebar', () => {
     render(<App />)
 
-    expect(screen.getByText('rect')).toBeInTheDocument()
-
-    fireEvent.click(screen.getByText('Your design'))
-
-    expect(screen.getByText('text')).toBeInTheDocument()
-    expect(screen.getByText('X: 450px')).toBeInTheDocument()
-    expect(screen.getByText('Y: 200px')).toBeInTheDocument()
+    expect(screen.getByText('Shape 1')).toBeInTheDocument()
+    expect(screen.getByText('Text 2')).toBeInTheDocument()
   })
 
-  it('deselects object when clicking the canvas backdrop', () => {
+  it('does not render a properties panel', () => {
     render(<App />)
 
     fireEvent.click(screen.getByText('Your design'))
-    expect(screen.getByText('Properties')).toBeInTheDocument()
-
     fireEvent.click(screen.getByTestId('canvas-area'))
 
     expect(screen.queryByText('Properties')).not.toBeInTheDocument()
@@ -45,25 +38,6 @@ describe('App integration', () => {
 
     expect(screen.queryByText('Text 3')).not.toBeInTheDocument()
     expect(screen.getAllByTitle('Delete')).toHaveLength(2)
-  })
-
-  it('updates text style from sidebar controls', () => {
-    render(<App />)
-
-    const textNode = screen.getByText('Your design')
-    fireEvent.click(textNode)
-
-    fireEvent.change(screen.getByLabelText('Font Size'), { target: { value: '48' } })
-    fireEvent.change(screen.getByLabelText('Font Weight'), { target: { value: 'bold' } })
-    fireEvent.click(screen.getByLabelText('Align Right'))
-    fireEvent.change(screen.getByLabelText('Text Color'), { target: { value: '#ff0000' } })
-
-    expect(textNode).toHaveStyle({
-      fontSize: '48px',
-      fontWeight: 'bold',
-      textAlign: 'right',
-      color: 'rgb(255, 0, 0)',
-    })
   })
 
   it('enters text edit mode on double click and saves on blur', () => {
@@ -119,37 +93,27 @@ describe('App integration', () => {
     expect(updatedHeight).toBeGreaterThan(initialHeight)
   })
 
-  it('adds image layer with placeholder and image controls', () => {
+  it('opens stock list in sidebar from add image menu action', () => {
     render(<App />)
 
     fireEvent.click(screen.getByTitle('Add Image'))
 
-    expect(screen.getByText('image')).toBeInTheDocument()
-    expect(screen.getByText('No image selected')).toBeInTheDocument()
-    expect(screen.getByLabelText('Image Fit Mode')).toBeInTheDocument()
-    expect(screen.getByLabelText('Image Opacity')).toBeInTheDocument()
-    expect(screen.getByLabelText('Image Corner Radius')).toBeInTheDocument()
+    expect(screen.getByLabelText('Left Stock Panel')).toBeInTheDocument()
   })
 
-  it('updates image placeholder style from image controls', () => {
+  it('adds image layer from left stock list', () => {
     render(<App />)
 
     fireEvent.click(screen.getByTitle('Add Image'))
-    fireEvent.change(screen.getByLabelText('Image Opacity'), { target: { value: '0.4' } })
-    fireEvent.change(screen.getByLabelText('Image Corner Radius'), { target: { value: '12' } })
+    fireEvent.click(screen.getByLabelText('Stock Mountain Lake'))
 
-    const placeholder = screen.getByText('No image selected')
-    expect(placeholder.parentElement).toHaveStyle({
-      opacity: '0.4',
-      borderRadius: '12px',
-    })
+    expect(screen.getByText('Image 3')).toBeInTheDocument()
   })
 
-  it('selects stock image from sidebar catalog', () => {
+  it('selects stock image from left menu stock list', () => {
     render(<App />)
 
     fireEvent.click(screen.getByTitle('Add Image'))
-    fireEvent.click(screen.getByLabelText('Browse Stock'))
     fireEvent.click(screen.getByLabelText('Stock Mountain Lake'))
 
     const renderedImage = document.querySelector('img[data-testid^="canvas-image-"]') as HTMLImageElement
@@ -158,40 +122,13 @@ describe('App integration', () => {
     expect(renderedImage.getAttribute('src')).toContain('picsum.photos')
   })
 
-  it('replaces image source from local file input', () => {
-    const createObjectURLSpy = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:unit-test-image')
-
+  it('closes stock list when switching to a non-image tool', () => {
     render(<App />)
 
     fireEvent.click(screen.getByTitle('Add Image'))
-    const input = screen.getByLabelText('Image File Input') as HTMLInputElement
-    const file = new File(['dummy'], 'upload.png', { type: 'image/png' })
-    fireEvent.change(input, { target: { files: [file] } })
+    expect(screen.getByLabelText('Left Stock Panel')).toBeInTheDocument()
 
-    const renderedImage = document.querySelector('img[data-testid^="canvas-image-"]') as HTMLImageElement
-    expect(renderedImage).toBeTruthy()
-    expect(renderedImage).toHaveAttribute('src', 'blob:unit-test-image')
-
-    createObjectURLSpy.mockRestore()
-  })
-
-  it('toggles layer visibility from shared metadata controls', () => {
-    render(<App />)
-
-    fireEvent.click(screen.getByText('Your design'))
-    const visibleToggle = screen.getByLabelText('Layer Visible')
-    fireEvent.click(visibleToggle)
-
-    expect(screen.queryByText('Your design')).not.toBeInTheDocument()
-  })
-
-  it('prevents entering text edit mode while layer is locked', () => {
-    render(<App />)
-
-    fireEvent.click(screen.getByText('Your design'))
-    fireEvent.click(screen.getByLabelText('Layer Locked'))
-    fireEvent.doubleClick(screen.getByText('Your design'))
-
-    expect(screen.queryByLabelText('Text Editor')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByTitle('Text'))
+    expect(screen.queryByLabelText('Left Stock Panel')).not.toBeInTheDocument()
   })
 })

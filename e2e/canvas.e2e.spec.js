@@ -109,51 +109,27 @@ test.describe('Canvas E2E interactions', () => {
     expect(after.height).toBeGreaterThan(before.height)
   })
 
-  test('toggles layer visibility from metadata panel', async ({ page }) => {
-    await page.goto('/')
-
-    await page.getByText('Your design').click()
-    const visibleToggle = page.getByLabel('Layer Visible')
-    await visibleToggle.uncheck()
-
-    await expect(page.getByText('Your design')).toHaveCount(0)
-  })
-
-  test('adds image layer and shows image controls', async ({ page }) => {
+  test('opens stock list in left sidebar from add image action', async ({ page }) => {
     await page.goto('/')
 
     await page.getByTitle('Add Image').click()
 
-    await expect(page.getByText('No image selected')).toBeVisible()
-    await expect(page.getByLabel('Image Fit Mode')).toBeVisible()
-    await expect(page.getByLabel('Image Opacity')).toBeVisible()
-    await expect(page.getByLabel('Image Corner Radius')).toBeVisible()
+    await expect(page.getByLabel('Left Stock Panel')).toBeVisible()
   })
 
   test('selects a stock image for image layer', async ({ page }) => {
     await page.goto('/')
 
     await page.getByTitle('Add Image').click()
-    await page.getByLabel('Browse Stock').click()
     await page.getByLabel('Stock Mountain Lake').click()
 
     await expect(page.locator('img[data-testid^="canvas-image-"]').first()).toHaveAttribute('src', /picsum.photos/)
   })
 
-  test('replaces image layer source using local file upload', async ({ page }) => {
+  test('shows retry when image source fails and can retry render', async ({ page }) => {
     await page.goto('/')
 
     await page.getByTitle('Add Image').click()
-    await page.getByLabel('Image File Input').setInputFiles('e2e/fixtures/sample-upload.svg')
-
-    await expect(page.locator('img[data-testid^="canvas-image-"]').first()).toHaveAttribute('src', /blob:/)
-  })
-
-  test('shows retry when image source fails and recovers after replacement', async ({ page }) => {
-    await page.goto('/')
-
-    await page.getByTitle('Add Image').click()
-    await page.getByLabel('Browse Stock').click()
     await page.getByLabel('Stock Mountain Lake').click()
 
     await page.evaluate(() => {
@@ -165,8 +141,6 @@ test.describe('Canvas E2E interactions', () => {
 
     await expect(page.getByText('Failed to load image')).toBeVisible()
     await page.getByRole('button', { name: 'Retry' }).click()
-
-    await page.getByLabel('Image File Input').setInputFiles('e2e/fixtures/sample-upload.svg')
-    await expect(page.locator('img[data-testid^="canvas-image-"]').first()).toHaveAttribute('src', /blob:/)
+    await expect(page.getByText('Failed to load image')).toHaveCount(0)
   })
 })

@@ -7,7 +7,7 @@ type MenuBarProps = {
   onToolSelect: (tool: Exclude<ActiveTool, null>) => void
   onAddShape: () => void
   onAddText: () => void
-  onAddImage: () => void
+  onOpenImageStock: () => void
 }
 
 const StyledMenuBar = styled.div`
@@ -23,7 +23,7 @@ const StyledMenuBar = styled.div`
   overflow-y: auto;
 `
 
-const MenuItem = styled.button`
+const MenuItem = styled.button<{ $active?: boolean }>`
   width: 56px;
   height: 56px;
   border-radius: 8px;
@@ -42,7 +42,7 @@ const MenuItem = styled.button`
     color: #0066cc;
   }
 
-  ${(props) => props.active && `
+  ${({ $active }) => $active && `
     background: #0066cc;
     color: white;
   `}
@@ -60,26 +60,26 @@ export const MenuBar = ({
   onToolSelect,
   onAddShape,
   onAddText,
-  onAddImage,
+  onOpenImageStock,
 }: MenuBarProps) => {
   return (
     <StyledMenuBar>
       <MenuItem
-        active={activeTool === 'element'}
+        $active={activeTool === 'element'}
         onClick={() => onToolSelect('element')}
         title="Elements"
       >
         ⬜
       </MenuItem>
       <MenuItem
-        active={activeTool === 'text'}
+        $active={activeTool === 'text'}
         onClick={() => onToolSelect('text')}
         title="Text"
       >
         T
       </MenuItem>
       <MenuItem
-        active={activeTool === 'image'}
+        $active={activeTool === 'image'}
         onClick={() => onToolSelect('image')}
         title="Image"
       >
@@ -92,7 +92,7 @@ export const MenuBar = ({
       <MenuItem onClick={onAddText} title="Add Text">
         📝
       </MenuItem>
-      <MenuItem onClick={onAddImage} title="Add Image">
+      <MenuItem onClick={onOpenImageStock} title="Add Image">
         📤
       </MenuItem>
     </StyledMenuBar>
