@@ -11,15 +11,15 @@ import {
   EditableText,
   ImageErrorPlaceholder,
   ImagePlaceholder,
-  InlineToolbar,
   ObjectText,
   PageSurface,
   RetryButton,
   ShapeBox,
-  ToolbarButton,
   Workspace,
 } from './Canvas.styles'
 import { useCanvasInteractions } from './useCanvasInteractions'
+import { InlineObjectToolbar } from './InlineObjectToolbar'
+import { useCanvasImageLifecycle } from './useCanvasImageLifecycle'
 import type { EditorObject } from '../../shared/types/editor'
 import {
   DEFAULT_IMAGE_CORNER_RADIUS,
@@ -27,8 +27,6 @@ import {
   DEFAULT_IMAGE_OPACITY,
   DEFAULT_TEXT_HEIGHT,
 } from '../../shared/constants/editorGeometry'
-
-type ImageLoadStatus = 'idle' | 'loading' | 'loaded' | 'error'
 
 type CanvasProps = {
   objects: EditorObject[]
@@ -58,9 +56,6 @@ export const Canvas = ({
   const originalTextRef = useRef('')
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null)
   const pendingHeightRef = useRef<number | null>(null)
-  const [imageLoadStates, setImageLoadStates] = useState<Record<number, ImageLoadStatus>>({})
-  const [imageRetryTokens, setImageRetryTokens] = useState<Record<number, number>>({})
-  const previousImageSrcRef = useRef<Record<number, string>>({})
 
   const {
     moveableRef,
@@ -72,6 +67,17 @@ export const Canvas = ({
     handleResize,
     handleRotate,
   } = useCanvasInteractions({ objects, selectedId, zoom, onUpdateObject, editingId })
+
+  const {
+    imageLoadStates,
+    imageRetryTokens,
+    handleImageLoad,
+    handleImageError,
+    handleRetry,
+  } = useCanvasImageLifecycle({
+    objects,
+    onImageLoaded: updateMoveableRect,
+  })
 
   useEffect(() => {
     if (editingId === null || !textAreaRef.current) return
@@ -101,58 +107,6 @@ export const Canvas = ({
     if (!object || object.type !== 'text') return
     updateTextHeightFromElement(object, textAreaRef.current)
   }, [draftText, editingId, objects, zoom])
-
-  useEffect(() => {
-    const currentImageSrc: Record<number, string> = {}
-
-    for (const obj of objects) {
-      if (obj.type !== 'image') continue
-      const src = obj.src ?? ''
-      currentImageSrc[obj.id] = src
-
-      const previousSrc = previousImageSrcRef.current[obj.id]
-      if (previousSrc === src) continue
-
-      if (previousSrc && previousSrc.startsWith('blob:')) {
-        URL.revokeObjectURL(previousSrc)
-      }
-
-      setImageLoadStates((current) => ({
-        ...current,
-        [obj.id]: src ? 'loading' : 'idle',
-      }))
-    }
-
-    for (const [idText, previousSrc] of Object.entries(previousImageSrcRef.current)) {
-      const id = Number(idText)
-      if (id in currentImageSrc) continue
-      if (previousSrc.startsWith('blob:')) {
-        URL.revokeObjectURL(previousSrc)
-      }
-      setImageLoadStates((current) => {
-        const next = { ...current }
-        delete next[id]
-        return next
-      })
-      setImageRetryTokens((current) => {
-        const next = { ...current }
-        delete next[id]
-        return next
-      })
-    }
-
-    previousImageSrcRef.current = currentImageSrc
-  }, [objects])
-
-  useEffect(() => {
-    return () => {
-      for (const src of Object.values(previousImageSrcRef.current)) {
-        if (src.startsWith('blob:')) {
-          URL.revokeObjectURL(src)
-        }
-      }
-    }
-  }, [])
 
   const enterTextEdit = (object: EditorObject) => {
     if (object.type !== 'text' || object.locked) return
@@ -287,13 +241,8 @@ export const Canvas = ({
                             draggable={false}
                             $fitMode={object.fitMode ?? DEFAULT_IMAGE_FIT_MODE}
                             style={{ display: imageLoadStates[object.id] === 'loaded' ? 'block' : 'none' }}
-                            onLoad={() => {
-                              setImageLoadStates((current) => ({ ...current, [object.id]: 'loaded' }))
-                              updateMoveableRect()
-                            }}
-                            onError={() => {
-                              setImageLoadStates((current) => ({ ...current, [object.id]: 'error' }))
-                            }}
+                            onLoad={() => handleImageLoad(object.id)}
+                            onError={() => handleImageError(object.id)}
                           />
 
                           {imageLoadStates[object.id] === 'error' ? (
@@ -303,11 +252,7 @@ export const Canvas = ({
                                 type="button"
                                 onClick={(e) => {
                                   e.stopPropagation()
-                                  setImageLoadStates((current) => ({ ...current, [object.id]: 'loading' }))
-                                  setImageRetryTokens((current) => ({
-                                    ...current,
-                                    [object.id]: (current[object.id] ?? 0) + 1,
-                                  }))
+                                  handleRetry(object.id)
                                 }}
                               >
                                 Retry
@@ -336,38 +281,12 @@ export const Canvas = ({
             })}
 
             {selectedObject && editingId === null && (
-              <InlineToolbar
-                data-testid="inline-toolbar"
-                aria-label="Inline Toolbar"
-                style={{
-                  left: selectedObject.x + selectedObject.width / 2,
-                  top: Math.max(10, selectedObject.y - 10),
-                  transform: 'translate(-50%, -100%)',
-                }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <ToolbarButton
-                  type="button"
-                  aria-label="Duplicate Selected"
-                  onClick={() => onDuplicateObject(selectedObject.id)}
-                >
-                  Duplicate
-                </ToolbarButton>
-                <ToolbarButton
-                  type="button"
-                  aria-label="Delete Selected"
-                  onClick={() => onDeleteObject(selectedObject.id)}
-                >
-                  Delete
-                </ToolbarButton>
-                <ToolbarButton
-                  type="button"
-                  aria-label={selectedObject.locked ? 'Unlock Selected' : 'Lock Selected'}
-                  onClick={() => onToggleObjectLock(selectedObject.id)}
-                >
-                  {selectedObject.locked ? 'Unlock' : 'Lock'}
-                </ToolbarButton>
-              </InlineToolbar>
+              <InlineObjectToolbar
+                selectedObject={selectedObject}
+                onDuplicateObject={onDuplicateObject}
+                onDeleteObject={onDeleteObject}
+                onToggleObjectLock={onToggleObjectLock}
+              />
             )}
           </PageSurface>
         </Workspace>
