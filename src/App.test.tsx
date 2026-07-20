@@ -132,6 +132,16 @@ describe('App integration', () => {
     expect(screen.queryByLabelText('Left Stock Panel')).not.toBeInTheDocument()
   })
 
+  it('opens background sidebar from menu bar', () => {
+    render(<App />)
+
+    fireEvent.click(screen.getByTitle('Background'))
+
+    expect(screen.getByLabelText('Background Sidebar')).toBeInTheDocument()
+    expect(screen.getByLabelText('Background Sidebar Color')).toBeInTheDocument()
+    expect(screen.getByLabelText('Background Stock Panel')).toBeInTheDocument()
+  })
+
   it('shows inline toolbar for selected object and hides on backdrop click', () => {
     render(<App />)
 
@@ -171,5 +181,26 @@ describe('App integration', () => {
     fireEvent.click(screen.getByLabelText('Delete Selected'))
 
     expect(screen.queryByText('Your design')).not.toBeInTheDocument()
+  })
+
+  it('updates page background color from background sidebar picker', () => {
+    render(<App />)
+
+    fireEvent.click(screen.getByTitle('Background'))
+    fireEvent.change(screen.getByLabelText('Background Sidebar Color'), { target: { value: '#ff0000' } })
+
+    expect(screen.getByTestId('page-surface')).toHaveStyle({
+      backgroundColor: '#ff0000',
+    })
+  })
+
+  it('sets page background image from background sidebar stock list', () => {
+    render(<App />)
+
+    fireEvent.click(screen.getByTitle('Background'))
+    fireEvent.click(screen.getByLabelText('Stock Mountain Lake'))
+
+    const backgroundImage = getComputedStyle(screen.getByTestId('page-surface')).backgroundImage
+    expect(backgroundImage).toContain('picsum.photos')
   })
 })

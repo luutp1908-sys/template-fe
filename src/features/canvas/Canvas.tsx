@@ -23,6 +23,8 @@ type CanvasProps = {
   onDuplicateObject: (id: number) => void
   onDeleteObject: (id: number) => void
   onToggleObjectLock: (id: number) => void
+  pageBackgroundColor?: string
+  pageBackgroundImage?: string
   zoom?: number
   viewportRef?: RefObject<HTMLDivElement | null>
 }
@@ -35,6 +37,8 @@ export const Canvas = ({
   onDuplicateObject,
   onDeleteObject,
   onToggleObjectLock,
+  pageBackgroundColor = '#ffffff',
+  pageBackgroundImage,
   zoom = 1,
   viewportRef,
 }: CanvasProps) => {
@@ -91,7 +95,12 @@ export const Canvas = ({
         <Workspace $zoom={zoom}>
           <BackdropGrid />
 
-          <PageSurface $zoom={zoom} data-testid="page-surface">
+          <PageSurface
+            $zoom={zoom}
+            $backgroundColor={pageBackgroundColor}
+            $backgroundImage={pageBackgroundImage}
+            data-testid="page-surface"
+          >
             {objects.map((object) => (
               <LayerRenderer
                 key={object.id}

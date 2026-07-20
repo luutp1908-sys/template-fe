@@ -3,13 +3,18 @@ import { SIDEBAR_WIDTH } from '../shared/constants/layout'
 import type { EditorObject } from '../shared/types/editor'
 import { STOCK_IMAGES } from '../shared/constants/stockImages'
 
+type SidebarPanel = 'none' | 'image' | 'background'
+
 type SidebarProps = {
   selectedObject?: EditorObject
   objects: EditorObject[]
   onSelectObject: (id: number) => void
   onDeleteObject: (id: number) => void
-  showImageStockPanel?: boolean
+  panel?: SidebarPanel
+  backgroundColor?: string
+  onChangeBackgroundColor?: (color: string) => void
   onSelectStockImage?: (src: string) => void
+  onSelectBackgroundImage?: (src: string) => void
 }
 
 const StyledSidebar = styled.div`
@@ -44,6 +49,31 @@ const LayerCount = styled.span`
   border-radius: 12px;
   font-size: 0.75rem;
   font-weight: 600;
+`
+
+const BackgroundPanel = styled.div`
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+`
+
+const BackgroundPickerLabel = styled.label`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.8rem;
+  color: #1f2937;
+  font-weight: 600;
+
+  input {
+    width: 40px;
+    height: 28px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 0;
+    background: #ffffff;
+  }
 `
 
 const StockPanel = styled.div`
@@ -158,9 +188,16 @@ export const Sidebar = ({
   objects,
   onSelectObject,
   onDeleteObject,
-  showImageStockPanel = false,
+  panel = 'none',
+  backgroundColor = '#ffffff',
+  onChangeBackgroundColor,
   onSelectStockImage,
+  onSelectBackgroundImage,
 }: SidebarProps) => {
+  const showImageStockPanel = panel === 'image'
+  const showBackgroundPanel = panel === 'background'
+  const showStockPanel = showImageStockPanel || showBackgroundPanel
+
   return (
     <StyledSidebar>
       <SidebarHeader>
@@ -168,14 +205,35 @@ export const Sidebar = ({
         <LayerCount>{objects.length}</LayerCount>
       </SidebarHeader>
 
-      {showImageStockPanel && (
-        <StockPanel aria-label="Left Stock Panel">
+      {showBackgroundPanel && (
+        <BackgroundPanel aria-label="Background Sidebar">
+          <BackgroundPickerLabel htmlFor="sidebar-background-color">
+            Background Color
+            <input
+              id="sidebar-background-color"
+              type="color"
+              aria-label="Background Sidebar Color"
+              value={backgroundColor}
+              onChange={(e) => onChangeBackgroundColor?.(e.target.value)}
+            />
+          </BackgroundPickerLabel>
+        </BackgroundPanel>
+      )}
+
+      {showStockPanel && (
+        <StockPanel aria-label={showImageStockPanel ? 'Left Stock Panel' : 'Background Stock Panel'}>
           {STOCK_IMAGES.map((image) => (
             <StockCard
               key={image.id}
               type="button"
               aria-label={`Stock ${image.title}`}
-              onClick={() => onSelectStockImage?.(image.url)}
+              onClick={() => {
+                if (showImageStockPanel) {
+                  onSelectStockImage?.(image.url)
+                  return
+                }
+                onSelectBackgroundImage?.(image.url)
+              }}
             >
               <StockThumb src={image.url} alt={image.title} />
               <StockMeta>

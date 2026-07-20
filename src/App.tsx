@@ -103,7 +103,9 @@ const initialObjects: EditorObject[] = [
 
 function App() {
   const editor = useEditor(initialObjects)
-  const [isImageStockOpen, setIsImageStockOpen] = useState(false)
+  const [sidebarPanel, setSidebarPanel] = useState<'none' | 'image' | 'background'>('none')
+  const [pageBackgroundColor, setPageBackgroundColor] = useState('#ffffff')
+  const [pageBackgroundImage, setPageBackgroundImage] = useState<string | undefined>(undefined)
   const canvasViewportRef = useRef<HTMLDivElement | null>(null)
   const hasAutoFitApplied = useRef(false)
 
@@ -154,26 +156,40 @@ function App() {
       text: 'New text',
       textColor: '#1a1a1a',
     })
-    setIsImageStockOpen(false)
+    setSidebarPanel('none')
   }
 
   const handleAddImageFromStock = (src: string) => {
     editor.addObject('image', {
       src,
     })
-    setIsImageStockOpen(false)
+    setSidebarPanel('none')
+  }
+
+  const handleSetBackgroundColor = (color: string) => {
+    setPageBackgroundColor(color)
+    setPageBackgroundImage(undefined)
+  }
+
+  const handleSetBackgroundImage = (src: string) => {
+    setPageBackgroundImage(src)
   }
 
   const handleToolSelect = (tool: 'element' | 'text' | 'image' | 'frame') => {
     editor.setActiveTool(tool)
-    if (tool !== 'image') {
-      setIsImageStockOpen(false)
+    if (tool === 'image') {
+      return
     }
+    setSidebarPanel('none')
   }
 
   const handleOpenImageStock = () => {
     editor.setActiveTool('image')
-    setIsImageStockOpen(true)
+    setSidebarPanel('image')
+  }
+
+  const handleOpenBackgroundPanel = () => {
+    setSidebarPanel('background')
   }
 
   return (
@@ -199,10 +215,12 @@ function App() {
       <AppContainer>
         <MenuBar
           activeTool={editor.activeTool}
+          isBackgroundPanelOpen={sidebarPanel === 'background'}
           onToolSelect={handleToolSelect}
           onAddShape={handleAddShape}
           onAddText={handleAddText}
           onOpenImageStock={handleOpenImageStock}
+          onOpenBackgroundPanel={handleOpenBackgroundPanel}
         />
 
         <Sidebar
@@ -210,8 +228,11 @@ function App() {
           objects={editor.objects}
           onSelectObject={editor.setSelectedId}
           onDeleteObject={editor.deleteObject}
-          showImageStockPanel={isImageStockOpen}
+          panel={sidebarPanel}
+          backgroundColor={pageBackgroundColor}
+          onChangeBackgroundColor={handleSetBackgroundColor}
           onSelectStockImage={handleAddImageFromStock}
+          onSelectBackgroundImage={handleSetBackgroundImage}
         />
 
         <Canvas
@@ -222,6 +243,8 @@ function App() {
           onDuplicateObject={editor.duplicateObject}
           onDeleteObject={editor.deleteObject}
           onToggleObjectLock={editor.toggleObjectLock}
+          pageBackgroundColor={pageBackgroundColor}
+          pageBackgroundImage={pageBackgroundImage}
           zoom={editor.zoom}
           viewportRef={canvasViewportRef}
         />

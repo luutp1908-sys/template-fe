@@ -4,10 +4,12 @@ import type { ActiveTool } from '../shared/types/editor'
 
 type MenuBarProps = {
   activeTool: ActiveTool
+  isBackgroundPanelOpen?: boolean
   onToolSelect: (tool: Exclude<ActiveTool, null>) => void
   onAddShape: () => void
   onAddText: () => void
   onOpenImageStock: () => void
+  onOpenBackgroundPanel: () => void
 }
 
 const StyledMenuBar = styled.div`
@@ -57,10 +59,12 @@ const MenuDivider = styled.div`
 
 export const MenuBar = ({
   activeTool,
+  isBackgroundPanelOpen = false,
   onToolSelect,
   onAddShape,
   onAddText,
   onOpenImageStock,
+  onOpenBackgroundPanel,
 }: MenuBarProps) => {
   return (
     <StyledMenuBar>
@@ -84,6 +88,13 @@ export const MenuBar = ({
         title="Image"
       >
         🖼️
+      </MenuItem>
+      <MenuItem
+        $active={isBackgroundPanelOpen}
+        onClick={onOpenBackgroundPanel}
+        title="Background"
+      >
+        🎨
       </MenuItem>
       <MenuDivider />
       <MenuItem onClick={onAddShape} title="Add Shape">

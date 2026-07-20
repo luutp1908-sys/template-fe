@@ -44,13 +44,21 @@ export const BackdropGrid = styled.div`
   pointer-events: none;
 `
 
-export const PageSurface = styled.div<{ $zoom?: number }>`
+export const PageSurface = styled.div<{
+  $zoom?: number
+  $backgroundColor?: string
+  $backgroundImage?: string
+}>`
   position: relative;
   width: ${PAGE_WIDTH}px;
   height: ${PAGE_HEIGHT}px;
   transform: ${({ $zoom = 1 }) => `scale(${$zoom})`};
   transform-origin: center center;
-  background: #ffffff;
+  background-color: ${({ $backgroundColor = '#ffffff' }) => $backgroundColor};
+  background-image: ${({ $backgroundImage }) => ($backgroundImage ? `url(${$backgroundImage})` : 'none')};
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border-radius: 12px;
   box-shadow: 0 18px 45px rgba(19, 35, 65, 0.12), 0 2px 8px rgba(19, 35, 65, 0.08);
   overflow: hidden;
