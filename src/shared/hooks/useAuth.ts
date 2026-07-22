@@ -37,9 +37,9 @@ export const useAuth = () => {
     setError(null)
     try {
       const body = await postJson('/api/v1/auth/login', payload)
-      const auth = body as any
-      const accessToken = auth?.accessToken ?? null
-      const userObj = auth?.user ?? null
+      const data = (body && (body.data ?? body)) as any
+      const accessToken = data?.accessToken ?? null
+      const userObj = data?.user ?? null
       setTokens({ accessToken, user: userObj })
       setUser(userObj)
       return userObj
@@ -56,9 +56,9 @@ export const useAuth = () => {
     setError(null)
     try {
       const body = await postJson('/api/v1/auth/register', payload)
-      const auth = body as any
-      const accessToken = auth?.accessToken ?? null
-      const userObj = auth?.user ?? null
+      const data = (body && (body.data ?? body)) as any
+      const accessToken = data?.accessToken ?? null
+      const userObj = data?.user ?? null
       setTokens({ accessToken, user: userObj })
       setUser(userObj)
       return userObj
@@ -90,9 +90,9 @@ export const useAuth = () => {
     setError(null)
     try {
       const body = await postJson('/api/v1/auth/refresh', {})
-      const auth = body as any
-      const accessToken = auth?.accessToken ?? null
-      const userObj = auth?.user ?? tokenStore.getUser()
+      const data = (body && (body.data ?? body)) as any
+      const accessToken = data?.accessToken ?? null
+      const userObj = data?.user ?? tokenStore.getUser()
       setTokens({ accessToken, user: userObj })
       setUser(userObj)
       return userObj
@@ -129,17 +129,26 @@ export const useAuth = () => {
     let mounted = true
     const init = async () => {
       const access = getAccessToken()
-      const refreshTok = getRefreshToken()
-      if (!access && !refreshTok) return
+
+      // If there is no access token, attempt a silent refresh using httpOnly cookie (server-set)
+      if (!access) {
+        try {
+          await refresh()
+        } catch {
+          // silent fail — no tokens available
+        }
+      }
+
+      // If we now have an access token, validate by calling /me. If /me fails, try refresh once.
+      const haveAccess = getAccessToken()
+      if (!haveAccess) return
       try {
         await me()
       } catch {
-        if (refreshTok) {
-          try {
-            await refresh()
-          } catch {
-            // give up
-          }
+        try {
+          await refresh()
+        } catch {
+          // give up
         }
       }
     }

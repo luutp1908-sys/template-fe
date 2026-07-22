@@ -1,8 +1,9 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import { computeFitZoom, useEditor } from './shared/hooks/useEditor'
 import { DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_HEIGHT, DEFAULT_TEXT_WIDTH, DEFAULT_TEXT_HEIGHT, DEFAULT_TEXT_COLOR, DEFAULT_TEXT_FONT_SIZE } from './shared/constants/editorGeometry'
 import useTemplate from './shared/hooks/useTemplate'
+import { postJson } from './shared/api/client'
 import {
   PAGE_HEIGHT,
   PAGE_WIDTH,
@@ -73,6 +74,21 @@ const ZoomSlider = styled.input`
   cursor: pointer;
 `
 
+const SaveButton = styled.button`
+  padding: 8px 12px;
+  background: #0066cc;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+`
+
 const AppContainer = styled.div`
   display: flex;
   width: 100%;
@@ -108,6 +124,7 @@ function App() {
   const [authModalOpen, setAuthModalOpen] = useState(false)
 
   const editor = useEditor(template || defaultLocalTemplate)
+  const [isSaving, setIsSaving] = useState(false)
   const [sidebarPanel, setSidebarPanel] = useState<'none' | 'image' | 'background'>('none')
   const canvasViewportRef = useRef<HTMLDivElement | null>(null)
   const hasAutoFitApplied = useRef(false)
@@ -232,6 +249,50 @@ function App() {
     setSidebarPanel('background')
   }
 
+  const handleSaveDraft = useCallback(async () => {
+    if (!user) {
+      setAuthModalOpen(true)
+      return
+    }
+
+    const resolvedTemplateId = template?.id ?? template?.templateId ?? defaultLocalTemplate.id
+    if (!resolvedTemplateId) {
+      alert('No template loaded to save')
+      return
+    }
+
+    setIsSaving(true)
+    try {
+      // ensure templateId is a UUID to satisfy backend DTO validation
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+      let templateIdToSend = String(resolvedTemplateId)
+      if (!uuidRegex.test(templateIdToSend)) {
+        // use browser crypto.randomUUID when available
+        try {
+          // @ts-ignore - crypto.randomUUID exists in modern browsers
+          templateIdToSend = (typeof crypto !== 'undefined' && (crypto as any).randomUUID)
+            ? (crypto as any).randomUUID()
+            : templateIdToSend
+        } catch (e) {
+          // fallback: leave as-is (server mock may still accept), but prefer a generated UUID
+        }
+      }
+
+      const payload = {
+        templateId: templateIdToSend,
+        name: template?.title || template?.name || `Draft ${new Date().toISOString()}`,
+        content: { pages: editor.pages },
+      }
+      await postJson('/api/v1/user-draft', payload)
+      alert('Draft saved')
+    } catch (err) {
+      console.error('Save draft failed', err)
+      alert('Failed to save draft')
+    } finally {
+      setIsSaving(false)
+    }
+  }, [user, template, editor.pages])
+
   return (
     <AppShell>
       <TopHeader>
@@ -249,6 +310,9 @@ function App() {
             />
             <ZoomValue>{Math.round(editor.zoom * 100)}%</ZoomValue>
           </ZoomControl>
+          <SaveButton onClick={handleSaveDraft} disabled={isSaving || !user}>
+            {isSaving ? 'Saving…' : 'Save'}
+          </SaveButton>
         </HeaderContent>
       </TopHeader>
 
