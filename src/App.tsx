@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { computeFitZoom, useEditor } from './shared/hooks/useEditor'
+import { DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_HEIGHT } from './shared/constants/editorGeometry'
 import useTemplate from './shared/hooks/useTemplate'
 import {
   PAGE_HEIGHT,
@@ -161,7 +162,23 @@ function App() {
 
   const handleAddImageFromStock = (src: string) => {
     editor.addObject('image', {
-      src,
+      imageConfig: {
+        size: { width: DEFAULT_IMAGE_WIDTH, height: DEFAULT_IMAGE_HEIGHT },
+        width: DEFAULT_IMAGE_WIDTH,
+        height: DEFAULT_IMAGE_HEIGHT,
+        translate: [0, 0],
+        rotate: 0,
+        url: src,
+        tagNames: [],
+        colorConfig: {},
+        cropImage: { width: DEFAULT_IMAGE_WIDTH, height: DEFAULT_IMAGE_HEIGHT, translate: [0, 0] },
+        scaleX: 1,
+        scaleY: 1,
+        replaced: false,
+        isPro: false,
+        isLoading: false,
+        isLocked: false,
+      },
     })
     setSidebarPanel('none')
   }

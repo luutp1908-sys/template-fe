@@ -13,6 +13,50 @@ export interface BaseLayer {
   zIndex?: number
 }
 
+export interface Size {
+  width: number
+  height: number
+}
+
+export type Point = [number, number]
+
+export interface CropImage {
+  width: number
+  height: number
+  translate: Point
+}
+
+export type ColorConfig = Record<string, string>
+
+export interface ImageConfig {
+  size: Size;
+
+  width: number;
+  height: number;
+
+  translate: Point;
+  rotate: number;
+
+  url: string;
+  sourceId?: string;
+
+  tagNames: string[];
+  tags?: string[];
+
+  colorConfig: ColorConfig;
+
+  cropImage: CropImage;
+
+  scaleX?: number;
+  scaleY?: number;
+
+  replaced?: boolean;
+  isPro?: boolean;
+
+  isLoading: boolean;
+  isLocked: boolean;
+}
+
 export interface RectLayer extends BaseLayer {
   type: 'rect'
   color?: string
@@ -35,8 +79,7 @@ export interface TextLayer extends BaseLayer {
 
 export interface ImageLayer extends BaseLayer {
   type: 'image'
-  src?: string
-  fitMode?: 'contain' | 'cover'
+  imageConfig?: ImageConfig
   opacity?: number
   cornerRadius?: number
 }
