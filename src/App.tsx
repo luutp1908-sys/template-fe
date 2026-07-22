@@ -86,12 +86,14 @@ const defaultLocalTemplate = {
   title: 'Starter Template',
   thumbnail: '/assets/thumbs/tmpl_001.png',
   metadata: {},
-  pages: [
+  blocks: [
     {
-      id: 'page_1',
-      width: PAGE_WIDTH,
-      height: PAGE_HEIGHT,
-      background: { color: '#ffffff' },
+      uuid: 'page_1',
+      config: {
+        width: `${PAGE_WIDTH}px`,
+        height: `${PAGE_HEIGHT}px`,
+        backgroundImg: '',
+      },
       layers: [],
     },
   ],

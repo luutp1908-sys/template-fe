@@ -149,7 +149,22 @@ export const computeFitZoom = ({
 }
 
 export const useEditor = (initialTemplate?: TemplateContent | null) => {
-  const initialPages: Page[] = initialTemplate?.pages?.length
+  const mapBlockToPage = (b: any): Page => {
+    const width = typeof b?.config?.width === 'string' ? parseInt(String(b.config.width).replace(/px$/, '')) || 1024 : b?.config?.width || 1024
+    const height = typeof b?.config?.height === 'string' ? parseInt(String(b.config.height).replace(/px$/, '')) || 768 : b?.config?.height || 768
+    const background: PageBackground = b?.config?.backgroundImg ? { image: { src: b.config.backgroundImg } } : { color: '#ffffff' }
+    return {
+      id: b?.uuid || `page_${Date.now()}`,
+      width,
+      height,
+      background,
+      layers: b?.layers || [],
+    }
+  }
+
+  const initialPages: Page[] = initialTemplate?.blocks?.length
+    ? initialTemplate.blocks.map(mapBlockToPage)
+    : initialTemplate?.pages?.length
     ? initialTemplate.pages
     : [
         {
@@ -171,10 +186,18 @@ export const useEditor = (initialTemplate?: TemplateContent | null) => {
 
   useEffect(() => {
     if (!initialTemplate) return
-    if (!initialTemplate.pages || initialTemplate.pages.length === 0) return
-    setPages(initialTemplate.pages)
-    setCurrentPageIndexState(0)
-    setSelectedId(initialTemplate.pages[0]?.layers?.[0]?.id || null)
+    if (initialTemplate.blocks && initialTemplate.blocks.length > 0) {
+      const mapped = initialTemplate.blocks.map(mapBlockToPage)
+      setPages(mapped)
+      setCurrentPageIndexState(0)
+      setSelectedId(mapped[0]?.layers?.[0]?.id || null)
+      return
+    }
+    if (initialTemplate.pages && initialTemplate.pages.length > 0) {
+      setPages(initialTemplate.pages)
+      setCurrentPageIndexState(0)
+      setSelectedId(initialTemplate.pages[0]?.layers?.[0]?.id || null)
+    }
   }, [initialTemplate])
 
   const objects = pages[currentPageIndex]?.layers || []

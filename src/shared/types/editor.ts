@@ -163,10 +163,25 @@ export interface Page {
   layers: Layer[]
 }
 
+export interface BlockConfig {
+  width: string
+  height: string
+  backgroundImg: string
+}
+
+export interface Block {
+  uuid: string
+  config: BlockConfig
+  layers: Layer[]
+}
+
 export interface TemplateContent {
   id?: string
   title?: string
   thumbnail?: string
   metadata?: Record<string, any>
-  pages: Page[]
+  // new primary field
+  blocks?: Block[]
+  // keep pages for backwards compatibility
+  pages?: Page[]
 }
