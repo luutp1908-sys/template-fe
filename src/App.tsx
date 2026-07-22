@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { computeFitZoom, useEditor } from './shared/hooks/useEditor'
 import useTemplate from './shared/hooks/useTemplate'
