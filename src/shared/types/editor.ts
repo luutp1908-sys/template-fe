@@ -61,3 +61,33 @@ export interface FitZoomInput {
   pageHeight: number
   padding?: number
 }
+
+export interface PageBackgroundImage {
+  src: string
+  fit?: 'cover' | 'contain' | 'stretch'
+  position?: string
+  repeat?: 'no-repeat' | 'repeat' | 'repeat-x' | 'repeat-y'
+  opacity?: number
+}
+
+export interface PageBackground {
+  color?: string
+  image?: PageBackgroundImage
+  overlay?: { color?: string }
+}
+
+export interface Page {
+  id: string
+  width: number
+  height: number
+  background?: PageBackground
+  layers: Layer[]
+}
+
+export interface TemplateContent {
+  id?: string
+  title?: string
+  thumbnail?: string
+  metadata?: Record<string, any>
+  pages: Page[]
+}

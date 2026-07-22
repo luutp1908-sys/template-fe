@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import styled from 'styled-components'
 import { computeFitZoom, useEditor } from './shared/hooks/useEditor'
+import useTemplate from './shared/hooks/useTemplate'
 import {
   PAGE_HEIGHT,
   PAGE_WIDTH,
@@ -77,35 +78,28 @@ const AppContainer = styled.div`
   overflow: hidden;
 `
 
-const initialObjects: EditorObject[] = [
-  {
-    id: 1,
-    type: 'rect',
-    x: 200,
-    y: 150,
-    width: 180,
-    height: 120,
-    rotate: 0,
-    color: '#0066cc',
-  },
-  {
-    id: 2,
-    type: 'text',
-    x: 450,
-    y: 200,
-    width: 220,
-    height: 60,
-    rotate: 0,
-    text: 'Your design',
-    textColor: '#1a1a1a',
-  },
-]
+const defaultLocalTemplate = {
+  id: 'tmpl_001',
+  title: 'Starter Template',
+  thumbnail: '/assets/thumbs/tmpl_001.png',
+  metadata: {},
+  pages: [
+    {
+      id: 'page_1',
+      width: PAGE_WIDTH,
+      height: PAGE_HEIGHT,
+      background: { color: '#ffffff' },
+      layers: [],
+    },
+  ],
+}
 
 function App() {
-  const editor = useEditor(initialObjects)
+  const { template, loading, error } = useTemplate('tmpl_001')
+  if (error) console.error('Template load error:', error)
+
+  const editor = useEditor(template || defaultLocalTemplate)
   const [sidebarPanel, setSidebarPanel] = useState<'none' | 'image' | 'background'>('none')
-  const [pageBackgroundColor, setPageBackgroundColor] = useState('#ffffff')
-  const [pageBackgroundImage, setPageBackgroundImage] = useState<string | undefined>(undefined)
   const canvasViewportRef = useRef<HTMLDivElement | null>(null)
   const hasAutoFitApplied = useRef(false)
 
@@ -167,12 +161,11 @@ function App() {
   }
 
   const handleSetBackgroundColor = (color: string) => {
-    setPageBackgroundColor(color)
-    setPageBackgroundImage(undefined)
+    editor.setPageBackground({ color })
   }
 
   const handleSetBackgroundImage = (src: string) => {
-    setPageBackgroundImage(src)
+    editor.setPageBackground({ image: { src, fit: 'cover' } })
   }
 
   const handleToolSelect = (tool: 'element' | 'text' | 'image' | 'frame') => {
@@ -229,7 +222,7 @@ function App() {
           onSelectObject={editor.setSelectedId}
           onDeleteObject={editor.deleteObject}
           panel={sidebarPanel}
-          backgroundColor={pageBackgroundColor}
+          backgroundColor={editor.currentPageBackground?.color || '#ffffff'}
           onChangeBackgroundColor={handleSetBackgroundColor}
           onSelectStockImage={handleAddImageFromStock}
           onSelectBackgroundImage={handleSetBackgroundImage}
@@ -243,8 +236,10 @@ function App() {
           onDuplicateObject={editor.duplicateObject}
           onDeleteObject={editor.deleteObject}
           onToggleObjectLock={editor.toggleObjectLock}
-          pageBackgroundColor={pageBackgroundColor}
-          pageBackgroundImage={pageBackgroundImage}
+          pageBackgroundColor={editor.currentPageBackground?.color || '#ffffff'}
+          pageBackgroundImage={editor.currentPageBackground?.image?.src}
+          pageWidth={editor.pages?.[editor.currentPageIndex]?.width}
+          pageHeight={editor.pages?.[editor.currentPageIndex]?.height}
           zoom={editor.zoom}
           viewportRef={canvasViewportRef}
         />

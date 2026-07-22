@@ -24,13 +24,13 @@ export const CanvasArea = styled.div`
   background: #eef2f7;
 `
 
-export const Workspace = styled.div<{ $zoom?: number }>`
+export const Workspace = styled.div<{ $zoom?: number; $pageWidth?: number; $pageHeight?: number }>`
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: ${({ $zoom = 1 }) => PAGE_WIDTH * $zoom + WORKSPACE_PADDING * 2}px;
-  min-height: ${({ $zoom = 1 }) => PAGE_HEIGHT * $zoom + WORKSPACE_PADDING * 2}px;
+  min-width: ${({ $zoom = 1, $pageWidth = PAGE_WIDTH }) => $pageWidth * $zoom + WORKSPACE_PADDING * 2}px;
+  min-height: ${({ $zoom = 1, $pageHeight = PAGE_HEIGHT }) => $pageHeight * $zoom + WORKSPACE_PADDING * 2}px;
   padding: ${WORKSPACE_PADDING}px;
 `
 
@@ -48,10 +48,12 @@ export const PageSurface = styled.div<{
   $zoom?: number
   $backgroundColor?: string
   $backgroundImage?: string
+  $pageWidth?: number
+  $pageHeight?: number
 }>`
   position: relative;
-  width: ${PAGE_WIDTH}px;
-  height: ${PAGE_HEIGHT}px;
+  width: ${({ $pageWidth = PAGE_WIDTH }) => `${$pageWidth}px`};
+  height: ${({ $pageHeight = PAGE_HEIGHT }) => `${$pageHeight}px`};
   transform: ${({ $zoom = 1 }) => `scale(${$zoom})`};
   transform-origin: center center;
   background-color: ${({ $backgroundColor = '#ffffff' }) => $backgroundColor};

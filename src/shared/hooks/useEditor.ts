@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   DEFAULT_IMAGE_CORNER_RADIUS,
   DEFAULT_IMAGE_FIT_MODE,
@@ -25,6 +25,9 @@ import type {
   ImageLayer,
   RectLayer,
   TextLayer,
+  TemplateContent,
+  Page,
+  PageBackground,
 } from '../types/editor'
 
 type DefaultLayerProps =
@@ -108,17 +111,45 @@ export const computeFitZoom = ({
   return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, fitZoom))
 }
 
-export const useEditor = (initialObjects: EditorObject[]) => {
-  const [objects, setObjects] = useState<EditorObject[]>(initialObjects)
-  const [selectedId, setSelectedId] = useState<number | null>(initialObjects[0]?.id || null)
+export const useEditor = (initialTemplate?: TemplateContent | null) => {
+  const initialPages: Page[] = initialTemplate?.pages?.length
+    ? initialTemplate.pages
+    : [
+        {
+          id: 'page_1',
+          width: 1024,
+          height: 768,
+          background: { color: '#ffffff' },
+          layers: [],
+        },
+      ]
+
+  const [pages, setPages] = useState<Page[]>(initialPages)
+  const [currentPageIndex, setCurrentPageIndexState] = useState<number>(0)
+  const [selectedId, setSelectedId] = useState<number | null>(
+    initialPages[0]?.layers?.[0]?.id || null,
+  )
   const [activeTool, setActiveTool] = useState<ActiveTool>(null)
   const [zoom, setZoomState] = useState(1)
 
+  useEffect(() => {
+    if (!initialTemplate) return
+    if (!initialTemplate.pages || initialTemplate.pages.length === 0) return
+    setPages(initialTemplate.pages)
+    setCurrentPageIndexState(0)
+    setSelectedId(initialTemplate.pages[0]?.layers?.[0]?.id || null)
+  }, [initialTemplate])
+
+  const objects = pages[currentPageIndex]?.layers || []
   const selectedObject = objects.find((obj) => obj.id === selectedId)
 
   const updateObject = (id: number, updates: Partial<EditorObject>) => {
-    setObjects((current) =>
-      current.map((obj) => (obj.id === id ? { ...obj, ...updates } : obj)),
+    setPages((current) =>
+      current.map((p, idx) =>
+        idx === currentPageIndex
+          ? { ...p, layers: p.layers.map((obj) => (obj.id === id ? { ...obj, ...updates } : obj)) }
+          : p,
+      ),
     )
   }
 
@@ -130,15 +161,23 @@ export const useEditor = (initialObjects: EditorObject[]) => {
       ...defaults,
     } as EditorObject
 
-    setObjects((current) => [...current, newObject])
+    setPages((current) =>
+      current.map((p, idx) => (idx === currentPageIndex ? { ...p, layers: [...p.layers, newObject] } : p)),
+    )
     setSelectedId(newId)
     return newObject
   }
 
   const deleteObject = (id: number) => {
-    const remaining = objects.filter((obj) => obj.id !== id)
-    setObjects(remaining)
+    setPages((current) =>
+      current.map((p, idx) =>
+        idx === currentPageIndex
+          ? { ...p, layers: p.layers.filter((obj) => obj.id !== id) }
+          : p,
+      ),
+    )
     if (selectedId === id) {
+      const remaining = (pages[currentPageIndex]?.layers || []).filter((o) => o.id !== id)
       setSelectedId(remaining[0]?.id || null)
     }
   }
@@ -161,18 +200,20 @@ export const useEditor = (initialObjects: EditorObject[]) => {
       y: source.y + 20,
     }
 
-    setObjects((current) => [...current, duplicatedObject])
+    setPages((current) =>
+      current.map((p, idx) => (idx === currentPageIndex ? { ...p, layers: [...p.layers, duplicatedObject] } : p)),
+    )
     setSelectedId(duplicateId)
     return duplicatedObject
   }
 
   const toggleObjectLock = (id: number) => {
-    setObjects((current) =>
-      current.map((obj) => (
-        obj.id === id
-          ? { ...obj, locked: !(obj.locked ?? false) }
-          : obj
-      )),
+    setPages((current) =>
+      current.map((p, idx) =>
+        idx === currentPageIndex
+          ? { ...p, layers: p.layers.map((obj) => (obj.id === id ? { ...obj, locked: !(obj.locked ?? false) } : obj)) }
+          : p,
+      ),
     )
   }
 
@@ -182,11 +223,45 @@ export const useEditor = (initialObjects: EditorObject[]) => {
     setZoomState(Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, numericZoom)))
   }
 
+  const addPage = (page: Partial<Page> = {}) => {
+    const newPage: Page = {
+      id: page.id || `page_${Date.now()}`,
+      width: page.width || 1024,
+      height: page.height || 768,
+      background: page.background || { color: '#ffffff' },
+      layers: page.layers || [],
+    }
+    setPages((current) => [...current, newPage])
+    setCurrentPageIndexState((prev) => prev + 1)
+    return newPage
+  }
+
+  const setCurrentPageIndex = (index: number) => {
+    const safe = Math.max(0, Math.min(index, pages.length - 1))
+    setCurrentPageIndexState(safe)
+  }
+
+  const setPageBackground = (bg: PageBackground) => {
+    setPages((current) =>
+      current.map((p, idx) => (idx === currentPageIndex ? { ...p, background: { ...(p.background || {}), ...bg } } : p)),
+    )
+  }
+
   return {
+    // page-level state
+    pages,
+    currentPageIndex,
+    setCurrentPageIndex,
+    addPage,
+    // current page helpers
     objects,
     selectedId,
     setSelectedId,
     selectedObject,
+    // page background helpers
+    currentPageBackground: pages[currentPageIndex]?.background,
+    setPageBackground,
+    // editor tools
     activeTool,
     setActiveTool,
     zoom,

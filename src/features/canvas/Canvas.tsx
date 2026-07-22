@@ -25,6 +25,8 @@ type CanvasProps = {
   onToggleObjectLock: (id: number) => void
   pageBackgroundColor?: string
   pageBackgroundImage?: string
+  pageWidth?: number
+  pageHeight?: number
   zoom?: number
   viewportRef?: RefObject<HTMLDivElement | null>
 }
@@ -39,6 +41,8 @@ export const Canvas = ({
   onToggleObjectLock,
   pageBackgroundColor = '#ffffff',
   pageBackgroundImage,
+  pageWidth,
+  pageHeight,
   zoom = 1,
   viewportRef,
 }: CanvasProps) => {
@@ -99,6 +103,8 @@ export const Canvas = ({
             $zoom={zoom}
             $backgroundColor={pageBackgroundColor}
             $backgroundImage={pageBackgroundImage}
+            $pageWidth={pageWidth}
+            $pageHeight={pageHeight}
             data-testid="page-surface"
           >
             {objects.map((object) => (
