@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { computeFitZoom, useEditor } from './shared/hooks/useEditor'
-import { DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_HEIGHT } from './shared/constants/editorGeometry'
+import { DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_HEIGHT, DEFAULT_TEXT_WIDTH, DEFAULT_TEXT_HEIGHT, DEFAULT_TEXT_COLOR, DEFAULT_TEXT_FONT_SIZE } from './shared/constants/editorGeometry'
 import useTemplate from './shared/hooks/useTemplate'
 import {
   PAGE_HEIGHT,
@@ -155,7 +155,29 @@ function App() {
   const handleAddText = () => {
     editor.addObject('text', {
       text: 'New text',
-      textColor: '#1a1a1a',
+      textColor: DEFAULT_TEXT_COLOR,
+      textConfig: {
+        value: 'New text',
+        type: 'text-box',
+        width: `${DEFAULT_TEXT_WIDTH}px`,
+        height: `${DEFAULT_TEXT_HEIGHT}px`,
+        translate: [0, 0],
+        rotate: 0,
+        fontFamily: 'Arial, sans-serif',
+        fontSize: `${DEFAULT_TEXT_FONT_SIZE}px`,
+        fontColor: DEFAULT_TEXT_COLOR,
+        textAlign: 'left',
+        lineHeight: 1.2,
+        letterSpacing: '0px',
+        isBold: false,
+        isItalic: false,
+        isUnderline: false,
+        isCapital: false,
+        presentationType: 'body',
+        colorPaletteType: null,
+        externalFontUrl: null,
+        isLogoQrCode: false,
+      },
     })
     setSidebarPanel('none')
   }

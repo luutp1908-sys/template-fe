@@ -61,6 +61,28 @@ const getDefaultLayerProps = (type: EditorObjectType): DefaultLayerProps => {
       textAlign: DEFAULT_TEXT_ALIGN,
       lineHeight: DEFAULT_TEXT_LINE_HEIGHT,
       wrapMode: 'fixed',
+      textConfig: {
+        value: 'New text',
+        type: 'text-box',
+        width: `${DEFAULT_TEXT_WIDTH}px`,
+        height: `${DEFAULT_TEXT_HEIGHT}px`,
+        translate: [0, 0],
+        rotate: 0,
+        fontFamily: DEFAULT_TEXT_FONT_FAMILY,
+        fontSize: `${DEFAULT_TEXT_FONT_SIZE}px`,
+        fontColor: DEFAULT_TEXT_COLOR,
+        textAlign: DEFAULT_TEXT_ALIGN,
+        lineHeight: DEFAULT_TEXT_LINE_HEIGHT,
+        letterSpacing: '0px',
+        isBold: false,
+        isItalic: false,
+        isUnderline: false,
+        isCapital: false,
+        presentationType: 'body',
+        colorPaletteType: null,
+        externalFontUrl: null,
+        isLogoQrCode: false,
+      },
     } satisfies Omit<TextLayer, 'id'>
   }
 

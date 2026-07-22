@@ -62,9 +62,44 @@ export interface RectLayer extends BaseLayer {
   color?: string
 }
 
-export type TextAlign = 'left' | 'center' | 'right'
+export type TextAlign = 'left' | 'center' | 'right' | 'justify'
 export type TextWeight = 'normal' | 'bold'
 
+export interface TextConfig {
+  // Content
+  value: string;
+  type: 'text-box' | string;
+
+  // Size
+  width: string;
+  height: string;
+
+  // Transform
+  translate: Point;
+  rotate: number;
+
+  // Typography
+  fontFamily: string;
+  fontSize: string;
+  fontColor: string;
+
+  textAlign: 'left' | 'center' | 'right' | 'justify';
+  lineHeight: number | string;
+  letterSpacing: number | string;
+
+  isBold: boolean;
+  isItalic: boolean;
+  isUnderline: boolean;
+  isCapital?: boolean;
+
+  // Metadata
+  presentationType: string;
+  colorPaletteType: string | null;
+  externalFontUrl: string | null;
+  isLogoQrCode: boolean;
+}
+
+// keep legacy flat fields for backward compatibility; prefer `textConfig` in new code
 export interface TextLayer extends BaseLayer {
   type: 'text'
   text?: string
@@ -75,6 +110,7 @@ export interface TextLayer extends BaseLayer {
   textAlign?: TextAlign
   lineHeight?: number
   wrapMode?: 'fixed'
+  textConfig?: TextConfig
 }
 
 export interface ImageLayer extends BaseLayer {
