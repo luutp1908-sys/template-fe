@@ -9,6 +9,8 @@ import {
 } from './shared/constants/editorGeometry'
 import { HEADER_HEIGHT } from './shared/constants/layout'
 import { MenuBar } from './widgets/MenuBar'
+import AuthModal from './widgets/AuthModal'
+import useAuth from './shared/hooks/useAuth'
 import { Sidebar } from './widgets/Sidebar'
 import { Canvas } from './features/canvas/Canvas'
 import type { EditorObject } from './shared/types/editor'
@@ -97,6 +99,10 @@ const defaultLocalTemplate = {
 function App() {
   const { template, loading, error } = useTemplate('tmpl_001')
   if (error) console.error('Template load error:', error)
+
+  const auth = useAuth()
+  const { user } = auth
+  const [authModalOpen, setAuthModalOpen] = useState(false)
 
   const editor = useEditor(template || defaultLocalTemplate)
   const [sidebarPanel, setSidebarPanel] = useState<'none' | 'image' | 'background'>('none')
@@ -214,6 +220,18 @@ function App() {
           onAddText={handleAddText}
           onOpenImageStock={handleOpenImageStock}
           onOpenBackgroundPanel={handleOpenBackgroundPanel}
+          onOpenAuth={() => setAuthModalOpen(true)}
+          user={user}
+          onLogout={() => auth.logout()}
+        />
+
+        <AuthModal
+          visible={authModalOpen}
+          onClose={() => setAuthModalOpen(false)}
+          onSignIn={auth.signIn}
+          onSignUp={auth.signUp}
+          loading={auth.loading}
+          error={auth.error}
         />
 
         <Sidebar

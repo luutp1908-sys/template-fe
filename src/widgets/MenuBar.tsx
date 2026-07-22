@@ -65,6 +65,9 @@ export const MenuBar = ({
   onAddText,
   onOpenImageStock,
   onOpenBackgroundPanel,
+  onOpenAuth,
+  user,
+  onLogout,
 }: MenuBarProps) => {
   return (
     <StyledMenuBar>
@@ -106,6 +109,15 @@ export const MenuBar = ({
       <MenuItem onClick={onOpenImageStock} title="Add Image">
         📤
       </MenuItem>
+      <MenuDivider />
+      {user ? (
+        <>
+          <div style={{ padding: '8px 12px', color: '#1a1a1a' }}>{user.displayName || user.email}</div>
+          <MenuItem onClick={onLogout} title="Logout">⎋</MenuItem>
+        </>
+      ) : (
+        <MenuItem onClick={onOpenAuth} title="Sign In">🔐</MenuItem>
+      )}
     </StyledMenuBar>
   )
 }
