@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { fetchJson } from '../api/client'
 
-export const useTemplate = (templateId = 'tmpl_001') => {
+// If draftId is provided, this hook will fetch the draft-backed endpoint
+// and return both the selected `template` content and the `draft` object.
+export const useTemplate = (templateId = 'tmpl_001', draftId?: string | null) => {
   const [template, setTemplate] = useState<any | null>(null)
+  const [draft, setDraft] = useState<any | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const reloadRef = useRef(0)
@@ -14,12 +17,27 @@ export const useTemplate = (templateId = 'tmpl_001') => {
 
     ;(async () => {
       try {
-        const body = await fetchJson(`/api/v1/template-content/${templateId}`, {
-          method: 'GET',
-          signal: ac.signal,
-        })
-        const content = body?.data?.content ?? null
-        setTemplate(content)
+        if (draftId) {
+          // draft-backed loader (private)
+          const body = await fetchJson(`/api/v1/user-draft/${draftId}/template-content`, {
+            method: 'GET',
+            signal: ac.signal,
+          })
+          const tpl = body?.data?.templateContent ?? null
+          const dr = body?.data?.draft ?? null
+          // prefer draft content when present (FE may later run a merge)
+          const chosen = (dr?.content ?? tpl?.content) ?? null
+          setTemplate(chosen)
+          setDraft(dr)
+        } else {
+          const body = await fetchJson(`/api/v1/template-content/${templateId}`, {
+            method: 'GET',
+            signal: ac.signal,
+          })
+          const content = body?.data?.content ?? null
+          setTemplate(content)
+          setDraft(null)
+        }
       } catch (err: any) {
         if (err?.name === 'AbortError') return
         setError(err?.message ?? String(err))
@@ -29,16 +47,13 @@ export const useTemplate = (templateId = 'tmpl_001') => {
     })()
 
     return () => ac.abort()
-  }, [templateId, reloadRef.current])
+  }, [templateId, draftId, reloadRef.current])
 
   const reload = () => {
     reloadRef.current += 1
-    // change of ref won't trigger effect; use a micro state trick
-    // but keeping simple: force update via state not necessary for now
-    // Consumers can call reload to re-run effect by updating a state wrapper if needed.
   }
 
-  return { template, loading, error, reload }
+  return { template, draft, loading, error, reload }
 }
 
 export default useTemplate

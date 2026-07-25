@@ -111,8 +111,8 @@ export const useAuth = () => {
     setError(null)
     try {
       const body = await fetchJson('/api/v1/auth/me')
-      const meUser = body as any
-      // the backend returns the user object directly in /me
+      // backend wraps response as { success, data, timestamp } or returns user directly
+      const meUser = (body && (body.data ?? body)) as any
       setTokens({ user: meUser })
       setUser(meUser)
       return meUser
@@ -124,31 +124,38 @@ export const useAuth = () => {
     }
   }
 
-  // on mount: if we have tokens, attempt to validate user via /me; if fails try refresh
+  // on mount: silently refresh using httpOnly cookie, then validate session via /me
   useEffect(() => {
     let mounted = true
     const init = async () => {
-      const access = getAccessToken()
+      // show persisted user immediately for instant UI
+      const persistedUser = tokenStore.getUser()
+      if (persistedUser && mounted) setUser(persistedUser)
 
-      // If there is no access token, attempt a silent refresh using httpOnly cookie (server-set)
-      if (!access) {
+      // if initAuth() in main.tsx already set an access token, skip refresh
+      // otherwise attempt silent refresh via httpOnly cookie
+      if (!getAccessToken()) {
         try {
           await refresh()
         } catch {
-          // silent fail — no tokens available
+          // no valid session — user is logged out
+          return
         }
       }
 
-      // If we now have an access token, validate by calling /me. If /me fails, try refresh once.
-      const haveAccess = getAccessToken()
-      if (!haveAccess) return
+      // we have an access token — validate with /me to confirm server-side session
+      if (!mounted) return
       try {
         await me()
       } catch {
+        // /me failed — token may be stale; try one more refresh
         try {
           await refresh()
+          if (mounted) await me()
         } catch {
-          // give up
+          // give up — clear stale state
+          clearTokens()
+          if (mounted) setUser(null)
         }
       }
     }

@@ -69,4 +69,8 @@ export async function postJson(path: string, body: any, options: RequestInit = {
   return fetchJson(path, { method: 'POST', body: JSON.stringify(body), ...options })
 }
 
-export default { getApiBase, fetchJson, postJson, setAuthHeaderGetter }
+export async function patchJson(path: string, body: any, options: RequestInit = {}) {
+  return fetchJson(path, { method: 'PATCH', body: JSON.stringify(body), ...options })
+}
+
+export default { getApiBase, fetchJson, postJson, patchJson, setAuthHeaderGetter }

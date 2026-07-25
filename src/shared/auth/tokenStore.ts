@@ -19,11 +19,8 @@ function loadFromStorage() {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return
     const parsed = JSON.parse(raw)
-    cache = {
-      accessToken: parsed.accessToken || null,
-      refreshToken: parsed.refreshToken || null,
-      user: parsed.user || null,
-    }
+    // only restore the public `user` profile from storage
+    cache.user = parsed.user || null
   } catch {
     // ignore
   }
@@ -31,13 +28,26 @@ function loadFromStorage() {
 
 function saveToStorage() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(cache))
+    // persist only the `user` profile to avoid storing secrets in localStorage
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ user: cache.user }))
   } catch {
     // ignore
   }
 }
 
 loadFromStorage()
+
+// ensure API client uses stored access token immediately on page load
+try {
+  // import lazily to avoid circular imports at module initialization time
+  // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
+  const client = require('../api/client')
+  if (client && typeof client.setAuthHeaderGetter === 'function') {
+    client.setAuthHeaderGetter(() => getAccessToken())
+  }
+} catch {
+  // ignore if client can't be required at this time
+}
 
 export function setTokens(payload: Partial<Tokens>) {
   cache = { ...cache, ...payload }
@@ -68,6 +78,39 @@ export function getUser() {
 export function subscribe(fn: () => void) {
   listeners.add(fn)
   return () => listeners.delete(fn)
+}
+
+// Attempt a silent refresh using server-set httpOnly cookie to obtain an access token.
+export async function initAuth(): Promise<boolean> {
+  // avoid duplicate refresh calls when initAuth is invoked multiple times
+  // or when called concurrently during app bootstrap
+  if ((initAuth as any)._done) return true
+  if ((initAuth as any)._promise) return (initAuth as any)._promise as Promise<boolean>
+
+  const p = (async () => {
+    try {
+      // dynamic import to avoid circular deps at module init
+      const client = await import('../api/client')
+      const res = await client.postJson('/api/v1/auth/refresh', {})
+      const body = (res && (res.data ?? res)) as any
+      const accessToken = body?.accessToken ?? null
+      const userObj = body?.user ?? cache.user
+      cache.accessToken = accessToken
+      cache.user = userObj
+      // persist only user
+      saveToStorage()
+      listeners.forEach((l) => l())
+      ;(initAuth as any)._done = true
+      return true
+    } catch {
+      return false
+    } finally {
+      delete (initAuth as any)._promise
+    }
+  })()
+
+  ;(initAuth as any)._promise = p
+  return p
 }
 
 export default { setTokens, clearTokens, getAccessToken, getRefreshToken, getUser, subscribe }

@@ -1,9 +1,9 @@
-import { useRef, useState, useEffect, useCallback } from 'react'
+import { useRef, useState, useEffect, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { computeFitZoom, useEditor } from './shared/hooks/useEditor'
 import { DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_HEIGHT, DEFAULT_TEXT_WIDTH, DEFAULT_TEXT_HEIGHT, DEFAULT_TEXT_COLOR, DEFAULT_TEXT_FONT_SIZE } from './shared/constants/editorGeometry'
 import useTemplate from './shared/hooks/useTemplate'
-import { postJson } from './shared/api/client'
+import { postJson, patchJson } from './shared/api/client'
 import {
   PAGE_HEIGHT,
   PAGE_WIDTH,
@@ -116,16 +116,28 @@ const defaultLocalTemplate = {
 }
 
 function App() {
-  const { template, loading, error } = useTemplate('tmpl_001')
-  if (error) console.error('Template load error:', error)
+  const draftIdFromPath = useMemo(() => {
+    try {
+      const m = window.location.pathname.match(/^\/draft\/([^/]+)$/)
+      return m ? decodeURIComponent(m[1]) : null
+    } catch (e) {
+      return null
+    }
+  }, [])
 
   const auth = useAuth()
   const { user } = auth
+
+  const { template, draft, loading, error } = useTemplate('tmpl_001', draftIdFromPath ?? undefined)
+  if (error) console.error('Template load error:', error)
+
   const [authModalOpen, setAuthModalOpen] = useState(false)
 
   const editor = useEditor(template || defaultLocalTemplate)
   const [isSaving, setIsSaving] = useState(false)
-  const [sidebarPanel, setSidebarPanel] = useState<'none' | 'image' | 'background'>('none')
+  const [name, setName] = useState('untitled')
+  const [localDraftId, setLocalDraftId] = useState<string | null>(null)
+  const [sidebarPanel, setSidebarPanel] = useState<'none' | 'image' | 'background' | 'layers'>('none')
   const canvasViewportRef = useRef<HTMLDivElement | null>(null)
   const hasAutoFitApplied = useRef(false)
 
@@ -161,9 +173,12 @@ function App() {
         })
       })
     })
-
     return () => cancelAnimationFrame(frame)
   }, [])
+
+  useEffect(() => {
+    if (draft?.id) setLocalDraftId(draft.id)
+  }, [draft])
 
   const handleAddShape = () => {
     editor.addObject('rect', {
@@ -283,7 +298,18 @@ function App() {
         name: template?.title || template?.name || `Draft ${new Date().toISOString()}`,
         content: { pages: editor.pages },
       }
-      await postJson('/api/v1/user-draft', payload)
+      if (localDraftId) {
+        const res = await patchJson(`/api/v1/user-draft/${localDraftId}`, payload)
+        alert('Draft updated')
+        return
+      }
+
+      const res = await postJson('/api/v1/user-draft', payload)
+      const id = res?.data?.id ?? null
+      if (id) {
+        window.history.replaceState({}, '', `/draft/${encodeURIComponent(id)}`)
+        setLocalDraftId(id)
+      }
       alert('Draft saved')
     } catch (err) {
       console.error('Save draft failed', err)
