@@ -10,7 +10,7 @@ import {
 } from './Canvas.styles'
 import { useCanvasInteractions } from './useCanvasInteractions'
 import { InlineObjectToolbar } from './InlineObjectToolbar'
-import { LayerRenderer } from './LayerRenderer'
+import { LayerRenderer } from '../layers'
 import { useCanvasImageLifecycle } from './useCanvasImageLifecycle'
 import { useCanvasTextEditing } from './useCanvasTextEditing'
 import type { EditorObject } from '../../shared/types/editor'

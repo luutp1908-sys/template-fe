@@ -3,7 +3,7 @@ import { SIDEBAR_WIDTH } from '../shared/constants/layout'
 import type { EditorObject } from '../shared/types/editor'
 import { STOCK_IMAGES } from '../shared/constants/stockImages'
 
-type SidebarPanel = 'none' | 'image' | 'background'
+type SidebarPanel = 'none' | 'image' | 'background' | 'layers'
 
 type SidebarProps = {
   selectedObject?: EditorObject

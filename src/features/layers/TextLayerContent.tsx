@@ -1,4 +1,4 @@
-import { EditableText, ObjectText } from './Canvas.styles'
+import { EditableText, ObjectText } from '../canvas/Canvas.styles'
 import type { TextLayer } from '../../shared/types/editor'
 import type { TextEditingHandlers } from './LayerRenderer.types'
 
@@ -53,3 +53,5 @@ export const TextLayerContent = ({
     </ObjectText>
   )
 }
+
+export default TextLayerContent

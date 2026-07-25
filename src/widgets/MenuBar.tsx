@@ -10,6 +10,9 @@ type MenuBarProps = {
   onAddText: () => void
   onOpenImageStock: () => void
   onOpenBackgroundPanel: () => void
+  onOpenAuth?: () => void
+  user?: { email?: string; displayName?: string } | null
+  onLogout?: () => void | Promise<void>
 }
 
 const StyledMenuBar = styled.div`

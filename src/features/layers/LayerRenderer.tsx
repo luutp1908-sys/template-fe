@@ -1,4 +1,4 @@
-import { CanvasObject } from './Canvas.styles'
+import { CanvasObject } from '../canvas/Canvas.styles'
 import { FrameLayerContent } from './FrameLayerContent'
 import { ImageLayerContent } from './ImageLayerContent'
 import { RectLayerContent } from './RectLayerContent'
@@ -74,3 +74,5 @@ export const LayerRenderer = ({
     </CanvasObject>
   )
 }
+
+export default LayerRenderer

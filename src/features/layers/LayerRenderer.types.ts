@@ -1,6 +1,6 @@
 import type { RefObject } from 'react'
 import type { EditorObject } from '../../shared/types/editor'
-import type { ImageLoadStatus } from './useCanvasImageLifecycle'
+import type { ImageLoadStatus } from '../canvas/useCanvasImageLifecycle'
 
 export type TextEditingHandlers = {
   editingId: number | null

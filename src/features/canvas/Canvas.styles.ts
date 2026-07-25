@@ -233,4 +233,16 @@ export const ToolbarButton = styled.button`
   }
 `
 
+export const RectBlock = styled(ShapeBox)``
+
+export const FrameBox = styled(ShapeBox)<{ borderWidth?: number }>`
+  box-sizing: border-box;
+  border-style: solid;
+  border-width: ${({ borderWidth = 1 }) => `${borderWidth}px`};
+  border-color: rgba(0,0,0,0.12);
+  background: transparent;
+`
+
+export const ImageElement = CanvasImage
+
 export { PAGE_WIDTH, PAGE_HEIGHT, WORKSPACE_PADDING }
