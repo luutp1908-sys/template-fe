@@ -7,6 +7,9 @@ export const getApiBase = (): string => {
   return `${proto}//${host}:4000`
 }
 
+// Generic API response wrapper
+export type ApiResponse<T = any> = T
+
 let authHeaderGetter: (() => string | null) | null = null
 
 export function setAuthHeaderGetter(getter: () => string | null) {
@@ -18,7 +21,15 @@ export function setRefreshHandler(fn: (() => Promise<boolean>) | null) {
   refreshHandler = fn
 }
 
-export async function fetchJson(path: string, options: RequestInit = {}) {
+export function parseError(err: unknown): string {
+  try {
+    return typeof err === 'string' ? err : (err && (err as any).message) ? String((err as any).message) : String(err)
+  } catch {
+    return 'Unknown error'
+  }
+}
+
+export async function fetchJson<T = any>(path: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
   const base = getApiBase()
   const url = new URL(path, base).toString()
 
@@ -65,12 +76,12 @@ export async function fetchJson(path: string, options: RequestInit = {}) {
   return res.json()
 }
 
-export async function postJson(path: string, body: any, options: RequestInit = {}) {
-  return fetchJson(path, { method: 'POST', body: JSON.stringify(body), ...options })
+export async function postJson<T = any>(path: string, body: any, options: RequestInit = {}) {
+  return fetchJson<T>(path, { method: 'POST', body: JSON.stringify(body), ...options })
 }
 
-export async function patchJson(path: string, body: any, options: RequestInit = {}) {
-  return fetchJson(path, { method: 'PATCH', body: JSON.stringify(body), ...options })
+export async function patchJson<T = any>(path: string, body: any, options: RequestInit = {}) {
+  return fetchJson<T>(path, { method: 'PATCH', body: JSON.stringify(body), ...options })
 }
 
-export default { getApiBase, fetchJson, postJson, patchJson, setAuthHeaderGetter }
+export default { getApiBase, fetchJson, postJson, patchJson, setAuthHeaderGetter, setRefreshHandler, parseError }

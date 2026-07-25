@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { fetchJson, postJson, setAuthHeaderGetter, setRefreshHandler } from '../api/client'
+import { fetchJson, postJson, setAuthHeaderGetter, setRefreshHandler, parseError } from '../api/client'
 import tokenStore, { clearTokens, getAccessToken, setTokens } from '../auth/tokenStore'
 
 type SignInPayload = { email: string; password: string }
@@ -64,7 +64,7 @@ export const useAuth = () => {
     initialData: tokenStore.getUser() ?? undefined,
   })
 
-  const error = queryError ? String((queryError as any)?.message ?? queryError) : null
+  const error = queryError ? parseError(queryError) : null
 
   // --- mutations ---
 

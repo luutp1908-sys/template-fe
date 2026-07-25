@@ -4,7 +4,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import './index.css'
 import App from './App'
-import { initAuth } from './shared/auth/tokenStore'
+import { initAuth, initAuthClient } from './shared/auth/tokenStore'
+import * as apiClient from './shared/api/client'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,6 +21,12 @@ async function boot() {
   try {
     // attempt silent auth refresh before rendering so components have access token
     await initAuth()
+    // wire tokenStore -> api client so requests can read access token immediately
+    try {
+      initAuthClient(apiClient)
+    } catch {
+      // ignore
+    }
   } catch {
     // ignore
   }

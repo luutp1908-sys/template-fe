@@ -37,16 +37,13 @@ function saveToStorage() {
 
 loadFromStorage()
 
-// ensure API client uses stored access token immediately on page load
-try {
-  // import lazily to avoid circular imports at module initialization time
-  // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
-  const client = require('../api/client')
-  if (client && typeof client.setAuthHeaderGetter === 'function') {
+// Initialize tokenStore wiring with API client. Call from application bootstrap
+// (e.g. in `src/main.tsx`) to avoid circular module initialization.
+export function initAuthClient(client: { setAuthHeaderGetter?: (fn: () => string | null) => void } | null) {
+  if (!client) return
+  if (typeof client.setAuthHeaderGetter === 'function') {
     client.setAuthHeaderGetter(() => getAccessToken())
   }
-} catch {
-  // ignore if client can't be required at this time
 }
 
 export function setTokens(payload: Partial<Tokens>) {

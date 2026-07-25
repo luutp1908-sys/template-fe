@@ -272,7 +272,7 @@ function App() {
 
     const resolvedTemplateId = template?.id ?? template?.templateId ?? defaultLocalTemplate.id
     if (!resolvedTemplateId) {
-      alert('No template loaded to save')
+      console.warn('No template loaded to save')
       return
     }
 
@@ -300,7 +300,7 @@ function App() {
       }
       if (localDraftId) {
         const res = await patchJson(`/api/v1/user-draft/${localDraftId}`, payload)
-        alert('Draft updated')
+        console.info('Draft updated')
         return
       }
 
@@ -310,10 +310,10 @@ function App() {
         window.history.replaceState({}, '', `/draft/${encodeURIComponent(id)}`)
         setLocalDraftId(id)
       }
-      alert('Draft saved')
+      console.info('Draft saved')
     } catch (err) {
       console.error('Save draft failed', err)
-      alert('Failed to save draft')
+      console.warn('Failed to save draft')
     } finally {
       setIsSaving(false)
     }

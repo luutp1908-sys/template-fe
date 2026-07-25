@@ -1,5 +1,5 @@
 import { useQueryClient, useQuery } from '@tanstack/react-query'
-import { fetchJson } from '../api/client'
+import { fetchJson, parseError } from '../api/client'
 import { getAccessToken } from '../auth/tokenStore'
 
 // If draftId is provided, this hook will fetch the draft-backed endpoint
@@ -46,7 +46,7 @@ export const useTemplate = (templateId = 'tmpl_001', draftId?: string | null) =>
       template: draftQuery.data?.template ?? null,
       draft: draftQuery.data?.draft ?? null,
       loading: draftQuery.isLoading,
-      error: draftQuery.error ? String((draftQuery.error as any)?.message ?? draftQuery.error) : null,
+      error: draftQuery.error ? parseError(draftQuery.error) : null,
       reload,
     }
   }
@@ -55,7 +55,7 @@ export const useTemplate = (templateId = 'tmpl_001', draftId?: string | null) =>
     template: templateQuery.data ?? null,
     draft: null,
     loading: templateQuery.isLoading,
-    error: templateQuery.error ? String((templateQuery.error as any)?.message ?? templateQuery.error) : null,
+    error: templateQuery.error ? parseError(templateQuery.error) : null,
     reload,
   }
 }
