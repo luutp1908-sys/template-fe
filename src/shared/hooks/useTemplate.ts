@@ -14,7 +14,7 @@ export const useTemplate = (templateId = 'tmpl_001', draftId?: string | null) =>
     queryFn: async () => {
       const body = await fetchJson(`/api/v1/user-draft/${draftId}/template-content`)
       const tpl = body?.data?.templateContent ?? null
-      const dr = body?.data?.draft ?? null
+      const dr = body?.data ?? null
       return { template: (dr?.content ?? tpl?.content) ?? null, draft: dr }
     },
     enabled: !!draftId && !!getAccessToken(),
