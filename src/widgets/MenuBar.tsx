@@ -1,4 +1,6 @@
 import styled from 'styled-components'
+import { useState } from 'react'
+import FrameBrowser from '../components/FrameBrowser'
 import { MENU_BAR_WIDTH } from '../shared/constants/layout'
 import type { ActiveTool } from '../shared/types/editor'
 
@@ -13,6 +15,7 @@ type MenuBarProps = {
   onOpenAuth?: () => void
   user?: { email?: string; displayName?: string } | null
   onLogout?: () => void | Promise<void>
+  onAddFrame?: (presetId: string) => void
 }
 
 const StyledMenuBar = styled.div`
@@ -71,8 +74,16 @@ export const MenuBar = ({
   onOpenAuth,
   user,
   onLogout,
+  onAddFrame,
 }: MenuBarProps) => {
+  const [frameBrowserOpen, setFrameBrowserOpen] = useState(false)
+
+  const handleSelectFrame = (presetId: string) => {
+    setFrameBrowserOpen(false)
+    if (onAddFrame) onAddFrame(presetId)
+  }
   return (
+    <>
     <StyledMenuBar>
       <MenuItem
         $active={activeTool === 'element'}
@@ -94,6 +105,16 @@ export const MenuBar = ({
         title="Image"
       >
         🖼️
+      </MenuItem>
+      <MenuItem
+        $active={activeTool === 'frame'}
+        onClick={() => {
+          onToolSelect('frame')
+          setFrameBrowserOpen(true)
+        }}
+        title="Frames"
+      >
+        ❐
       </MenuItem>
       <MenuItem
         $active={isBackgroundPanelOpen}
@@ -122,5 +143,7 @@ export const MenuBar = ({
         <MenuItem onClick={onOpenAuth} title="Sign In">🔐</MenuItem>
       )}
     </StyledMenuBar>
+    <FrameBrowser visible={frameBrowserOpen} onClose={() => setFrameBrowserOpen(false)} onSelect={handleSelectFrame} />
+    </>
   )
 }

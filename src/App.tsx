@@ -11,6 +11,7 @@ import {
 } from './shared/constants/editorGeometry'
 import { HEADER_HEIGHT } from './shared/constants/layout'
 import { MenuBar } from './widgets/MenuBar'
+import FRAME_PRESETS from './data/framePresets'
 import AuthModal from './widgets/AuthModal'
 import useAuth from './shared/hooks/useAuth'
 import { Sidebar } from './widgets/Sidebar'
@@ -137,7 +138,7 @@ function App() {
   const [isSaving, setIsSaving] = useState(false)
   const [name, setName] = useState('untitled')
   const [localDraftId, setLocalDraftId] = useState<string | null>(null)
-  const [sidebarPanel, setSidebarPanel] = useState<'none' | 'image' | 'background' | 'layers'>('none')
+  const [sidebarPanel, setSidebarPanel] = useState<'none' | 'image' | 'background' | 'layers' | 'frames'>('none')
   const canvasViewportRef = useRef<HTMLDivElement | null>(null)
   const hasAutoFitApplied = useRef(false)
 
@@ -250,7 +251,29 @@ function App() {
   const handleToolSelect = (tool: 'element' | 'text' | 'image' | 'frame') => {
     editor.setActiveTool(tool)
     if (tool === 'image') {
+      setSidebarPanel('image')
       return
+    }
+    if (tool === 'frame') {
+      setSidebarPanel('frames')
+      return
+    }
+    setSidebarPanel('none')
+  }
+
+  const handleAddFrame = (presetId: string) => {
+    const preset = FRAME_PRESETS.find((p) => p.id === presetId)
+    if (!preset) return
+    if (typeof editor.addFrameLayer === 'function') {
+      editor.addFrameLayer({ width: preset.width, height: preset.height, shape: preset.shape })
+    } else {
+      editor.addObject('frame', {
+        width: preset.width,
+        height: preset.height,
+        // store preset shape for later mask rendering
+        // @ts-ignore - relaxed property for now
+        shape: preset.shape,
+      } as any)
     }
     setSidebarPanel('none')
   }
@@ -351,6 +374,7 @@ function App() {
           onAddText={handleAddText}
           onOpenImageStock={handleOpenImageStock}
           onOpenBackgroundPanel={handleOpenBackgroundPanel}
+          onAddFrame={handleAddFrame}
           onOpenAuth={() => setAuthModalOpen(true)}
           user={user}
           onLogout={() => auth.logout()}
@@ -375,6 +399,7 @@ function App() {
           onChangeBackgroundColor={handleSetBackgroundColor}
           onSelectStockImage={handleAddImageFromStock}
           onSelectBackgroundImage={handleSetBackgroundImage}
+          onAddFrame={handleAddFrame}
         />
 
         <Canvas

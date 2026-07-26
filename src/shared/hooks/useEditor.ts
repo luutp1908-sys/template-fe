@@ -228,6 +228,17 @@ export const useEditor = (initialTemplate?: TemplateContent | null) => {
     return newObject
   }
 
+  const addFrameLayer = (opts: { width?: number; height?: number; shape?: string; x?: number; y?: number } = {}) => {
+    const defaults: Partial<EditorObject> = {}
+    if (opts.width !== undefined) defaults.width = opts.width
+    if (opts.height !== undefined) defaults.height = opts.height
+    if (opts.x !== undefined) defaults.x = opts.x
+    if (opts.y !== undefined) defaults.y = opts.y
+    if (opts.shape !== undefined) (defaults as any).shape = opts.shape
+
+    return addObject('frame', defaults)
+  }
+
   const deleteObject = (id: number) => {
     setPages((current) =>
       current.map((p, idx) =>
@@ -328,6 +339,7 @@ export const useEditor = (initialTemplate?: TemplateContent | null) => {
     setZoom,
     updateObject,
     addObject,
+    addFrameLayer,
     duplicateObject,
     deleteObject,
     deleteSelected,

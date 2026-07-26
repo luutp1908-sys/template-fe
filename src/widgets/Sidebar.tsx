@@ -2,8 +2,9 @@ import styled from 'styled-components'
 import { SIDEBAR_WIDTH } from '../shared/constants/layout'
 import type { EditorObject } from '../shared/types/editor'
 import { STOCK_IMAGES } from '../shared/constants/stockImages'
+import FRAME_PRESETS from '../data/framePresets'
 
-type SidebarPanel = 'none' | 'image' | 'background' | 'layers'
+type SidebarPanel = 'none' | 'image' | 'background' | 'layers' | 'frames'
 
 type SidebarProps = {
   selectedObject?: EditorObject
@@ -15,6 +16,7 @@ type SidebarProps = {
   onChangeBackgroundColor?: (color: string) => void
   onSelectStockImage?: (src: string) => void
   onSelectBackgroundImage?: (src: string) => void
+  onAddFrame?: (presetId: string) => void
 }
 
 const StyledSidebar = styled.div`
@@ -193,9 +195,11 @@ export const Sidebar = ({
   onChangeBackgroundColor,
   onSelectStockImage,
   onSelectBackgroundImage,
+  onAddFrame,
 }: SidebarProps) => {
   const showImageStockPanel = panel === 'image'
   const showBackgroundPanel = panel === 'background'
+  const showFramesPanel = panel === 'frames'
   const showStockPanel = showImageStockPanel || showBackgroundPanel
 
   return (
@@ -217,6 +221,20 @@ export const Sidebar = ({
               onChange={(e) => onChangeBackgroundColor?.(e.target.value)}
             />
           </BackgroundPickerLabel>
+        </BackgroundPanel>
+      )}
+
+      {showFramesPanel && (
+        <BackgroundPanel aria-label="Frames Sidebar">
+          <h4 style={{ margin: 0, marginBottom: 8 }}>Frames</h4>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
+            {FRAME_PRESETS.map((p) => (
+              <button key={p.id} onClick={() => onAddFrame?.(p.id)} style={{ padding: 8, borderRadius: 6, border: '1px solid #e5e7eb', background: '#fff', cursor: 'pointer', textAlign: 'left' }}>
+                <div style={{ fontSize: 12, fontWeight: 600 }}>{p.name}</div>
+                <div style={{ fontSize: 11, color: '#6b7280' }}>{p.width}×{p.height}</div>
+              </button>
+            ))}
+          </div>
         </BackgroundPanel>
       )}
 
