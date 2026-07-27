@@ -2300,6 +2300,26 @@
     "type": "static"
   },
   {
+    "source": "npm:@reduxjs/toolkit",
+    "target": "npm:immer",
+    "type": "static"
+  },
+  {
+    "source": "npm:@reduxjs/toolkit",
+    "target": "npm:redux",
+    "type": "static"
+  },
+  {
+    "source": "npm:@reduxjs/toolkit",
+    "target": "npm:redux-thunk",
+    "type": "static"
+  },
+  {
+    "source": "npm:@reduxjs/toolkit",
+    "target": "npm:reselect",
+    "type": "static"
+  },
+  {
     "source": "npm:@scena/dragscroll",
     "target": "npm:@daybrush/utils",
     "type": "static"
@@ -2482,6 +2502,11 @@
   {
     "source": "npm:@types/esquery",
     "target": "npm:@types/estree",
+    "type": "static"
+  },
+  {
+    "source": "npm:@types/hoist-non-react-statics",
+    "target": "npm:hoist-non-react-statics",
     "type": "static"
   },
   {
@@ -4665,6 +4690,16 @@
     "type": "static"
   },
   {
+    "source": "npm:hoist-non-react-statics",
+    "target": "npm:react-is@16.13.1",
+    "type": "static"
+  },
+  {
+    "source": "npm:hoist-non-react-statics",
+    "target": "npm:react-is@16.13.1",
+    "type": "static"
+  },
+  {
     "source": "npm:html-encoding-sniffer",
     "target": "npm:@exodus/bytes",
     "type": "static"
@@ -6601,7 +6636,7 @@
   },
   {
     "source": "npm:pretty-format",
-    "target": "npm:react-is",
+    "target": "npm:react-is@17.0.2",
     "type": "static"
   },
   {
@@ -6685,6 +6720,36 @@
     "type": "static"
   },
   {
+    "source": "npm:react-redux",
+    "target": "npm:@babel/runtime",
+    "type": "static"
+  },
+  {
+    "source": "npm:react-redux",
+    "target": "npm:@types/hoist-non-react-statics",
+    "type": "static"
+  },
+  {
+    "source": "npm:react-redux",
+    "target": "npm:@types/use-sync-external-store",
+    "type": "static"
+  },
+  {
+    "source": "npm:react-redux",
+    "target": "npm:hoist-non-react-statics",
+    "type": "static"
+  },
+  {
+    "source": "npm:react-redux",
+    "target": "npm:react-is",
+    "type": "static"
+  },
+  {
+    "source": "npm:react-redux",
+    "target": "npm:use-sync-external-store",
+    "type": "static"
+  },
+  {
     "source": "npm:react-selecto",
     "target": "npm:selecto",
     "type": "static"
@@ -6742,6 +6807,11 @@
   {
     "source": "npm:redent",
     "target": "npm:strip-indent",
+    "type": "static"
+  },
+  {
+    "source": "npm:redux",
+    "target": "npm:@babel/runtime",
     "type": "static"
   },
   {

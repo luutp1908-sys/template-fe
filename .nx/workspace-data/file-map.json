@@ -16,32 +16,20 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "tsconfig.base.json",
-        "hash": "12775075012423230082"
-      },
-      {
-        "file": "yarn.lock",
-        "hash": "15667430397937753376"
-      },
-      {
-        "file": "test-results/.last-run.json",
-        "hash": "11141884120100644736"
-      },
-      {
-        "file": "nx.json",
-        "hash": "9917378610941575468"
-      },
-      {
         "file": ".github/copilot-instructions.md",
         "hash": "563961152393806487"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "13046175384202504187"
       },
       {
         "file": "README.nx.md",
         "hash": "11498756923445397898"
       },
       {
-        "file": ".gitignore",
-        "hash": "13046175384202504187"
+        "file": "nx.json",
+        "hash": "9917378610941575468"
       },
       {
         "file": "package-lock.json",
@@ -49,10 +37,68 @@
       },
       {
         "file": "package.json",
-        "hash": "5885901359142441662"
+        "hash": "14829180459296989214"
+      },
+      {
+        "file": "test-results/.last-run.json",
+        "hash": "11141884120100644736"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "12775075012423230082"
+      },
+      {
+        "file": "yarn.lock",
+        "hash": "1486691938003420451"
       }
     ],
     "projectFileMap": {
+      "admin": [
+        {
+          "file": "apps/admin/docs/CATEGORY_MANAGEMENT_DESIGN.md",
+          "hash": "5903381322358508129"
+        },
+        {
+          "file": "apps/admin/docs/todo-tracker.json",
+          "hash": "11004805886273190633"
+        },
+        {
+          "file": "apps/admin/index.html",
+          "hash": "211444524782319358"
+        },
+        {
+          "file": "apps/admin/project.json",
+          "hash": "12913336157112950623"
+        },
+        {
+          "file": "apps/admin/src/App.tsx",
+          "hash": "10798598483376227371"
+        },
+        {
+          "file": "apps/admin/src/app/categories/api/dtos.ts",
+          "hash": "13076792167740799921"
+        },
+        {
+          "file": "apps/admin/src/app/categories/store/categories.slice.ts",
+          "hash": "15227989700237321127"
+        },
+        {
+          "file": "apps/admin/src/app/categories/store/selectors.ts",
+          "hash": "15114829482003458406"
+        },
+        {
+          "file": "apps/admin/src/app/store/index.ts",
+          "hash": "10065290927469441860"
+        },
+        {
+          "file": "apps/admin/src/index.css",
+          "hash": "12711544535056086299"
+        },
+        {
+          "file": "apps/admin/src/main.tsx",
+          "hash": "4034218379384655179"
+        }
+      ],
       "editor": [
         {
           "file": "apps/editor/README.md",
@@ -274,50 +320,8 @@
           "file": "apps/editor/vite.config.js",
           "hash": "5517292966376885498"
         }
-      ],
-      "admin": [
-        {
-          "file": "apps/admin/docs/CATEGORY_MANAGEMENT_DESIGN.md",
-          "hash": "5903381322358508129"
-        },
-        {
-          "file": "apps/admin/docs/todo-tracker.json",
-          "hash": "11004805886273190633"
-        },
-        {
-          "file": "apps/admin/index.html",
-          "hash": "211444524782319358"
-        },
-        {
-          "file": "apps/admin/project.json",
-          "hash": "12913336157112950623"
-        },
-        {
-          "file": "apps/admin/src/App.tsx",
-          "hash": "10798598483376227371"
-        },
-        {
-          "file": "apps/admin/src/app/categories/api/dtos.ts",
-          "hash": "13076792167740799921"
-        },
-        {
-          "file": "apps/admin/src/app/categories/store/categories.slice.ts",
-          "hash": "15227989700237321127"
-        },
-        {
-          "file": "apps/admin/src/app/categories/store/selectors.ts",
-          "hash": "15114829482003458406"
-        },
-        {
-          "file": "apps/admin/src/index.css",
-          "hash": "12711544535056086299"
-        },
-        {
-          "file": "apps/admin/src/main.tsx",
-          "hash": "2216127516641185489"
-        }
       ]
     }
   },
-  "externalNodesHash": "16393843146756455161"
+  "externalNodesHash": "3940310328000001271"
 }

@@ -1797,6 +1797,15 @@
         "hash": "sha512-8nKv6+0RJSL9FE4jYOEGXnPeM/Hg12qZpmqzZjRh3qM0Y7c3z1mrOTfFLids72RDQYVh9WpLEfR5WdpNX4fkig=="
       }
     },
+    "npm:@reduxjs/toolkit": {
+      "type": "npm",
+      "name": "npm:@reduxjs/toolkit",
+      "data": {
+        "version": "1.9.7",
+        "packageName": "@reduxjs/toolkit",
+        "hash": "sha512-t7v8ZPxhhKgOKtU+uyJT13lu4vL7az5aFi4IdoDs/eS548edn2M8Ik9h8fxgvMjGoAUVFSt6ZC1P5cWmQ014QQ=="
+      }
+    },
     "npm:@rolldown/pluginutils": {
       "type": "npm",
       "name": "npm:@rolldown/pluginutils",
@@ -2220,6 +2229,15 @@
         "hash": "sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg=="
       }
     },
+    "npm:@types/hoist-non-react-statics": {
+      "type": "npm",
+      "name": "npm:@types/hoist-non-react-statics",
+      "data": {
+        "version": "3.3.7",
+        "packageName": "@types/hoist-non-react-statics",
+        "hash": "sha512-PQTyIulDkIDro8P+IHbKCsw7U2xxBYflVzW/FgWdCAePD9xGSidgA76/GeJ6lBKoblyhf9pBY763gbrN+1dI8g=="
+      }
+    },
     "npm:@types/json-schema": {
       "type": "npm",
       "name": "npm:@types/json-schema",
@@ -2254,6 +2272,15 @@
         "version": "19.2.17",
         "packageName": "@types/react",
         "hash": "sha512-MXfmqaVPEVgkBT/aY0aGCkRWWtByiYQXo3xdQ8r5RzuFrPiRn8Gar2tQdXSUQ2GKV3bkXckek89V8wQBY2Q/Aw=="
+      }
+    },
+    "npm:@types/use-sync-external-store": {
+      "type": "npm",
+      "name": "npm:@types/use-sync-external-store",
+      "data": {
+        "version": "0.0.3",
+        "packageName": "@types/use-sync-external-store",
+        "hash": "sha512-EwmlvuaxPNej9+T4v5AuBPJa2x2UOJVdjCtDHgcDqitUeOtjnJKJ+apYjVcAoBEMjKW1VVFGZLUb5+qqa09XFA=="
       }
     },
     "npm:@typescript-eslint/parser": {
@@ -3813,6 +3840,15 @@
         "hash": "sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A=="
       }
     },
+    "npm:hoist-non-react-statics": {
+      "type": "npm",
+      "name": "npm:hoist-non-react-statics",
+      "data": {
+        "version": "3.3.2",
+        "packageName": "hoist-non-react-statics",
+        "hash": "sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw=="
+      }
+    },
     "npm:html-encoding-sniffer": {
       "type": "npm",
       "name": "npm:html-encoding-sniffer",
@@ -3865,6 +3901,15 @@
         "version": "7.0.6",
         "packageName": "ignore",
         "hash": "sha512-BAg6QkE8W+TuQLrrw0Ugr7HegXduRuuj8/ti2kSOc+jz1dmx8/WNcjr6XGnq5YpDWxFwwaavqD0+jIUOKelTsw=="
+      }
+    },
+    "npm:immer": {
+      "type": "npm",
+      "name": "npm:immer",
+      "data": {
+        "version": "9.0.21",
+        "packageName": "immer",
+        "hash": "sha512-bc4NBHqOqSfRW7POMkHd51LvClaeMXpm8dx0e8oE2GORbq5aRK7Bxl4FyzVLdGtLmvLKL7BTDBG5ACQm4HWjTA=="
       }
     },
     "npm:import-fresh": {
@@ -4830,13 +4875,31 @@
         "hash": "sha512-t0BRVXvbiE/o20Hfw669rLbMCDWtYZLvmJigy2f0MxsXF+71pxhR3xOkspmsO8h3ZlNzyibAmtCa3l4lYKk6gQ=="
       }
     },
-    "npm:react-is": {
+    "npm:react-is@16.13.1": {
       "type": "npm",
-      "name": "npm:react-is",
+      "name": "npm:react-is@16.13.1",
+      "data": {
+        "version": "16.13.1",
+        "packageName": "react-is",
+        "hash": "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="
+      }
+    },
+    "npm:react-is@17.0.2": {
+      "type": "npm",
+      "name": "npm:react-is@17.0.2",
       "data": {
         "version": "17.0.2",
         "packageName": "react-is",
         "hash": "sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w=="
+      }
+    },
+    "npm:react-is": {
+      "type": "npm",
+      "name": "npm:react-is",
+      "data": {
+        "version": "18.3.1",
+        "packageName": "react-is",
+        "hash": "sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg=="
       }
     },
     "npm:react-moveable": {
@@ -4846,6 +4909,15 @@
         "version": "0.56.0",
         "packageName": "react-moveable",
         "hash": "sha512-FmJNmIOsOA36mdxbrc/huiE4wuXSRlmon/o+/OrfNhSiYYYL0AV5oObtPluEhb2Yr/7EfYWBHTxF5aWAvjg1SA=="
+      }
+    },
+    "npm:react-redux": {
+      "type": "npm",
+      "name": "npm:react-redux",
+      "data": {
+        "version": "8.1.3",
+        "packageName": "react-redux",
+        "hash": "sha512-n0ZrutD7DaX/j9VscF+uTALI3oUPa/pO4Z3soOBIjuRn/FzVu6aehhysxZCLi6y7duMf52WNZGMl7CtuK5EnRw=="
       }
     },
     "npm:react-refresh": {
@@ -4891,6 +4963,24 @@
         "version": "3.0.0",
         "packageName": "redent",
         "hash": "sha512-6tDA8g98We0zd0GvVeMT9arEOnTw9qM03L9cJXaCjrip1OO764RDBLBfrB4cwzNGDj5OA5ioymC9GkizgWJDUg=="
+      }
+    },
+    "npm:redux-thunk": {
+      "type": "npm",
+      "name": "npm:redux-thunk",
+      "data": {
+        "version": "2.4.2",
+        "packageName": "redux-thunk",
+        "hash": "sha512-+P3TjtnP0k/FEjcBL5FZpoovtvrTNT/UXd4/sluaSyrURlSlhLSzEdfsTBW7WsKB6yPvgd7q/iZPICFjW4o57Q=="
+      }
+    },
+    "npm:redux": {
+      "type": "npm",
+      "name": "npm:redux",
+      "data": {
+        "version": "4.2.1",
+        "packageName": "redux",
+        "hash": "sha512-LAUYz4lc+Do8/g7aeRa8JkyDErK6ekstQaqWQrNRW//MY1TvCEpMtpTWvlQ+FPbWCx+Xixu/6SHt5N0HR+SB4w=="
       }
     },
     "npm:regenerate-unicode-properties": {
@@ -4963,6 +5053,15 @@
         "version": "2.0.2",
         "packageName": "require-from-string",
         "hash": "sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw=="
+      }
+    },
+    "npm:reselect": {
+      "type": "npm",
+      "name": "npm:reselect",
+      "data": {
+        "version": "4.1.8",
+        "packageName": "reselect",
+        "hash": "sha512-ab9EmR80F/zQTMNeneUr4cv+jSwPJgIlvEmVwLerwrWVbpLlBuls9XHzIeTFy4cegU2NHBp3va0LKOzU5qFEYQ=="
       }
     },
     "npm:resolve-from": {
@@ -5530,6 +5629,15 @@
         "version": "4.4.1",
         "packageName": "uri-js",
         "hash": "sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg=="
+      }
+    },
+    "npm:use-sync-external-store": {
+      "type": "npm",
+      "name": "npm:use-sync-external-store",
+      "data": {
+        "version": "1.6.0",
+        "packageName": "use-sync-external-store",
+        "hash": "sha512-Pp6GSwGP/NrPIrxVFAIkOQeyw8lFenOHijQWkUTrDvrF4ALqylP2C/KCkeS9dpUM3KvYRQhna5vt7IL95+ZQ9w=="
       }
     },
     "npm:util-deprecate": {
@@ -8003,6 +8111,28 @@
         "type": "static"
       }
     ],
+    "npm:@reduxjs/toolkit": [
+      {
+        "source": "npm:@reduxjs/toolkit",
+        "target": "npm:immer",
+        "type": "static"
+      },
+      {
+        "source": "npm:@reduxjs/toolkit",
+        "target": "npm:redux",
+        "type": "static"
+      },
+      {
+        "source": "npm:@reduxjs/toolkit",
+        "target": "npm:redux-thunk",
+        "type": "static"
+      },
+      {
+        "source": "npm:@reduxjs/toolkit",
+        "target": "npm:reselect",
+        "type": "static"
+      }
+    ],
     "npm:@scena/dragscroll": [
       {
         "source": "npm:@scena/dragscroll",
@@ -8200,6 +8330,13 @@
       {
         "source": "npm:@types/esquery",
         "target": "npm:@types/estree",
+        "type": "static"
+      }
+    ],
+    "npm:@types/hoist-non-react-statics": [
+      {
+        "source": "npm:@types/hoist-non-react-statics",
+        "target": "npm:hoist-non-react-statics",
         "type": "static"
       }
     ],
@@ -9813,6 +9950,13 @@
         "type": "static"
       }
     ],
+    "npm:hoist-non-react-statics": [
+      {
+        "source": "npm:hoist-non-react-statics",
+        "target": "npm:react-is@16.13.1",
+        "type": "static"
+      }
+    ],
     "npm:html-encoding-sniffer": [
       {
         "source": "npm:html-encoding-sniffer",
@@ -11120,7 +11264,7 @@
       },
       {
         "source": "npm:pretty-format",
-        "target": "npm:react-is",
+        "target": "npm:react-is@17.0.2",
         "type": "static"
       }
     ],
@@ -11210,6 +11354,38 @@
         "type": "static"
       }
     ],
+    "npm:react-redux": [
+      {
+        "source": "npm:react-redux",
+        "target": "npm:@babel/runtime",
+        "type": "static"
+      },
+      {
+        "source": "npm:react-redux",
+        "target": "npm:@types/hoist-non-react-statics",
+        "type": "static"
+      },
+      {
+        "source": "npm:react-redux",
+        "target": "npm:@types/use-sync-external-store",
+        "type": "static"
+      },
+      {
+        "source": "npm:react-redux",
+        "target": "npm:hoist-non-react-statics",
+        "type": "static"
+      },
+      {
+        "source": "npm:react-redux",
+        "target": "npm:react-is",
+        "type": "static"
+      },
+      {
+        "source": "npm:react-redux",
+        "target": "npm:use-sync-external-store",
+        "type": "static"
+      }
+    ],
     "npm:react-selecto": [
       {
         "source": "npm:react-selecto",
@@ -11243,6 +11419,13 @@
       {
         "source": "npm:redent",
         "target": "npm:strip-indent",
+        "type": "static"
+      }
+    ],
+    "npm:redux": [
+      {
+        "source": "npm:redux",
+        "target": "npm:@babel/runtime",
         "type": "static"
       }
     ],
@@ -12265,5 +12448,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1785170101670
+  "computedAt": 1785170446453
 }

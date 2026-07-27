@@ -25,6 +25,8 @@
   "dependencies": {
     "@tanstack/react-query": "^5.101.4",
     "@tanstack/react-query-devtools": "^5.101.4",
+    "@reduxjs/toolkit": "^1.9.5",
+    "react-redux": "^8.1.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-moveable": "^0.56.0",
