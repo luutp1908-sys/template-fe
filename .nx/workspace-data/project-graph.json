@@ -1104,6 +1104,42 @@
         "hash": "sha512-ALK12C6SQNNHw1enXK+UO8bdyQ+jaWNQ1Af7Z3FNxeAwjYhQT7do+TRE4RASAJ3ObaS2+TJ7TXR3oz2Gzbw0PQ=="
       }
     },
+    "npm:@dnd-kit/accessibility": {
+      "type": "npm",
+      "name": "npm:@dnd-kit/accessibility",
+      "data": {
+        "version": "3.1.1",
+        "packageName": "@dnd-kit/accessibility",
+        "hash": "sha512-2P+YgaXF+gRsIihwwY1gCsQSYnu9Zyj2py8kY5fFvUM1qm2WA2u639R6YNVfU4GWr+ZM5mqEsfHZZLoRONbemw=="
+      }
+    },
+    "npm:@dnd-kit/core": {
+      "type": "npm",
+      "name": "npm:@dnd-kit/core",
+      "data": {
+        "version": "6.3.1",
+        "packageName": "@dnd-kit/core",
+        "hash": "sha512-xkGBRQQab4RLwgXxoqETICr6S5JlogafbhNsidmrkVv2YRs5MLwpjoF2qpiGjQt8S9AoxtIV603s0GIUpY5eYQ=="
+      }
+    },
+    "npm:@dnd-kit/sortable": {
+      "type": "npm",
+      "name": "npm:@dnd-kit/sortable",
+      "data": {
+        "version": "10.0.0",
+        "packageName": "@dnd-kit/sortable",
+        "hash": "sha512-+xqhmIIzvAYMGfBYYnbKuNicfSsk4RksY2XdmJhT+HAC01nix6fHCztU68jooFiMUB01Ky3F0FyOvhG/BZrWkg=="
+      }
+    },
+    "npm:@dnd-kit/utilities": {
+      "type": "npm",
+      "name": "npm:@dnd-kit/utilities",
+      "data": {
+        "version": "3.2.2",
+        "packageName": "@dnd-kit/utilities",
+        "hash": "sha512-+MKAJEOfaBe5SmV6t34p80MMKhjvUz0vRrvVJbPT0WElzaOJ/1xs+D+KDv+tD/NE5ujfrChEcshd4fLn0wpiqg=="
+      }
+    },
     "npm:@egjs/agent": {
       "type": "npm",
       "name": "npm:@egjs/agent",
@@ -7552,6 +7588,49 @@
         "type": "static"
       }
     ],
+    "npm:@dnd-kit/accessibility": [
+      {
+        "source": "npm:@dnd-kit/accessibility",
+        "target": "npm:tslib",
+        "type": "static"
+      }
+    ],
+    "npm:@dnd-kit/core": [
+      {
+        "source": "npm:@dnd-kit/core",
+        "target": "npm:@dnd-kit/accessibility",
+        "type": "static"
+      },
+      {
+        "source": "npm:@dnd-kit/core",
+        "target": "npm:@dnd-kit/utilities",
+        "type": "static"
+      },
+      {
+        "source": "npm:@dnd-kit/core",
+        "target": "npm:tslib",
+        "type": "static"
+      }
+    ],
+    "npm:@dnd-kit/sortable": [
+      {
+        "source": "npm:@dnd-kit/sortable",
+        "target": "npm:@dnd-kit/utilities",
+        "type": "static"
+      },
+      {
+        "source": "npm:@dnd-kit/sortable",
+        "target": "npm:tslib",
+        "type": "static"
+      }
+    ],
+    "npm:@dnd-kit/utilities": [
+      {
+        "source": "npm:@dnd-kit/utilities",
+        "target": "npm:tslib",
+        "type": "static"
+      }
+    ],
     "npm:@egjs/children-differ": [
       {
         "source": "npm:@egjs/children-differ",
@@ -12448,5 +12527,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1785170813422
+  "computedAt": 1785172461637
 }

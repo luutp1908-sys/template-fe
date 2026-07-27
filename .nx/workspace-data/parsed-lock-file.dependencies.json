@@ -1750,6 +1750,41 @@
     "type": "static"
   },
   {
+    "source": "npm:@dnd-kit/accessibility",
+    "target": "npm:tslib",
+    "type": "static"
+  },
+  {
+    "source": "npm:@dnd-kit/core",
+    "target": "npm:@dnd-kit/accessibility",
+    "type": "static"
+  },
+  {
+    "source": "npm:@dnd-kit/core",
+    "target": "npm:@dnd-kit/utilities",
+    "type": "static"
+  },
+  {
+    "source": "npm:@dnd-kit/core",
+    "target": "npm:tslib",
+    "type": "static"
+  },
+  {
+    "source": "npm:@dnd-kit/sortable",
+    "target": "npm:@dnd-kit/utilities",
+    "type": "static"
+  },
+  {
+    "source": "npm:@dnd-kit/sortable",
+    "target": "npm:tslib",
+    "type": "static"
+  },
+  {
+    "source": "npm:@dnd-kit/utilities",
+    "target": "npm:tslib",
+    "type": "static"
+  },
+  {
     "source": "npm:@egjs/children-differ",
     "target": "npm:@egjs/list-differ",
     "type": "static"

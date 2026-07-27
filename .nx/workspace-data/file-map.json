@@ -16,6 +16,18 @@
   "fileMap": {
     "nonProjectFiles": [
       {
+        "file": ".github/copilot-instructions.md",
+        "hash": "563961152393806487"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "13046175384202504187"
+      },
+      {
+        "file": "README.nx.md",
+        "hash": "11498756923445397898"
+      },
+      {
         "file": "nx.json",
         "hash": "9917378610941575468"
       },
@@ -28,28 +40,16 @@
         "hash": "727459774344292173"
       },
       {
-        "file": ".gitignore",
-        "hash": "13046175384202504187"
-      },
-      {
-        "file": "README.nx.md",
-        "hash": "11498756923445397898"
-      },
-      {
-        "file": ".github/copilot-instructions.md",
-        "hash": "563961152393806487"
-      },
-      {
         "file": "test-results/.last-run.json",
         "hash": "11141884120100644736"
       },
       {
-        "file": "yarn.lock",
-        "hash": "1486691938003420451"
-      },
-      {
         "file": "tsconfig.base.json",
         "hash": "12775075012423230082"
+      },
+      {
+        "file": "yarn.lock",
+        "hash": "11673186063741775697"
       }
     ],
     "projectFileMap": {
@@ -88,7 +88,7 @@
         },
         {
           "file": "apps/admin/src/app/categories/components/CategoryTree.tsx",
-          "hash": "8352612676308727924"
+          "hash": "18227430666133156866"
         },
         {
           "file": "apps/admin/src/app/categories/components/CategoryTreePanel.tsx",
@@ -359,5 +359,5 @@
       ]
     }
   },
-  "externalNodesHash": "3940310328000001271"
+  "externalNodesHash": "5916978317463778950"
 }

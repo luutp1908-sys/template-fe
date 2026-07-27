@@ -5,7 +5,7 @@ import { useAppSelector, useAppDispatch } from '../../store/hooks'
 import { selectTreeRootsForEditor, selectCategoriesById, selectChildren, selectExpandedIds } from '../store/selectors'
 import { flattenTree, collectDescendantIds } from '../utils/treeUtils'
 import TreeNode from './TreeNode'
-import { setExpanded, moveCategory } from '../store/categories.slice'
+import { setExpanded, moveCategory, updateCategory, reorderChildren } from '../store/categories.slice'
 
 export default function CategoryTree({ editorTypeId = '' }: { editorTypeId?: string }) {
   const dispatch = useAppDispatch()
@@ -28,11 +28,54 @@ export default function CategoryTree({ editorTypeId = '' }: { editorTypeId?: str
     // Prevent dropping into descendants
     const descendants = collectDescendantIds(draggedId, childrenByParent)
     if (descendants.has(targetId)) return
-    // For simplicity, place dragged node as sibling after target
+    // Determine drop behavior:
+    // - if target has children and is expanded -> drop as first child
+    // - else -> drop as sibling after target
     const targetNode = byId[targetId]
-    const newParentId = targetNode.parentId ?? null
-    const newSortOrder = (targetNode.sortOrder ?? 0) + 1
-    dispatch(moveCategory({ id: draggedId, newParentId, newSortOrder }))
+    const draggedNode = byId[draggedId]
+    if (!targetNode || !draggedNode) return
+
+    let newParent: string | null = null
+    let insertIndex = 0
+
+    const targetChildren = childrenByParent[targetId] ?? []
+    const targetHasChildrenAndExpanded = targetChildren.length > 0 && expandedIds.includes(targetId)
+    if (targetHasChildrenAndExpanded) {
+      newParent = targetId
+      insertIndex = 0
+    } else {
+      newParent = targetNode.parentId ?? null
+      const siblings = childrenByParent[newParent] ?? []
+      const targetIdx = siblings.indexOf(targetId)
+      insertIndex = targetIdx >= 0 ? targetIdx + 1 : siblings.length
+    }
+
+    const oldParent = draggedNode.parentId ?? null
+
+    // Build new sibling lists (remove draggedId from wherever it was)
+    const newParentSiblings = (childrenByParent[newParent] ?? []).filter((id) => id !== draggedId)
+    newParentSiblings.splice(insertIndex, 0, draggedId)
+
+    const oldParentSiblings = (childrenByParent[oldParent] ?? []).filter((id) => id !== draggedId)
+
+    // Build moves payload (all affected nodes get new parentId/sortOrder)
+    const moves: Array<{ id: string; parentId?: string | null; sortOrder: number }> = []
+    newParentSiblings.forEach((id, idx) => moves.push({ id, parentId: newParent, sortOrder: idx }))
+    if (oldParent !== newParent) {
+      oldParentSiblings.forEach((id, idx) => moves.push({ id, parentId: oldParent, sortOrder: idx }))
+    }
+
+    // Optimistically apply changes to local state
+    // update moved node's parent and sortOrder
+    dispatch(updateCategory({ id: draggedId, changes: { parentId: newParent, sortOrder: insertIndex } }))
+    // update ordering for new and old parents
+    dispatch(reorderChildren({ parentId: newParent, orderedIds: newParentSiblings }))
+    if (oldParent !== newParent) dispatch(reorderChildren({ parentId: oldParent, orderedIds: oldParentSiblings }))
+
+    // Prepare server payload
+    const payload = { moves }
+    // TODO: call API to persist moves. For now we log the payload.
+    console.log('Reorder payload prepared:', JSON.stringify(payload, null, 2))
   }
 
   return (
