@@ -1,0 +1,12 @@
+{
+  "feature": "Category Management",
+  "createdAt": "2026-07-27T00:00:00.000Z",
+  "todos": [
+    { "id": 1, "title": "Draft architecture design document", "status": "completed" },
+    { "id": 2, "title": "Define TypeScript models and API contracts", "status": "in-progress" },
+    { "id": 3, "title": "Design state management and selectors", "status": "not-started" },
+    { "id": 4, "title": "Define component hierarchy and folder structure", "status": "not-started" },
+    { "id": 5, "title": "Design UI interactions, DnD and accessibility", "status": "not-started" },
+    { "id": 6, "title": "Specify error handling, loading and testing strategies", "status": "not-started" }
+  ]
+}

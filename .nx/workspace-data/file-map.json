@@ -16,8 +16,24 @@
   "fileMap": {
     "nonProjectFiles": [
       {
+        "file": "yarn.lock",
+        "hash": "15667430397937753376"
+      },
+      {
+        "file": "nx.json",
+        "hash": "9917378610941575468"
+      },
+      {
         "file": "test-results/.last-run.json",
         "hash": "11141884120100644736"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "10810935158920023040"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "12775075012423230082"
       },
       {
         "file": "README.nx.md",
@@ -28,24 +44,8 @@
         "hash": "563961152393806487"
       },
       {
-        "file": "tsconfig.base.json",
-        "hash": "12775075012423230082"
-      },
-      {
-        "file": "nx.json",
-        "hash": "9917378610941575468"
-      },
-      {
         "file": ".gitignore",
         "hash": "13046175384202504187"
-      },
-      {
-        "file": "yarn.lock",
-        "hash": "15667430397937753376"
-      },
-      {
-        "file": "package-lock.json",
-        "hash": "10810935158920023040"
       },
       {
         "file": "package.json",
@@ -277,6 +277,14 @@
       ],
       "admin": [
         {
+          "file": "apps/admin/docs/CATEGORY_MANAGEMENT_DESIGN.md",
+          "hash": "5903381322358508129"
+        },
+        {
+          "file": "apps/admin/docs/todo-tracker.json",
+          "hash": "11004805886273190633"
+        },
+        {
           "file": "apps/admin/index.html",
           "hash": "211444524782319358"
         },
@@ -287,6 +295,10 @@
         {
           "file": "apps/admin/src/App.tsx",
           "hash": "10798598483376227371"
+        },
+        {
+          "file": "apps/admin/src/app/categories/api/dtos.ts",
+          "hash": "13076792167740799921"
         },
         {
           "file": "apps/admin/src/index.css",
