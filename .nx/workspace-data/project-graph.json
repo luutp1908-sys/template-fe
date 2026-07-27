@@ -51,7 +51,9 @@
           "build": {
             "executor": "@nx/vite:build",
             "options": {
-              "outputPath": "dist/apps/admin"
+              "outputPath": "dist/apps/admin",
+              "configFile": "apps/admin/vite.config.js",
+              "skipTypeCheck": false
             },
             "configurations": {},
             "parallelism": true
@@ -12527,5 +12529,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1785172461637
+  "computedAt": 1785175252148
 }

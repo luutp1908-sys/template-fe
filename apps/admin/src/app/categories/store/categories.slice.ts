@@ -1,10 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CategoryDTO, ReorderMoveDTO } from '../../api/dtos';
+import { CategoryDTO } from '../api/dtos';
+
+export const ROOT_PARENT_KEY = '__root__';
+
+const parentKey = (parentId?: string | null) => parentId ?? ROOT_PARENT_KEY;
 
 export interface CategoriesState {
   byId: Record<string, CategoryDTO>;
   ids: string[];
-  childrenByParent: Record<string | null, string[]>;
+  childrenByParent: Record<string, string[]>;
   ui: {
     selectedId?: string | null;
     expandedIds: string[];
@@ -20,10 +24,6 @@ const initialState: CategoriesState = {
   ui: { selectedId: null, expandedIds: [], loading: false, error: null },
 };
 
-function ensureArray<T>(v: T[] | undefined): T[] {
-  return Array.isArray(v) ? v : [];
-}
-
 const slice = createSlice({
   name: 'categories',
   initialState,
@@ -35,7 +35,7 @@ const slice = createSlice({
       for (const c of action.payload) {
         state.byId[c.id] = c;
         state.ids.push(c.id);
-        const key = c.parentId ?? null;
+        const key = parentKey(c.parentId);
         if (!state.childrenByParent[key]) state.childrenByParent[key] = [];
         state.childrenByParent[key].push(c.id);
       }
@@ -49,7 +49,7 @@ const slice = createSlice({
       const c = action.payload;
       state.byId[c.id] = c;
       if (!state.ids.includes(c.id)) state.ids.push(c.id);
-      const key = c.parentId ?? null;
+      const key = parentKey(c.parentId);
       if (!state.childrenByParent[key]) state.childrenByParent[key] = [];
       // insert by sortOrder
       const siblings = state.childrenByParent[key];
@@ -75,17 +75,17 @@ const slice = createSlice({
     removeCategory(state, action: PayloadAction<string>) {
       const id = action.payload;
       if (!state.byId[id]) return;
-      const parentKey = state.byId[id].parentId ?? null;
+      const pKey = parentKey(state.byId[id].parentId);
       delete state.byId[id];
       state.ids = state.ids.filter((x) => x !== id);
-      if (state.childrenByParent[parentKey]) state.childrenByParent[parentKey] = state.childrenByParent[parentKey].filter((x) => x !== id);
+      if (state.childrenByParent[pKey]) state.childrenByParent[pKey] = state.childrenByParent[pKey].filter((x) => x !== id);
       // remove any children mapping for the removed node (but do not cascade here)
       delete state.childrenByParent[id];
     },
 
     setChildrenForParent(state, action: PayloadAction<{ parentId?: string | null; children: CategoryDTO[] }>) {
       const { parentId, children } = action.payload;
-      const key = parentId ?? null;
+      const key = parentKey(parentId);
       state.childrenByParent[key] = children.map((c) => c.id);
       for (const c of children) {
         state.byId[c.id] = c;
@@ -97,8 +97,8 @@ const slice = createSlice({
       const { id, newParentId, newSortOrder } = action.payload;
       const node = state.byId[id];
       if (!node) return;
-      const oldParent = node.parentId ?? null;
-      const newParent = newParentId ?? null;
+      const oldParent = parentKey(node.parentId);
+      const newParent = parentKey(newParentId);
       // Remove from old parent's children
       if (state.childrenByParent[oldParent]) state.childrenByParent[oldParent] = state.childrenByParent[oldParent].filter((x) => x !== id);
       // Update node
@@ -122,7 +122,7 @@ const slice = createSlice({
 
     reorderChildren(state, action: PayloadAction<{ parentId?: string | null; orderedIds: string[] }>) {
       const { parentId, orderedIds } = action.payload;
-      const key = parentId ?? null;
+      const key = parentKey(parentId);
       state.childrenByParent[key] = orderedIds.slice();
       // update sortOrder to match index
       for (let i = 0; i < orderedIds.length; i++) {

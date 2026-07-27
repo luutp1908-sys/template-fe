@@ -1,30 +1,28 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { CategoryDTO } from '../../api/dtos';
+import { CategoryDTO } from '../api/dtos';
+import { RootState } from '../../store';
+import { ROOT_PARENT_KEY } from './categories.slice';
 
 // Assumes the feature slice is mounted at `state.categories`.
-const selectState = (state: any) => state.categories as {
-  byId: Record<string, CategoryDTO>;
-  childrenByParent: Record<string | null, string[]>;
-  ui: { selectedId?: string | null; expandedIds: string[] };
-};
+const selectState = (state: RootState) => state.categories;
 
-export const selectCategoriesById = (state: any) => selectState(state).byId;
+export const selectCategoriesById = (state: RootState) => selectState(state).byId;
 
-export const selectCategoryById = (state: any, id: string | undefined | null) => {
+export const selectCategoryById = (state: RootState, id: string | undefined | null) => {
   if (!id) return undefined;
   return selectState(state).byId[id];
 };
 
 export const selectChildren = createSelector(
-  [selectState, (_: any, parentId: string | null = null) => parentId],
+  [selectState, (_: RootState, parentId: string | null = null) => parentId],
   (state, parentId) => {
-    const key = parentId ?? null;
+    const key = parentId ?? ROOT_PARENT_KEY;
     const ids = state.childrenByParent[key] ?? [];
     return ids.map((id) => state.byId[id]).filter(Boolean);
   }
 );
 
-export const selectAncestors = (state: any, id: string | undefined | null) => {
+export const selectAncestors = (state: RootState, id: string | undefined | null) => {
   if (!id) return [];
   const s = selectState(state);
   const out: CategoryDTO[] = [];
@@ -38,7 +36,7 @@ export const selectAncestors = (state: any, id: string | undefined | null) => {
   return out;
 };
 
-export const selectDescendants = (state: any, id: string | undefined | null) => {
+export const selectDescendants = (state: RootState, id: string | undefined | null) => {
   if (!id) return [];
   const s = selectState(state);
   const out: CategoryDTO[] = [];
@@ -54,7 +52,7 @@ export const selectDescendants = (state: any, id: string | undefined | null) => 
   return out;
 };
 
-export const selectBreadcrumbs = (state: any, id: string | undefined | null) => {
+export const selectBreadcrumbs = (state: RootState, id: string | undefined | null) => {
   if (!id) return [];
   const ancestors = selectAncestors(state, id);
   const self = selectCategoryById(state, id);
@@ -62,13 +60,15 @@ export const selectBreadcrumbs = (state: any, id: string | undefined | null) => 
 };
 
 export const selectTreeRootsForEditor = createSelector(
-  [selectState, (_: any, editorTypeId: string) => editorTypeId],
+  [selectState, (_: RootState, editorTypeId: string) => editorTypeId],
   (state, editorTypeId) => {
-    const roots = state.childrenByParent[null] ?? [];
-    return roots.map((id: string) => state.byId[id]).filter((c: CategoryDTO) => c && c.editorTypeId === editorTypeId);
+    const roots = state.childrenByParent[ROOT_PARENT_KEY] ?? [];
+    return roots
+      .map((id: string) => state.byId[id])
+      .filter((c: CategoryDTO) => c && (editorTypeId ? c.editorTypeId === editorTypeId : true));
   }
 );
 
-export const selectExpandedIds = (state: any) => selectState(state).ui.expandedIds;
+export const selectExpandedIds = (state: RootState) => selectState(state).ui.expandedIds;
 
-export const selectSelectedId = (state: any) => selectState(state).ui.selectedId;
+export const selectSelectedId = (state: RootState) => selectState(state).ui.selectedId;

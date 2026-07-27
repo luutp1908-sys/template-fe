@@ -1,0 +1,88 @@
+> nx run admin:build
+
+[1m[33mThe `@nx/vite:build` executor is deprecated and will be removed in Nx v24. Run `nx g @nx/vite:convert-to-inferred` to migrate to the `@nx/vite/plugin` inferred targets. See https://nx.dev/docs/guides/tasks--caching/convert-to-inferred for details.[39m[22m
+[4m[34mapps/admin/src/app/categories/components/CategoryTree.tsx:17:40[39m[24m - [31m[1merror[22m[39m [90mTS2345[39m: Argument of type 'unknown' is not assignable to parameter of type 'Record<string, CategoryDTO>'.
+  Index signature for type 'string' is missing in type '{}'.
+
+[0m [90m 15 | [39m  [36mconst[39m expandedIds [33m=[39m useAppSelector(selectExpandedIds as any)
+ [90m 16 | [39m
+[31m[1m>[22m[39m[90m 17 | [39m  [36mconst[39m flattened [33m=[39m flattenTree(roots[33m,[39m byId[33m,[39m childrenByParent[33m,[39m expandedIds)
+ [90m    | [39m                                       [31m[1m^[22m[39m
+ [90m 18 | [39m
+ [90m 19 | [39m  [36mfunction[39m handleToggle(id[33m:[39m string) {
+ [90m 20 | [39m    dispatch(setExpanded(expandedIds[33m.[39mincludes(id) [33m?[39m expandedIds[33m.[39mfilter((x) [33m=>[39m x [33m!==[39m id) [33m:[39m [[33m...[39mexpandedIds[33m,[39m id]))[0m
+
+[4m[34mapps/admin/src/app/categories/components/CategoryTree.tsx:20:38[39m[24m - [31m[1merror[22m[39m [90mTS2339[39m: Property 'includes' does not exist on type 'unknown'.
+
+[0m [90m 18 | [39m
+ [90m 19 | [39m  [36mfunction[39m handleToggle(id[33m:[39m string) {
+[31m[1m>[22m[39m[90m 20 | [39m    dispatch(setExpanded(expandedIds[33m.[39mincludes(id) [33m?[39m expandedIds[33m.[39mfilter((x) [33m=>[39m x [33m!==[39m id) [33m:[39m [[33m...[39mexpandedIds[33m,[39m id]))
+ [90m    | [39m                                     [31m[1m^[22m[39m
+ [90m 21 | [39m  }
+ [90m 22 | [39m
+ [90m 23 | [39m  [36mfunction[39m handleDragEnd(event[33m:[39m any) {[0m
+
+[4m[34mapps/admin/src/app/categories/components/CategoryTree.tsx:20:65[39m[24m - [31m[1merror[22m[39m [90mTS2339[39m: Property 'filter' does not exist on type 'unknown'.
+
+[0m [90m 18 | [39m
+ [90m 19 | [39m  [36mfunction[39m handleToggle(id[33m:[39m string) {
+[31m[1m>[22m[39m[90m 20 | [39m    dispatch(setExpanded(expandedIds[33m.[39mincludes(id) [33m?[39m expandedIds[33m.[39mfilter((x) [33m=>[39m x [33m!==[39m id) [33m:[39m [[33m...[39mexpandedIds[33m,[39m id]))
+ [90m    | [39m                                                                [31m[1m^[22m[39m
+ [90m 21 | [39m  }
+ [90m 22 | [39m
+ [90m 23 | [39m  [36mfunction[39m handleDragEnd(event[33m:[39m any) {[0m
+
+[4m[34mapps/admin/src/app/categories/components/CategoryTree.tsx:20:95[39m[24m - [31m[1merror[22m[39m [90mTS2488[39m: Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+[0m [90m 18 | [39m
+ [90m 19 | [39m  [36mfunction[39m handleToggle(id[33m:[39m string) {
+[31m[1m>[22m[39m[90m 20 | [39m    dispatch(setExpanded(expandedIds[33m.[39mincludes(id) [33m?[39m expandedIds[33m.[39mfilter((x) [33m=>[39m x [33m!==[39m id) [33m:[39m [[33m...[39mexpandedIds[33m,[39m id]))
+ [90m    | [39m                                                                                              [31m[1m^[22m[39m
+ [90m 21 | [39m  }
+ [90m 22 | [39m
+ [90m 23 | [39m  [36mfunction[39m handleDragEnd(event[33m:[39m any) {[0m
+
+[4m[34mapps/admin/src/app/categories/components/CategoryTree.tsx:42:83[39m[24m - [31m[1merror[22m[39m [90mTS2339[39m: Property 'includes' does not exist on type 'unknown'.
+
+[0m [90m 40 | [39m
+ [90m 41 | [39m    [36mconst[39m targetChildren [33m=[39m childrenByParent[targetId] [33m?[39m[33m?[39m []
+[31m[1m>[22m[39m[90m 42 | [39m    [36mconst[39m targetHasChildrenAndExpanded [33m=[39m targetChildren[33m.[39mlength [33m>[39m [35m0[39m [33m&&[39m expandedIds[33m.[39mincludes(targetId)
+ [90m    | [39m                                                                                  [31m[1m^[22m[39m
+ [90m 43 | [39m    [36mif[39m (targetHasChildrenAndExpanded) {
+ [90m 44 | [39m      newParent [33m=[39m targetId
+ [90m 45 | [39m      insertIndex [33m=[39m [35m0[39m[0m
+
+[4m[34mapps/admin/src/app/categories/store/categories.slice.ts:2:45[39m[24m - [31m[1merror[22m[39m [90mTS2307[39m: Cannot find module '../../api/dtos' or its corresponding type declarations.
+
+[0m [90m 1 | [39m[36mimport[39m { createSlice[33m,[39m [33mPayloadAction[39m } from [32m'@reduxjs/toolkit'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 2 | [39m[36mimport[39m { [33mCategoryDTO[39m[33m,[39m [33mReorderMoveDTO[39m } from [32m'../../api/dtos'[39m[33m;[39m
+ [90m   | [39m                                            [31m[1m^[22m[39m
+ [90m 3 | [39m
+ [90m 4 | [39m[36mexport[39m interface [33mCategoriesState[39m {
+ [90m 5 | [39m  byId[33m:[39m [33mRecord[39m[33m<[39m[33mstring[39m[33m,[39m [33mCategoryDTO[39m[33m>[39m[33m;[39m[0m
+
+[4m[34mapps/admin/src/app/categories/store/selectors.ts:2:29[39m[24m - [31m[1merror[22m[39m [90mTS2307[39m: Cannot find module '../../api/dtos' or its corresponding type declarations.
+
+[0m [90m 1 | [39m[36mimport[39m { createSelector } from [32m'@reduxjs/toolkit'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 2 | [39m[36mimport[39m { [33mCategoryDTO[39m } from [32m'../../api/dtos'[39m[33m;[39m
+ [90m   | [39m                            [31m[1m^[22m[39m
+ [90m 3 | [39m
+ [90m 4 | [39m[90m// Assumes the feature slice is mounted at `state.categories`.[39m
+ [90m 5 | [39m[36mconst[39m selectState [33m=[39m (state[33m:[39m any) [33m=>[39m state[33m.[39mcategories as {[0m
+
+[4m[34mapps/admin/src/app/categories/store/selectors.ts:67:42[39m[24m - [31m[1merror[22m[39m [90mTS2538[39m: Type 'null' cannot be used as an index type.
+
+[0m [90m 65 | [39m  [selectState[33m,[39m (_[33m:[39m any[33m,[39m editorTypeId[33m:[39m string) [33m=>[39m editorTypeId][33m,[39m
+ [90m 66 | [39m  (state[33m,[39m editorTypeId) [33m=>[39m {
+[31m[1m>[22m[39m[90m 67 | [39m    [36mconst[39m roots [33m=[39m state[33m.[39mchildrenByParent[[36mnull[39m] [33m?[39m[33m?[39m [][33m;[39m
+ [90m    | [39m                                         [31m[1m^[22m[39m
+ [90m 68 | [39m    [36mreturn[39m roots[33m.[39mmap((id[33m:[39m string) [33m=>[39m state[33m.[39mbyId[id])[33m.[39mfilter((c[33m:[39m [33mCategoryDTO[39m) [33m=>[39m c [33m&&[39m c[33m.[39meditorTypeId [33m===[39m editorTypeId)[33m;[39m
+ [90m 69 | [39m  }
+ [90m 70 | [39m)[33m;[39m[0m
+
+Found 8 errors.
+
+[7m[1m[31m NX [39m[22m[27m  [31mFound type errors. See above.[39m
+
+Pass --verbose to see the stacktrace.
+

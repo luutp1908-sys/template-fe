@@ -2,17 +2,18 @@ import React from 'react'
 import { DndContext, closestCenter, DragOverlay } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useAppSelector, useAppDispatch } from '../../store/hooks'
-import { selectTreeRootsForEditor, selectCategoriesById, selectChildren, selectExpandedIds } from '../store/selectors'
+import { selectTreeRootsForEditor, selectCategoriesById, selectExpandedIds } from '../store/selectors'
 import { flattenTree, collectDescendantIds } from '../utils/treeUtils'
 import TreeNode from './TreeNode'
+import { ROOT_PARENT_KEY } from '../store/categories.slice'
 import { setExpanded, moveCategory, updateCategory, reorderChildren } from '../store/categories.slice'
 
 export default function CategoryTree({ editorTypeId = '' }: { editorTypeId?: string }) {
   const dispatch = useAppDispatch()
-  const byId = useAppSelector(selectCategoriesById as any)
-  const childrenByParent = (useAppSelector((s) => (s as any).categories.childrenByParent) ?? {}) as Record<string | null, string[]>
+  const byId = useAppSelector(selectCategoriesById)
+  const childrenByParent = useAppSelector((s) => s.categories.childrenByParent)
   const roots = useAppSelector((s) => selectTreeRootsForEditor(s, editorTypeId))
-  const expandedIds = useAppSelector(selectExpandedIds as any)
+  const expandedIds = useAppSelector(selectExpandedIds)
 
   const flattened = flattenTree(roots, byId, childrenByParent, expandedIds)
 
@@ -45,18 +46,20 @@ export default function CategoryTree({ editorTypeId = '' }: { editorTypeId?: str
       insertIndex = 0
     } else {
       newParent = targetNode.parentId ?? null
-      const siblings = childrenByParent[newParent] ?? []
+      const siblings = childrenByParent[newParent ?? ROOT_PARENT_KEY] ?? []
       const targetIdx = siblings.indexOf(targetId)
       insertIndex = targetIdx >= 0 ? targetIdx + 1 : siblings.length
     }
 
     const oldParent = draggedNode.parentId ?? null
+    const newParentKey = newParent ?? ROOT_PARENT_KEY
+    const oldParentKey = oldParent ?? ROOT_PARENT_KEY
 
     // Build new sibling lists (remove draggedId from wherever it was)
-    const newParentSiblings = (childrenByParent[newParent] ?? []).filter((id) => id !== draggedId)
+    const newParentSiblings = (childrenByParent[newParentKey] ?? []).filter((id) => id !== draggedId)
     newParentSiblings.splice(insertIndex, 0, draggedId)
 
-    const oldParentSiblings = (childrenByParent[oldParent] ?? []).filter((id) => id !== draggedId)
+    const oldParentSiblings = (childrenByParent[oldParentKey] ?? []).filter((id) => id !== draggedId)
 
     // Build moves payload (all affected nodes get new parentId/sortOrder)
     const moves: Array<{ id: string; parentId?: string | null; sortOrder: number }> = []

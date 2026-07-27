@@ -16,20 +16,8 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": ".github/copilot-instructions.md",
-        "hash": "563961152393806487"
-      },
-      {
-        "file": ".gitignore",
-        "hash": "13046175384202504187"
-      },
-      {
-        "file": "README.nx.md",
-        "hash": "11498756923445397898"
-      },
-      {
-        "file": "nx.json",
-        "hash": "9917378610941575468"
+        "file": "test-results/.last-run.json",
+        "hash": "11141884120100644736"
       },
       {
         "file": "package-lock.json",
@@ -40,16 +28,28 @@
         "hash": "727459774344292173"
       },
       {
-        "file": "test-results/.last-run.json",
-        "hash": "11141884120100644736"
+        "file": "nx.json",
+        "hash": "9917378610941575468"
+      },
+      {
+        "file": "yarn.lock",
+        "hash": "11673186063741775697"
+      },
+      {
+        "file": "README.nx.md",
+        "hash": "11498756923445397898"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "13046175384202504187"
       },
       {
         "file": "tsconfig.base.json",
         "hash": "12775075012423230082"
       },
       {
-        "file": "yarn.lock",
-        "hash": "11673186063741775697"
+        "file": ".github/copilot-instructions.md",
+        "hash": "563961152393806487"
       }
     ],
     "projectFileMap": {
@@ -64,15 +64,19 @@
         },
         {
           "file": "apps/admin/index.html",
-          "hash": "211444524782319358"
+          "hash": "1355500690598162564"
         },
         {
           "file": "apps/admin/project.json",
-          "hash": "12913336157112950623"
+          "hash": "533850372054138463"
         },
         {
           "file": "apps/admin/src/App.tsx",
-          "hash": "8852314584741595081"
+          "hash": "3983984402341266434"
+        },
+        {
+          "file": "apps/admin/src/app/categories/api/categories.api.ts",
+          "hash": "17112147772751238935"
         },
         {
           "file": "apps/admin/src/app/categories/api/dtos.ts",
@@ -84,19 +88,23 @@
         },
         {
           "file": "apps/admin/src/app/categories/components/CategoryManagementPage.tsx",
-          "hash": "9494323411427070893"
+          "hash": "2582494246723599847"
         },
         {
           "file": "apps/admin/src/app/categories/components/CategoryTree.tsx",
-          "hash": "18227430666133156866"
+          "hash": "13183792252914373057"
         },
         {
           "file": "apps/admin/src/app/categories/components/CategoryTreePanel.tsx",
           "hash": "15602441312697054356"
         },
         {
+          "file": "apps/admin/src/app/categories/components/TemplateManagementPage.tsx",
+          "hash": "10024270619889821192"
+        },
+        {
           "file": "apps/admin/src/app/categories/components/Toolbar.tsx",
-          "hash": "13584134935092952802"
+          "hash": "898999595314595308"
         },
         {
           "file": "apps/admin/src/app/categories/components/TreeNode.tsx",
@@ -104,19 +112,19 @@
         },
         {
           "file": "apps/admin/src/app/categories/components/index.ts",
-          "hash": "8507403026463663297"
+          "hash": "4113551275281679282"
         },
         {
           "file": "apps/admin/src/app/categories/store/categories.slice.ts",
-          "hash": "15227989700237321127"
+          "hash": "6771381363155894987"
         },
         {
           "file": "apps/admin/src/app/categories/store/selectors.ts",
-          "hash": "15114829482003458406"
+          "hash": "10179330930348154521"
         },
         {
           "file": "apps/admin/src/app/categories/utils/treeUtils.ts",
-          "hash": "16557829008976758606"
+          "hash": "11503285437266890028"
         },
         {
           "file": "apps/admin/src/app/store/hooks.ts",
@@ -127,12 +135,24 @@
           "hash": "10065290927469441860"
         },
         {
+          "file": "apps/admin/src/global.d.ts",
+          "hash": "16702849627393673146"
+        },
+        {
           "file": "apps/admin/src/index.css",
-          "hash": "12711544535056086299"
+          "hash": "9593311840711781033"
         },
         {
           "file": "apps/admin/src/main.tsx",
           "hash": "4034218379384655179"
+        },
+        {
+          "file": "apps/admin/tsconfig.json",
+          "hash": "3204959499965294023"
+        },
+        {
+          "file": "apps/admin/vite.config.js",
+          "hash": "16800205413230004650"
         }
       ],
       "editor": [

@@ -32,6 +32,14 @@
       "apps/admin/project.json",
       "nx/core/project-json"
     ],
+    "targets.build.options.configFile": [
+      "apps/admin/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.build.options.skipTypeCheck": [
+      "apps/admin/project.json",
+      "nx/core/project-json"
+    ],
     "targets.build.options": [
       "apps/admin/project.json",
       "nx/core/project-json"

@@ -10,7 +10,7 @@ export interface FlattenedNode {
 export function flattenTree(
   roots: CategoryDTO[],
   byId: Record<string, CategoryDTO>,
-  childrenByParent: Record<string | null, string[]>,
+  childrenByParent: Record<string, string[]>,
   expandedIds: string[]
 ): FlattenedNode[] {
   const out: FlattenedNode[] = [];
@@ -35,7 +35,7 @@ export function flattenTree(
   return out;
 }
 
-export function collectDescendantIds(id: string, childrenByParent: Record<string | null, string[]>) {
+export function collectDescendantIds(id: string, childrenByParent: Record<string, string[]>) {
   const out = new Set<string>();
   const stack = [...(childrenByParent[id] ?? [])];
   while (stack.length) {

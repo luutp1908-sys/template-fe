@@ -1,0 +1,59 @@
+> nx run admin:build
+
+[1m[33mThe `@nx/vite:build` executor is deprecated and will be removed in Nx v24. Run `nx g @nx/vite:convert-to-inferred` to migrate to the `@nx/vite/plugin` inferred targets. See https://nx.dev/docs/guides/tasks--caching/convert-to-inferred for details.[39m[22m
+[4m[34mapps/admin/src/app/categories/api/categories.api.ts:15:30[39m[24m - [31m[1merror[22m[39m [90mTS2339[39m: Property 'env' does not exist on type 'ImportMeta'.
+
+[0m [90m 13 | [39m}
+ [90m 14 | [39m
+[31m[1m>[22m[39m[90m 15 | [39m[36mconst[39m [33mAPI_BASE[39m [33m=[39m [36mimport[39m[33m.[39mmeta[33m.[39menv[33m.[39m[33mVITE_BE_API_BASE[39m [33m?[39m[33m?[39m [32m'http://localhost:4000/api/v1'[39m[33m;[39m
+ [90m    | [39m                             [31m[1m^[22m[39m
+ [90m 16 | [39m
+ [90m 17 | [39m[36mfunction[39m toCategoryDTO(item[33m:[39m any[33m,[39m sortOrder[33m:[39m number)[33m:[39m [33mCategoryDTO[39m {
+ [90m 18 | [39m  [36mreturn[39m {[0m
+
+[4m[34mapps/admin/src/app/categories/components/CategoryManagementPage.tsx:9:42[39m[24m - [31m[1merror[22m[39m [90mTS2339[39m: Property 'env' does not exist on type 'ImportMeta'.
+
+[0m [90m  7 | [39m[36mimport[39m { setCategories[33m,[39m setError } from [32m'../store/categories.slice'[39m
+ [90m  8 | [39m
+[31m[1m>[22m[39m[90m  9 | [39m[36mconst[39m [33mDEFAULT_WORKSPACE_ID[39m [33m=[39m [36mimport[39m[33m.[39mmeta[33m.[39menv[33m.[39m[33mVITE_CATEGORY_WORKSPACE_ID[39m [33m?[39m[33m?[39m [32m'11111111-1111-1111-1111-111111111111'[39m
+ [90m    | [39m                                         [31m[1m^[22m[39m
+ [90m 10 | [39m[36mconst[39m [33mDEFAULT_EDITOR_TYPE_ID[39m [33m=[39m [36mimport[39m[33m.[39mmeta[33m.[39menv[33m.[39m[33mVITE_CATEGORY_EDITOR_TYPE_ID[39m [33m?[39m[33m?[39m [32m'22222222-2222-2222-2222-222222222222'[39m
+ [90m 11 | [39m
+ [90m 12 | [39m[36mexport[39m [36mdefault[39m [36mfunction[39m [33mCategoryManagementPage[39m() {[0m
+
+[4m[34mapps/admin/src/app/categories/components/CategoryManagementPage.tsx:10:44[39m[24m - [31m[1merror[22m[39m [90mTS2339[39m: Property 'env' does not exist on type 'ImportMeta'.
+
+[0m [90m  8 | [39m
+ [90m  9 | [39m[36mconst[39m [33mDEFAULT_WORKSPACE_ID[39m [33m=[39m [36mimport[39m[33m.[39mmeta[33m.[39menv[33m.[39m[33mVITE_CATEGORY_WORKSPACE_ID[39m [33m?[39m[33m?[39m [32m'11111111-1111-1111-1111-111111111111'[39m
+[31m[1m>[22m[39m[90m 10 | [39m[36mconst[39m [33mDEFAULT_EDITOR_TYPE_ID[39m [33m=[39m [36mimport[39m[33m.[39mmeta[33m.[39menv[33m.[39m[33mVITE_CATEGORY_EDITOR_TYPE_ID[39m [33m?[39m[33m?[39m [32m'22222222-2222-2222-2222-222222222222'[39m
+ [90m    | [39m                                           [31m[1m^[22m[39m
+ [90m 11 | [39m
+ [90m 12 | [39m[36mexport[39m [36mdefault[39m [36mfunction[39m [33mCategoryManagementPage[39m() {
+ [90m 13 | [39m  [36mconst[39m dispatch [33m=[39m useAppDispatch()[0m
+
+[4m[34mapps/admin/src/app/categories/components/Toolbar.tsx:4:42[39m[24m - [31m[1merror[22m[39m [90mTS2339[39m: Property 'env' does not exist on type 'ImportMeta'.
+
+[0m [90m 2 | [39m[36mimport[39m { createCategory } from [32m'../api/categories.api'[39m
+ [90m 3 | [39m
+[31m[1m>[22m[39m[90m 4 | [39m[36mconst[39m [33mDEFAULT_WORKSPACE_ID[39m [33m=[39m [36mimport[39m[33m.[39mmeta[33m.[39menv[33m.[39m[33mVITE_CATEGORY_WORKSPACE_ID[39m [33m?[39m[33m?[39m [32m'11111111-1111-1111-1111-111111111111'[39m
+ [90m   | [39m                                         [31m[1m^[22m[39m
+ [90m 5 | [39m[36mconst[39m [33mDEFAULT_EDITOR_TYPE_ID[39m [33m=[39m [36mimport[39m[33m.[39mmeta[33m.[39menv[33m.[39m[33mVITE_CATEGORY_EDITOR_TYPE_ID[39m [33m?[39m[33m?[39m [32m'22222222-2222-2222-2222-222222222222'[39m
+ [90m 6 | [39m
+ [90m 7 | [39mtype [33mToolbarProps[39m [33m=[39m {[0m
+
+[4m[34mapps/admin/src/app/categories/components/Toolbar.tsx:5:44[39m[24m - [31m[1merror[22m[39m [90mTS2339[39m: Property 'env' does not exist on type 'ImportMeta'.
+
+[0m [90m 3 | [39m
+ [90m 4 | [39m[36mconst[39m [33mDEFAULT_WORKSPACE_ID[39m [33m=[39m [36mimport[39m[33m.[39mmeta[33m.[39menv[33m.[39m[33mVITE_CATEGORY_WORKSPACE_ID[39m [33m?[39m[33m?[39m [32m'11111111-1111-1111-1111-111111111111'[39m
+[31m[1m>[22m[39m[90m 5 | [39m[36mconst[39m [33mDEFAULT_EDITOR_TYPE_ID[39m [33m=[39m [36mimport[39m[33m.[39mmeta[33m.[39menv[33m.[39m[33mVITE_CATEGORY_EDITOR_TYPE_ID[39m [33m?[39m[33m?[39m [32m'22222222-2222-2222-2222-222222222222'[39m
+ [90m   | [39m                                           [31m[1m^[22m[39m
+ [90m 6 | [39m
+ [90m 7 | [39mtype [33mToolbarProps[39m [33m=[39m {
+ [90m 8 | [39m  searchValue[33m:[39m string[0m
+
+Found 5 errors.
+
+[7m[1m[31m NX [39m[22m[27m  [31mFound type errors. See above.[39m
+
+Pass --verbose to see the stacktrace.
+

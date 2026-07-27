@@ -1,0 +1,14 @@
+> nx run admin:build
+
+[1m[33mThe `@nx/vite:build` executor is deprecated and will be removed in Nx v24. Run `nx g @nx/vite:convert-to-inferred` to migrate to the `@nx/vite/plugin` inferred targets. See https://nx.dev/docs/guides/tasks--caching/convert-to-inferred for details.[39m[22m
+
+[7m[1m[31m NX [39m[22m[27m  [31mCannot read properties of undefined (reading 'startsWith')[39m
+
+TypeError: Cannot read properties of undefined (reading 'startsWith')
+    at validateTypes (/Users/luu/Desktop/templates/fe/node_modules/@nx/vite/dist/src/utils/executor-utils.js:16:41)
+    at viteBuildExecutor (/Users/luu/Desktop/templates/fe/node_modules/@nx/vite/dist/src/executors/build/build.impl.js:49:50)
+    at async getLastValueFromAsyncIterableIterator (/Users/luu/Desktop/templates/fe/node_modules/nx/dist/src/utils/async-iterator.js:15:19)
+    at async iteratorToProcessStatusCode (/Users/luu/Desktop/templates/fe/node_modules/nx/dist/src/command-line/run/run.js:40:25)
+    at async handleErrors (/Users/luu/Desktop/templates/fe/node_modules/nx/dist/src/utils/handle-errors.js:9:24)
+    at async process.<anonymous> (/Users/luu/Desktop/templates/fe/node_modules/nx/dist/bin/run-executor.js:59:28)
+
