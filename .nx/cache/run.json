@@ -1,8 +1,8 @@
 {
   "run": {
     "command": "nx build admin",
-    "startTime": "2026-07-27T18:12:30.111Z",
-    "endTime": "2026-07-27T18:12:32.282Z",
+    "startTime": "2026-07-27T18:41:13.029Z",
+    "endTime": "2026-07-27T18:41:15.138Z",
     "inner": false
   },
   "tasks": [
@@ -10,9 +10,9 @@
       "taskId": "admin:build",
       "target": "build",
       "projectName": "admin",
-      "hash": "1632870545221736526",
-      "startTime": "2026-07-27T18:12:30.160Z",
-      "endTime": "2026-07-27T18:12:32.273Z",
+      "hash": "7175298238389838547",
+      "startTime": "2026-07-27T18:41:13.063Z",
+      "endTime": "2026-07-27T18:41:15.133Z",
       "params": "",
       "cacheStatus": "cache-miss",
       "status": 0

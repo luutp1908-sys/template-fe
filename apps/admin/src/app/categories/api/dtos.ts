@@ -63,3 +63,22 @@ export interface SearchParams {
   editorTypeId?: number;
   limit?: number;
 }
+
+export interface CreateTemplateRequest {
+  title: string;
+  slug: string;
+  editorTypeId: number;
+  categoryId: string;
+  status?: 'draft' | 'published' | 'archived';
+}
+
+export interface TemplateDTO {
+  id: string;
+  title: string;
+  slug: string;
+  status: 'draft' | 'published' | 'archived';
+  categoryId: string;
+  editorTypeId: number;
+  createdAt: string;
+  updatedAt: string;
+}

@@ -16,40 +16,40 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "package-lock.json",
-        "hash": "10810935158920023040"
-      },
-      {
-        "file": "nx.json",
-        "hash": "9917378610941575468"
-      },
-      {
-        "file": "tsconfig.base.json",
-        "hash": "12775075012423230082"
-      },
-      {
         "file": "test-results/.last-run.json",
         "hash": "11141884120100644736"
-      },
-      {
-        "file": ".gitignore",
-        "hash": "13046175384202504187"
-      },
-      {
-        "file": ".github/copilot-instructions.md",
-        "hash": "563961152393806487"
       },
       {
         "file": "yarn.lock",
         "hash": "11673186063741775697"
       },
       {
-        "file": "package.json",
-        "hash": "727459774344292173"
+        "file": "tsconfig.base.json",
+        "hash": "12775075012423230082"
       },
       {
         "file": "README.nx.md",
         "hash": "11498756923445397898"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "10810935158920023040"
+      },
+      {
+        "file": ".github/copilot-instructions.md",
+        "hash": "563961152393806487"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "13046175384202504187"
+      },
+      {
+        "file": "nx.json",
+        "hash": "9917378610941575468"
+      },
+      {
+        "file": "package.json",
+        "hash": "727459774344292173"
       }
     ],
     "projectFileMap": {
@@ -80,7 +80,11 @@
         },
         {
           "file": "apps/admin/src/app/categories/api/dtos.ts",
-          "hash": "15564176772537185426"
+          "hash": "8438106271200608112"
+        },
+        {
+          "file": "apps/admin/src/app/categories/api/templates.api.ts",
+          "hash": "4841837511739065461"
         },
         {
           "file": "apps/admin/src/app/categories/components/CategoryDetailPanel.tsx",
@@ -103,8 +107,12 @@
           "hash": "18445301483586356087"
         },
         {
+          "file": "apps/admin/src/app/categories/components/CreateTemplateModal.tsx",
+          "hash": "6554025587368837718"
+        },
+        {
           "file": "apps/admin/src/app/categories/components/TemplateManagementPage.tsx",
-          "hash": "10024270619889821192"
+          "hash": "4773651625298916315"
         },
         {
           "file": "apps/admin/src/app/categories/components/Toolbar.tsx",
@@ -116,7 +124,7 @@
         },
         {
           "file": "apps/admin/src/app/categories/components/index.ts",
-          "hash": "13749856781401369611"
+          "hash": "8066951516403502095"
         },
         {
           "file": "apps/admin/src/app/categories/store/categories.slice.ts",
@@ -144,7 +152,7 @@
         },
         {
           "file": "apps/admin/src/index.css",
-          "hash": "16271982597932701051"
+          "hash": "11468419640726842659"
         },
         {
           "file": "apps/admin/src/main.tsx",
