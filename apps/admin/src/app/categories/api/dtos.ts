@@ -6,7 +6,7 @@ export interface CategoryDTO {
   slug: string;
   description?: string | null;
   parentId?: string | null;
-  editorTypeId: string;
+  editorTypeId: number;
   templateCount: number;
   sortOrder: number;
   createdAt: string;
@@ -15,7 +15,7 @@ export interface CategoryDTO {
 }
 
 export interface EditorTypeDTO {
-  id: string;
+  id: number;
   name: string;
 }
 
@@ -41,9 +41,10 @@ export interface ApiErrorDTO {
 // API request/response shapes
 export interface CreateCategoryRequest {
   name: string;
+  slug?: string;
   description?: string | null;
   parentId?: string | null;
-  editorTypeId: string;
+  editorTypeId: number;
 }
 
 export interface UpdateCategoryRequest {
@@ -59,6 +60,6 @@ export interface ReorderRequest {
 
 export interface SearchParams {
   q?: string;
-  editorTypeId?: string;
+  editorTypeId?: number;
   limit?: number;
 }

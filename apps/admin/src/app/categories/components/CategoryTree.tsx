@@ -8,7 +8,7 @@ import TreeNode from './TreeNode'
 import { ROOT_PARENT_KEY } from '../store/categories.slice'
 import { setExpanded, moveCategory, updateCategory, reorderChildren } from '../store/categories.slice'
 
-export default function CategoryTree({ editorTypeId = '' }: { editorTypeId?: string }) {
+export default function CategoryTree({ editorTypeId }: { editorTypeId?: number }) {
   const dispatch = useAppDispatch()
   const byId = useAppSelector(selectCategoriesById)
   const childrenByParent = useAppSelector((s) => s.categories.childrenByParent)

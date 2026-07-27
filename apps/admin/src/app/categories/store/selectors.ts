@@ -60,12 +60,12 @@ export const selectBreadcrumbs = (state: RootState, id: string | undefined | nul
 };
 
 export const selectTreeRootsForEditor = createSelector(
-  [selectState, (_: RootState, editorTypeId: string) => editorTypeId],
+  [selectState, (_: RootState, editorTypeId?: number) => editorTypeId],
   (state, editorTypeId) => {
     const roots = state.childrenByParent[ROOT_PARENT_KEY] ?? [];
     return roots
       .map((id: string) => state.byId[id])
-      .filter((c: CategoryDTO) => c && (editorTypeId ? c.editorTypeId === editorTypeId : true));
+      .filter((c: CategoryDTO) => c && (editorTypeId !== undefined ? c.editorTypeId === editorTypeId : true));
   }
 );
 

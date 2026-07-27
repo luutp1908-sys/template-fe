@@ -1,0 +1,19 @@
+> nx run admin:build
+
+[1m[33mThe `@nx/vite:build` executor is deprecated and will be removed in Nx v24. Run `nx g @nx/vite:convert-to-inferred` to migrate to the `@nx/vite/plugin` inferred targets. See https://nx.dev/docs/guides/tasks--caching/convert-to-inferred for details.[39m[22m
+[4m[34mapps/admin/src/app/categories/components/CreateCategoryModal.tsx:43:9[39m[24m - [31m[1merror[22m[39m [90mTS2353[39m: Object literal may only specify known properties, and 'slug' does not exist in type 'CreateCategoryRequest'.
+
+[0m [90m 41 | [39m      await createCategory({
+ [90m 42 | [39m        name[33m:[39m name[33m.[39mtrim()[33m,[39m
+[31m[1m>[22m[39m[90m 43 | [39m        slug[33m:[39m slug[33m.[39mtrim() [33m||[39m undefined[33m,[39m
+ [90m    | [39m        [31m[1m^[22m[39m
+ [90m 44 | [39m        parentId[33m:[39m parentId [33m||[39m [36mnull[39m[33m,[39m
+ [90m 45 | [39m        editorTypeId[33m:[39m editorTypeId[33m.[39mtrim()[33m,[39m
+ [90m 46 | [39m      })[0m
+
+Found 1 error.
+
+[7m[1m[31m NX [39m[22m[27m  [31mFound type errors. See above.[39m
+
+Pass --verbose to see the stacktrace.
+

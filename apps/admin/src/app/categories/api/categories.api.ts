@@ -7,7 +7,7 @@ interface ApiEnvelope<T> {
 }
 
 export interface CategoryListQuery {
-  editorTypeId?: string;
+  editorTypeId?: number;
   search?: string;
 }
 
@@ -19,7 +19,7 @@ function toCategoryDTO(item: any, sortOrder: number): CategoryDTO {
     name: item.name,
     slug: item.slug,
     parentId: item.parentId ?? null,
-    editorTypeId: item.editorTypeId,
+    editorTypeId: Number(item.editorTypeId ?? 0),
     templateCount: item.templateCount ?? 0,
     sortOrder,
     createdAt: typeof item.createdAt === 'string' ? item.createdAt : new Date(item.createdAt).toISOString(),
@@ -30,7 +30,7 @@ function toCategoryDTO(item: any, sortOrder: number): CategoryDTO {
 
 export async function fetchCategories(query: CategoryListQuery): Promise<CategoryDTO[]> {
   const params = new URLSearchParams();
-  if (query.editorTypeId) params.set('editorTypeId', query.editorTypeId);
+  if (query.editorTypeId !== undefined) params.set('editorTypeId', String(query.editorTypeId));
   if (query.search) params.set('search', query.search);
 
   const response = await fetch(`${API_BASE}/category?${params.toString()}`);
