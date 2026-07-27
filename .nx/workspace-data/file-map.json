@@ -16,40 +16,40 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": ".gitignore",
-        "hash": "13046175384202504187"
-      },
-      {
-        "file": "yarn.lock",
-        "hash": "1486691938003420451"
-      },
-      {
-        "file": ".github/copilot-instructions.md",
-        "hash": "563961152393806487"
-      },
-      {
-        "file": "package.json",
-        "hash": "14829180459296989214"
-      },
-      {
-        "file": "tsconfig.base.json",
-        "hash": "12775075012423230082"
-      },
-      {
-        "file": "README.nx.md",
-        "hash": "11498756923445397898"
-      },
-      {
-        "file": "test-results/.last-run.json",
-        "hash": "11141884120100644736"
-      },
-      {
         "file": "nx.json",
         "hash": "9917378610941575468"
       },
       {
         "file": "package-lock.json",
         "hash": "10810935158920023040"
+      },
+      {
+        "file": "package.json",
+        "hash": "727459774344292173"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "13046175384202504187"
+      },
+      {
+        "file": "README.nx.md",
+        "hash": "11498756923445397898"
+      },
+      {
+        "file": ".github/copilot-instructions.md",
+        "hash": "563961152393806487"
+      },
+      {
+        "file": "test-results/.last-run.json",
+        "hash": "11141884120100644736"
+      },
+      {
+        "file": "yarn.lock",
+        "hash": "1486691938003420451"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "12775075012423230082"
       }
     ],
     "projectFileMap": {
@@ -87,12 +87,20 @@
           "hash": "9494323411427070893"
         },
         {
+          "file": "apps/admin/src/app/categories/components/CategoryTree.tsx",
+          "hash": "8352612676308727924"
+        },
+        {
           "file": "apps/admin/src/app/categories/components/CategoryTreePanel.tsx",
-          "hash": "5120534863462287223"
+          "hash": "15602441312697054356"
         },
         {
           "file": "apps/admin/src/app/categories/components/Toolbar.tsx",
           "hash": "13584134935092952802"
+        },
+        {
+          "file": "apps/admin/src/app/categories/components/TreeNode.tsx",
+          "hash": "844200889186492333"
         },
         {
           "file": "apps/admin/src/app/categories/components/index.ts",
@@ -105,6 +113,10 @@
         {
           "file": "apps/admin/src/app/categories/store/selectors.ts",
           "hash": "15114829482003458406"
+        },
+        {
+          "file": "apps/admin/src/app/categories/utils/treeUtils.ts",
+          "hash": "16557829008976758606"
         },
         {
           "file": "apps/admin/src/app/store/hooks.ts",
