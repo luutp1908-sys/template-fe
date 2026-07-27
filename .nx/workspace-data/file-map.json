@@ -16,36 +16,36 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "yarn.lock",
-        "hash": "15667430397937753376"
+        "file": "tsconfig.base.json",
+        "hash": "12775075012423230082"
       },
       {
-        "file": "nx.json",
-        "hash": "9917378610941575468"
+        "file": "yarn.lock",
+        "hash": "15667430397937753376"
       },
       {
         "file": "test-results/.last-run.json",
         "hash": "11141884120100644736"
       },
       {
-        "file": "package-lock.json",
-        "hash": "10810935158920023040"
-      },
-      {
-        "file": "tsconfig.base.json",
-        "hash": "12775075012423230082"
-      },
-      {
-        "file": "README.nx.md",
-        "hash": "11498756923445397898"
+        "file": "nx.json",
+        "hash": "9917378610941575468"
       },
       {
         "file": ".github/copilot-instructions.md",
         "hash": "563961152393806487"
       },
       {
+        "file": "README.nx.md",
+        "hash": "11498756923445397898"
+      },
+      {
         "file": ".gitignore",
         "hash": "13046175384202504187"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "10810935158920023040"
       },
       {
         "file": "package.json",
@@ -299,6 +299,14 @@
         {
           "file": "apps/admin/src/app/categories/api/dtos.ts",
           "hash": "13076792167740799921"
+        },
+        {
+          "file": "apps/admin/src/app/categories/store/categories.slice.ts",
+          "hash": "15227989700237321127"
+        },
+        {
+          "file": "apps/admin/src/app/categories/store/selectors.ts",
+          "hash": "15114829482003458406"
         },
         {
           "file": "apps/admin/src/index.css",
