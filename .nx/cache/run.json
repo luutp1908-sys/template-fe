@@ -1,0 +1,21 @@
+{
+  "run": {
+    "command": "nx serve editor",
+    "startTime": "2026-07-27T15:55:12.223Z",
+    "endTime": "2026-07-27T16:10:29.025Z",
+    "inner": false
+  },
+  "tasks": [
+    {
+      "taskId": "editor:serve",
+      "target": "serve",
+      "projectName": "editor",
+      "hash": "714251531875981636",
+      "startTime": "2026-07-27T15:55:12.256Z",
+      "endTime": "2026-07-27T16:10:28.888Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 1
+    }
+  ]
+}

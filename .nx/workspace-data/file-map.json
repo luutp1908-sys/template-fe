@@ -1,0 +1,303 @@
+{
+  "version": "6.0",
+  "nxVersion": "23.1.0",
+  "pathMappings": {
+    "@editor/*": [
+      "apps/editor/src/*"
+    ],
+    "@admin/*": [
+      "apps/admin/src/*"
+    ],
+    "@shared/*": [
+      "libs/shared/src/*"
+    ]
+  },
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "nonProjectFiles": [
+      {
+        "file": "test-results/.last-run.json",
+        "hash": "11141884120100644736"
+      },
+      {
+        "file": "README.nx.md",
+        "hash": "11498756923445397898"
+      },
+      {
+        "file": ".github/copilot-instructions.md",
+        "hash": "563961152393806487"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "12775075012423230082"
+      },
+      {
+        "file": "nx.json",
+        "hash": "9917378610941575468"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "13046175384202504187"
+      },
+      {
+        "file": "yarn.lock",
+        "hash": "15667430397937753376"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "10810935158920023040"
+      },
+      {
+        "file": "package.json",
+        "hash": "5885901359142441662"
+      }
+    ],
+    "projectFileMap": {
+      "editor": [
+        {
+          "file": "apps/editor/README.md",
+          "hash": "9480402779026442139"
+        },
+        {
+          "file": "apps/editor/docs/plan.md",
+          "hash": "7900770985369197417"
+        },
+        {
+          "file": "apps/editor/docs/test-implementation-status.md",
+          "hash": "1973096673013393612"
+        },
+        {
+          "file": "apps/editor/docs/testing-strategy.md",
+          "hash": "2058163113298647854"
+        },
+        {
+          "file": "apps/editor/docs/update-canvas.md",
+          "hash": "9277378837769802233"
+        },
+        {
+          "file": "apps/editor/e2e/auth.e2e.spec.ts",
+          "hash": "9374577165713069666"
+        },
+        {
+          "file": "apps/editor/e2e/canvas.e2e.spec.js",
+          "hash": "12811766934893220101"
+        },
+        {
+          "file": "apps/editor/e2e/fixtures/sample-upload.svg",
+          "hash": "8390226518891801842"
+        },
+        {
+          "file": "apps/editor/eslint.config.js",
+          "hash": "1619063768437646049"
+        },
+        {
+          "file": "apps/editor/index.html",
+          "hash": "18350149164431196410"
+        },
+        {
+          "file": "apps/editor/playwright.config.js",
+          "hash": "11870446465541986083"
+        },
+        {
+          "file": "apps/editor/project.json",
+          "hash": "627328646090441093"
+        },
+        {
+          "file": "apps/editor/public/favicon.svg",
+          "hash": "9681363740239943431"
+        },
+        {
+          "file": "apps/editor/public/icons.svg",
+          "hash": "12690649164411559435"
+        },
+        {
+          "file": "apps/editor/src/App.css",
+          "hash": "9665983422351549808"
+        },
+        {
+          "file": "apps/editor/src/App.test.tsx",
+          "hash": "15978003414490920464"
+        },
+        {
+          "file": "apps/editor/src/App.tsx",
+          "hash": "1582265725169918645"
+        },
+        {
+          "file": "apps/editor/src/assets/hero.png",
+          "hash": "8887776959365123467"
+        },
+        {
+          "file": "apps/editor/src/assets/react.svg",
+          "hash": "16069471864800376455"
+        },
+        {
+          "file": "apps/editor/src/assets/vite.svg",
+          "hash": "6723104814466855237"
+        },
+        {
+          "file": "apps/editor/src/components/FrameBrowser.tsx",
+          "hash": "1744803098863709993"
+        },
+        {
+          "file": "apps/editor/src/data/framePresets.ts",
+          "hash": "49858423769339789"
+        },
+        {
+          "file": "apps/editor/src/features/canvas/Canvas.styles.ts",
+          "hash": "2316015485532322369"
+        },
+        {
+          "file": "apps/editor/src/features/canvas/Canvas.tsx",
+          "hash": "544387146991795600"
+        },
+        {
+          "file": "apps/editor/src/features/canvas/InlineObjectToolbar.tsx",
+          "hash": "10498283664996421652"
+        },
+        {
+          "file": "apps/editor/src/features/canvas/canvasGeometry.ts",
+          "hash": "2346831861517987854"
+        },
+        {
+          "file": "apps/editor/src/features/canvas/useCanvasImageLifecycle.ts",
+          "hash": "18192146399950758389"
+        },
+        {
+          "file": "apps/editor/src/features/canvas/useCanvasInteractions.ts",
+          "hash": "8797360909275957485"
+        },
+        {
+          "file": "apps/editor/src/features/canvas/useCanvasTextEditing.ts",
+          "hash": "15168464358038582088"
+        },
+        {
+          "file": "apps/editor/src/features/layers/FrameLayerContent.tsx",
+          "hash": "5114524935473512149"
+        },
+        {
+          "file": "apps/editor/src/features/layers/ImageLayerContent.tsx",
+          "hash": "914868702081409298"
+        },
+        {
+          "file": "apps/editor/src/features/layers/LayerRenderer.tsx",
+          "hash": "14425319147093472456"
+        },
+        {
+          "file": "apps/editor/src/features/layers/LayerRenderer.types.ts",
+          "hash": "9815974133494373066"
+        },
+        {
+          "file": "apps/editor/src/features/layers/RectLayerContent.tsx",
+          "hash": "16991564323973877025"
+        },
+        {
+          "file": "apps/editor/src/features/layers/TextLayerContent.tsx",
+          "hash": "5393455798528761746"
+        },
+        {
+          "file": "apps/editor/src/features/layers/index.ts",
+          "hash": "8597192958769946277"
+        },
+        {
+          "file": "apps/editor/src/global.d.ts",
+          "hash": "18113466401432664784"
+        },
+        {
+          "file": "apps/editor/src/index.css",
+          "hash": "16253403384054463301"
+        },
+        {
+          "file": "apps/editor/src/main.tsx",
+          "hash": "2803463426071907448"
+        },
+        {
+          "file": "apps/editor/src/shared/api/client.ts",
+          "hash": "13130471577517093245"
+        },
+        {
+          "file": "apps/editor/src/shared/auth/tokenStore.ts",
+          "hash": "8686293096904788272"
+        },
+        {
+          "file": "apps/editor/src/shared/constants/editorGeometry.ts",
+          "hash": "15822881364010519942"
+        },
+        {
+          "file": "apps/editor/src/shared/constants/layout.ts",
+          "hash": "5689887069794662300"
+        },
+        {
+          "file": "apps/editor/src/shared/constants/stockImages.ts",
+          "hash": "1307775247627279549"
+        },
+        {
+          "file": "apps/editor/src/shared/hooks/useAuth.ts",
+          "hash": "4374194836185399303"
+        },
+        {
+          "file": "apps/editor/src/shared/hooks/useEditor.test.tsx",
+          "hash": "1261425736963900624"
+        },
+        {
+          "file": "apps/editor/src/shared/hooks/useEditor.ts",
+          "hash": "7170882246554046742"
+        },
+        {
+          "file": "apps/editor/src/shared/hooks/useTemplate.ts",
+          "hash": "17341480183484135767"
+        },
+        {
+          "file": "apps/editor/src/shared/types/editor.ts",
+          "hash": "8913721436230768637"
+        },
+        {
+          "file": "apps/editor/src/test/setup.ts",
+          "hash": "8528460375559093105"
+        },
+        {
+          "file": "apps/editor/src/widgets/AuthModal.tsx",
+          "hash": "3681425981959905409"
+        },
+        {
+          "file": "apps/editor/src/widgets/MenuBar.tsx",
+          "hash": "7667360721456736827"
+        },
+        {
+          "file": "apps/editor/src/widgets/Sidebar.tsx",
+          "hash": "16554342018660338164"
+        },
+        {
+          "file": "apps/editor/tsconfig.json",
+          "hash": "3204959499965294023"
+        },
+        {
+          "file": "apps/editor/vite.config.js",
+          "hash": "5517292966376885498"
+        }
+      ],
+      "admin": [
+        {
+          "file": "apps/admin/index.html",
+          "hash": "211444524782319358"
+        },
+        {
+          "file": "apps/admin/project.json",
+          "hash": "12913336157112950623"
+        },
+        {
+          "file": "apps/admin/src/App.tsx",
+          "hash": "10798598483376227371"
+        },
+        {
+          "file": "apps/admin/src/index.css",
+          "hash": "12711544535056086299"
+        },
+        {
+          "file": "apps/admin/src/main.tsx",
+          "hash": "2216127516641185489"
+        }
+      ]
+    }
+  },
+  "externalNodesHash": "16393843146756455161"
+}

@@ -148,7 +148,11 @@ export const computeFitZoom = ({
   return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, fitZoom))
 }
 
-export const useEditor = (initialTemplate?: TemplateContent | null) => {
+export const useEditor = (initialTemplate?: TemplateContent | EditorObject[] | null) => {
+  // Normalize legacy input: if an array of EditorObject is provided, convert to TemplateContent
+  const normalizedInitial: TemplateContent | null = Array.isArray(initialTemplate)
+    ? { pages: [ { id: 'page_1', width: 1024, height: 768, background: { color: '#ffffff' }, layers: initialTemplate } ] }
+    : (initialTemplate as TemplateContent | null)
   const mapBlockToPage = (b: any): Page => {
     const width = typeof b?.config?.width === 'string' ? parseInt(String(b.config.width).replace(/px$/, '')) || 1024 : b?.config?.width || 1024
     const height = typeof b?.config?.height === 'string' ? parseInt(String(b.config.height).replace(/px$/, '')) || 768 : b?.config?.height || 768
@@ -162,10 +166,10 @@ export const useEditor = (initialTemplate?: TemplateContent | null) => {
     }
   }
 
-  const initialPages: Page[] = initialTemplate?.blocks?.length
-    ? initialTemplate.blocks.map(mapBlockToPage)
-    : initialTemplate?.pages?.length
-    ? initialTemplate.pages
+  const initialPages: Page[] = normalizedInitial?.blocks?.length
+    ? normalizedInitial.blocks.map(mapBlockToPage)
+    : normalizedInitial?.pages?.length
+    ? normalizedInitial.pages
     : [
         {
           id: 'page_1',
@@ -183,22 +187,23 @@ export const useEditor = (initialTemplate?: TemplateContent | null) => {
   )
   const [activeTool, setActiveTool] = useState<ActiveTool>(null)
   const [zoom, setZoomState] = useState(1)
+  
 
   useEffect(() => {
-    if (!initialTemplate) return
-    if (initialTemplate.blocks && initialTemplate.blocks.length > 0) {
-      const mapped = initialTemplate.blocks.map(mapBlockToPage)
+    if (!normalizedInitial) return
+    if (normalizedInitial.blocks && normalizedInitial.blocks.length > 0) {
+      const mapped = normalizedInitial.blocks.map(mapBlockToPage)
       setPages(mapped)
       setCurrentPageIndexState(0)
       setSelectedId(mapped[0]?.layers?.[0]?.id || null)
       return
     }
-    if (initialTemplate.pages && initialTemplate.pages.length > 0) {
-      setPages(initialTemplate.pages)
+    if (normalizedInitial.pages && normalizedInitial.pages.length > 0) {
+      setPages(normalizedInitial.pages)
       setCurrentPageIndexState(0)
-      setSelectedId(initialTemplate.pages[0]?.layers?.[0]?.id || null)
+      setSelectedId(normalizedInitial.pages[0]?.layers?.[0]?.id || null)
     }
-  }, [initialTemplate])
+  }, [normalizedInitial])
 
   const objects = pages[currentPageIndex]?.layers || []
   const selectedObject = objects.find((obj) => obj.id === selectedId)

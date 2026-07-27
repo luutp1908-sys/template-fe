@@ -13,7 +13,14 @@
     "test:unit": "vitest run src/shared/hooks",
     "test:integration": "vitest run src/features src/widgets src/App.test.tsx",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "nx": "nx",
+    "start:editor": "nx serve editor",
+    "start:admin": "nx serve admin",
+    "build:editor": "nx build editor",
+    "build:admin": "nx build admin",
+    "build:editor:fast": "vite build --config apps/editor/vite.config.js",
+    "start:editor:fast": "vite --config apps/editor/vite.config.js"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.101.4",
@@ -39,6 +46,10 @@
     "jsdom": "^29.1.1",
     "typescript": "^5.9.2",
     "vite": "^6.4.3",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "nx": "latest",
+    "@nx/vite": "latest",
+    "@nx/vitest": "latest",
+    "@testing-library/dom": "^9.0.0"
   }
 }

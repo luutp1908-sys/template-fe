@@ -118,6 +118,7 @@ export interface ImageLayer extends BaseLayer {
   imageConfig?: ImageConfig
   opacity?: number
   cornerRadius?: number
+  fitMode?: 'contain' | 'cover'
 }
 
 export interface FrameLayer extends BaseLayer {

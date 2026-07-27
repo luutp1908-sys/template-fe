@@ -1,0 +1,142 @@
+{
+  "apps/admin": {
+    "root": [
+      "apps/admin/project.json",
+      "nx/core/project-json"
+    ],
+    "name": [
+      "apps/admin/project.json",
+      "nx/core/project-json"
+    ],
+    "sourceRoot": [
+      "apps/admin/project.json",
+      "nx/core/project-json"
+    ],
+    "projectType": [
+      "apps/admin/project.json",
+      "nx/core/project-json"
+    ],
+    "targets": [
+      "apps/admin/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.build": [
+      "apps/admin/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.build.executor": [
+      "apps/admin/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.build.options.outputPath": [
+      "apps/admin/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.build.options": [
+      "apps/admin/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve": [
+      "apps/admin/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve.executor": [
+      "apps/admin/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve.options.buildTarget": [
+      "apps/admin/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve.options": [
+      "apps/admin/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test": [
+      "apps/admin/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.executor": [
+      "apps/admin/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.options": [
+      "apps/admin/project.json",
+      "nx/core/project-json"
+    ]
+  },
+  "apps/editor": {
+    "root": [
+      "apps/editor/project.json",
+      "nx/core/project-json"
+    ],
+    "name": [
+      "apps/editor/project.json",
+      "nx/core/project-json"
+    ],
+    "sourceRoot": [
+      "apps/editor/project.json",
+      "nx/core/project-json"
+    ],
+    "projectType": [
+      "apps/editor/project.json",
+      "nx/core/project-json"
+    ],
+    "targets": [
+      "apps/editor/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.build": [
+      "apps/editor/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.build.executor": [
+      "apps/editor/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.build.options.outputPath": [
+      "apps/editor/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.build.options.configFile": [
+      "apps/editor/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.build.options.skipTypeCheck": [
+      "apps/editor/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.build.options": [
+      "apps/editor/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve": [
+      "apps/editor/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve.executor": [
+      "apps/editor/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve.options.buildTarget": [
+      "apps/editor/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve.options": [
+      "apps/editor/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test": [
+      "apps/editor/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.executor": [
+      "apps/editor/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.options": [
+      "apps/editor/project.json",
+      "nx/core/project-json"
+    ]
+  }
+}

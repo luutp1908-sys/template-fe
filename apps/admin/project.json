@@ -1,0 +1,24 @@
+{
+  "name": "admin",
+  "root": "apps/admin",
+  "sourceRoot": "apps/admin/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "options": {
+        "outputPath": "dist/apps/admin"
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "options": {
+        "buildTarget": "admin:build"
+      }
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "options": {}
+    }
+  }
+}

@@ -21,7 +21,7 @@ export const useCanvasImageLifecycle = ({
 
     for (const obj of objects) {
       if (obj.type !== 'image') continue
-      const src = obj.src ?? ''
+      const src = obj.imageConfig?.url ?? ''
       currentImageSrc[obj.id] = src
 
       const previousSrc = previousImageSrcRef.current[obj.id]

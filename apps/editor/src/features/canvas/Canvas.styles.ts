@@ -92,7 +92,7 @@ export const CanvasObject = styled.div<{ selected: boolean; $locked?: boolean }>
 type ObjectTextProps = {
   $fontSize?: number
   $fontWeight?: 'normal' | 'bold'
-  $textAlign?: 'left' | 'center' | 'right'
+  $textAlign?: 'left' | 'center' | 'right' | 'justify'
   $textColor?: string
   $lineHeight?: number
   $fontFamily?: string

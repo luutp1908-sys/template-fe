@@ -1,0 +1,26 @@
+{
+  "name": "editor",
+  "root": "apps/editor",
+  "sourceRoot": "apps/editor/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "options": {
+        "outputPath": "dist/apps/editor",
+        "configFile": "apps/editor/vite.config.js",
+        "skipTypeCheck": false
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "options": {
+        "buildTarget": "editor:build"
+      }
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "options": {}
+    }
+  }
+}
