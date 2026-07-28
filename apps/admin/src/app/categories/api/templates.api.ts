@@ -69,10 +69,12 @@ export async function fetchTemplates(query: TemplateListQuery): Promise<Template
 }
 
 export async function createTemplate(payload: CreateTemplateRequest): Promise<TemplateDTO> {
+  const accessToken = sessionStorage.getItem('admin_access_token')
   const response = await fetch(`${API_BASE}/template`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
     },
     body: JSON.stringify(payload),
   })
