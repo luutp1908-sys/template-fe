@@ -16,40 +16,40 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "package.json",
-        "hash": "727459774344292173"
+        "file": "yarn.lock",
+        "hash": "11673186063741775697"
       },
       {
-        "file": "nx.json",
-        "hash": "9917378610941575468"
+        "file": "package.json",
+        "hash": "727459774344292173"
       },
       {
         "file": ".github/copilot-instructions.md",
         "hash": "563961152393806487"
       },
       {
-        "file": "yarn.lock",
-        "hash": "11673186063741775697"
-      },
-      {
         "file": ".gitignore",
         "hash": "2070325066638866827"
       },
       {
-        "file": "package-lock.json",
-        "hash": "10810935158920023040"
+        "file": "nx.json",
+        "hash": "9917378610941575468"
       },
       {
         "file": "README.nx.md",
         "hash": "11498756923445397898"
       },
       {
+        "file": "test-results/.last-run.json",
+        "hash": "11141884120100644736"
+      },
+      {
         "file": "tsconfig.base.json",
         "hash": "12775075012423230082"
       },
       {
-        "file": "test-results/.last-run.json",
-        "hash": "11141884120100644736"
+        "file": "package-lock.json",
+        "hash": "10810935158920023040"
       }
     ],
     "projectFileMap": {
@@ -72,7 +72,15 @@
         },
         {
           "file": "apps/admin/src/App.tsx",
-          "hash": "3983984402341266434"
+          "hash": "6179009197271960067"
+        },
+        {
+          "file": "apps/admin/src/app/auth/Login.tsx",
+          "hash": "11328948874385246153"
+        },
+        {
+          "file": "apps/admin/src/app/auth/useAuth.ts",
+          "hash": "11964614475585707172"
         },
         {
           "file": "apps/admin/src/app/categories/api/categories.api.ts",
