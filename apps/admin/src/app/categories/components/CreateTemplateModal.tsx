@@ -71,6 +71,7 @@ export default function CreateTemplateModal({ isOpen, onClose, onCreated }: Crea
     if (!canSubmit) return
 
     const selectedCategory = categories.find((item) => item.id === categoryId)
+
     if (!selectedCategory) {
       setError('Please choose a valid category')
       return

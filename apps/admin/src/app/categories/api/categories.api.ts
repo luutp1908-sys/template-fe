@@ -19,7 +19,7 @@ function toCategoryDTO(item: any, sortOrder: number): CategoryDTO {
     name: item.name,
     slug: item.slug,
     parentId: item.parentId ?? null,
-    editorTypeId: Number(item.editorTypeId ?? 0),
+    editorTypeId: item.editorTypeId,
     templateCount: item.templateCount ?? 0,
     sortOrder,
     createdAt: typeof item.createdAt === 'string' ? item.createdAt : new Date(item.createdAt).toISOString(),
