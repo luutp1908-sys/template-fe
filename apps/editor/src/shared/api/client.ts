@@ -84,4 +84,8 @@ export async function patchJson<T = any>(path: string, body: any, options: Reque
   return fetchJson<T>(path, { method: 'PATCH', body: JSON.stringify(body), ...options })
 }
 
-export default { getApiBase, fetchJson, postJson, patchJson, setAuthHeaderGetter, setRefreshHandler, parseError }
+export async function putJson<T = any>(path: string, body: any, options: RequestInit = {}) {
+  return fetchJson<T>(path, { method: 'PUT', body: JSON.stringify(body), ...options })
+}
+
+export default { getApiBase, fetchJson, postJson, patchJson, putJson, setAuthHeaderGetter, setRefreshHandler, parseError }

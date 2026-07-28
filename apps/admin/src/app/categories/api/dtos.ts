@@ -15,7 +15,7 @@ export interface CategoryDTO {
 }
 
 export interface EditorTypeDTO {
-  id: number;
+  id: string;
   name: string;
 }
 

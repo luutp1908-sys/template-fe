@@ -7,12 +7,7 @@ import {
   selectChildren,
   selectDescendants,
 } from '../store/selectors'
-
-const editorTypeLabel: Record<number, string> = {
-  0: 'Graphic',
-  1: 'Document',
-  2: 'Whiteboard',
-}
+import { EDITOR_TYPE_LABELS } from '../constants/editorTypes'
 
 function formatDate(value: string | undefined) {
   if (!value) return '-'
@@ -59,7 +54,7 @@ export default function CategoryDetailPanel() {
           </p>
         </div>
         <span className="category-detail-editor-chip">
-          {editorTypeLabel[category.editorTypeId] ?? `Type ${category.editorTypeId}`}
+          {EDITOR_TYPE_LABELS[category.editorTypeId] ?? `Type ${category.editorTypeId}`}
         </span>
       </div>
 

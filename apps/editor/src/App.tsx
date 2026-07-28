@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { computeFitZoom, useEditor } from './shared/hooks/useEditor'
 import { DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_HEIGHT, DEFAULT_TEXT_WIDTH, DEFAULT_TEXT_HEIGHT, DEFAULT_TEXT_COLOR, DEFAULT_TEXT_FONT_SIZE } from './shared/constants/editorGeometry'
 import useTemplate from './shared/hooks/useTemplate'
-import { postJson, patchJson } from './shared/api/client'
+import { postJson, patchJson, putJson } from './shared/api/client'
 import {
   PAGE_HEIGHT,
   PAGE_WIDTH,
@@ -117,6 +117,11 @@ const defaultLocalTemplate = {
 }
 
 function App() {
+  const searchParams = useMemo(() => new URLSearchParams(window.location.search), [])
+  const templateIdFromQuery = useMemo(() => searchParams.get('templateId'), [searchParams])
+  const adminEditParam = useMemo(() => (searchParams.get('adminEdit') || '').toLowerCase(), [searchParams])
+  const isAdminEditMode = adminEditParam === '1' || adminEditParam === 'true'
+
   const draftIdFromPath = useMemo(() => {
     try {
       const m = window.location.pathname.match(/^\/draft\/([^/]+)$/)
@@ -129,7 +134,8 @@ function App() {
   const auth = useAuth()
   const { user } = auth
 
-  const { template, draft, loading, error } = useTemplate('tmpl_001', draftIdFromPath ?? undefined)
+  const canonicalTemplateId = draftIdFromPath ? null : (templateIdFromQuery || null)
+  const { template, draft, loading, error } = useTemplate(canonicalTemplateId, draftIdFromPath ?? undefined)
   if (error) console.error('Template load error:', error)
 
   const [authModalOpen, setAuthModalOpen] = useState(false)
@@ -287,13 +293,18 @@ function App() {
     setSidebarPanel('background')
   }
 
-  const handleSaveDraft = useCallback(async () => {
-    if (!user) {
+  const handleSave = useCallback(async () => {
+    const shouldSaveCanonical = !draftIdFromPath && isAdminEditMode && !!templateIdFromQuery
+
+    if (!user && !shouldSaveCanonical) {
       setAuthModalOpen(true)
       return
     }
 
-    const resolvedTemplateId = template?.id ?? template?.templateId ?? defaultLocalTemplate.id
+    const resolvedTemplateId = shouldSaveCanonical
+      ? templateIdFromQuery
+      : (template?.id ?? template?.templateId ?? defaultLocalTemplate.id)
+
     if (!resolvedTemplateId) {
       console.warn('No template loaded to save')
       return
@@ -301,6 +312,14 @@ function App() {
 
     setIsSaving(true)
     try {
+      if (shouldSaveCanonical) {
+        await putJson(`/api/v1/template-content/${resolvedTemplateId}`, {
+          content: { pages: editor.pages },
+        })
+        console.info('Canonical template content saved')
+        return
+      }
+
       // ensure templateId is a UUID to satisfy backend DTO validation
       const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
       let templateIdToSend = String(resolvedTemplateId)
@@ -340,13 +359,15 @@ function App() {
     } finally {
       setIsSaving(false)
     }
-  }, [user, template, editor.pages])
+  }, [user, draftIdFromPath, isAdminEditMode, templateIdFromQuery, template, editor.pages])
+
+  const shouldSaveCanonical = !draftIdFromPath && isAdminEditMode && !!templateIdFromQuery
 
   return (
     <AppShell>
       <TopHeader>
         <HeaderContent>
-          <h1>Canva Editor</h1>
+          <h1>{shouldSaveCanonical ? 'Canva Editor · Admin Template Mode' : 'Canva Editor'}</h1>
           <ZoomControl>
             <ZoomSlider
               type="range"
@@ -359,8 +380,8 @@ function App() {
             />
             <ZoomValue>{Math.round(editor.zoom * 100)}%</ZoomValue>
           </ZoomControl>
-          <SaveButton onClick={handleSaveDraft} disabled={isSaving || !user}>
-            {isSaving ? 'Saving…' : 'Save'}
+          <SaveButton onClick={handleSave} disabled={isSaving}>
+            {isSaving ? 'Saving…' : shouldSaveCanonical ? 'Save Template Content' : 'Save Draft'}
           </SaveButton>
         </HeaderContent>
       </TopHeader>

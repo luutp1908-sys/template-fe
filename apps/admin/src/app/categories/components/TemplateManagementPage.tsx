@@ -2,12 +2,9 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import CreateTemplateModal from './CreateTemplateModal'
 import { fetchTemplates } from '../api/templates.api'
 import { TemplateDTO } from '../api/dtos'
+import { EDITOR_TYPE_LABELS } from '../constants/editorTypes'
 
-const editorTypeLabel: Record<number, string> = {
-  0: 'Graphic',
-  1: 'Document',
-  2: 'Whiteboard',
-}
+const EDITOR_APP_URL = import.meta.env.VITE_EDITOR_APP_URL ?? 'http://localhost:5174'
 
 function formatDate(value: string) {
   const date = new Date(value)
@@ -24,6 +21,7 @@ function formatDate(value: string) {
 export default function TemplateManagementPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [lastCreatedTemplate, setLastCreatedTemplate] = useState<TemplateDTO | null>(null)
   const [templates, setTemplates] = useState<TemplateDTO[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -67,6 +65,14 @@ export default function TemplateManagementPage() {
     setPage(1)
   }, [search, statusFilter])
 
+  const openTemplateEditor = useCallback((templateId: string) => {
+    const url = new URL(EDITOR_APP_URL)
+    url.searchParams.set('templateId', templateId)
+    url.searchParams.set('adminEdit', '1')
+    url.searchParams.set('source', 'admin')
+    window.open(url.toString(), '_blank', 'noopener,noreferrer')
+  }, [])
+
   return (
     <section className="template-page">
       <div className="template-card">
@@ -91,7 +97,20 @@ export default function TemplateManagementPage() {
           </button>
         </div>
 
-        {successMessage ? <div className="form-success">{successMessage}</div> : null}
+        {successMessage ? (
+          <div className="form-success template-success-row">
+            <span>{successMessage}</span>
+            {lastCreatedTemplate ? (
+              <button
+                type="button"
+                className="ghost-btn"
+                onClick={() => openTemplateEditor(lastCreatedTemplate.id)}
+              >
+                Edit Content
+              </button>
+            ) : null}
+          </div>
+        ) : null}
 
         <div className="template-stats-grid">
           <div className="template-stat-card">
@@ -146,16 +165,17 @@ export default function TemplateManagementPage() {
                 <th>Editor Type</th>
                 <th>Status</th>
                 <th>Updated</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="template-table-state">Loading templates...</td>
+                  <td colSpan={7} className="template-table-state">Loading templates...</td>
                 </tr>
               ) : templates.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="template-table-state">No templates found.</td>
+                  <td colSpan={7} className="template-table-state">No templates found.</td>
                 </tr>
               ) : (
                 templates.map((item) => (
@@ -163,11 +183,20 @@ export default function TemplateManagementPage() {
                     <td>{item.title}</td>
                     <td>{item.slug}</td>
                     <td>{item.categoryName || item.categoryId}</td>
-                    <td>{item.editorTypeName || editorTypeLabel[item.editorTypeId] || '-'}</td>
+                    <td>{item.editorTypeName || EDITOR_TYPE_LABELS[item.editorTypeId] || '-'}</td>
                     <td>
                       <span className={`status-chip status-${item.status}`}>{item.status}</span>
                     </td>
                     <td>{formatDate(item.updatedAt)}</td>
+                    <td>
+                      <button
+                        type="button"
+                        className="ghost-btn template-action-btn"
+                        onClick={() => openTemplateEditor(item.id)}
+                      >
+                        Edit Content
+                      </button>
+                    </td>
                   </tr>
                 ))
               )}
@@ -204,8 +233,12 @@ export default function TemplateManagementPage() {
       <CreateTemplateModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onCreated={(createdTitle) => {
-          setSuccessMessage(`Template \"${createdTitle}\" created successfully.`)
+        onCreated={(createdTemplate, openEditor) => {
+          setLastCreatedTemplate(createdTemplate)
+          setSuccessMessage(`Template \"${createdTemplate.title}\" created successfully.`)
+          if (openEditor) {
+            openTemplateEditor(createdTemplate.id)
+          }
           void loadTemplates()
         }}
       />

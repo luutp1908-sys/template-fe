@@ -1,4 +1,5 @@
 import { CategoryDTO, CreateCategoryRequest } from './dtos';
+import { normalizeEditorTypeId } from '../constants/editorTypes';
 
 interface ApiEnvelope<T> {
   success: boolean;
@@ -19,7 +20,7 @@ function toCategoryDTO(item: any, sortOrder: number): CategoryDTO {
     name: item.name,
     slug: item.slug,
     parentId: item.parentId ?? null,
-    editorTypeId: item.editorTypeId,
+    editorTypeId: normalizeEditorTypeId(item.editorTypeId),
     templateCount: item.templateCount ?? 0,
     sortOrder,
     createdAt: typeof item.createdAt === 'string' ? item.createdAt : new Date(item.createdAt).toISOString(),

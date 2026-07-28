@@ -1,18 +1,13 @@
 import React, { FormEvent, useEffect, useMemo, useState } from 'react'
-import { CategoryDTO } from '../api/dtos'
+import { CategoryDTO, TemplateDTO } from '../api/dtos'
 import { fetchCategories } from '../api/categories.api'
 import { createTemplate } from '../api/templates.api'
+import { EDITOR_TYPE_LABELS } from '../constants/editorTypes'
 
 type CreateTemplateModalProps = {
   isOpen: boolean
   onClose: () => void
-  onCreated: (createdTitle: string) => void
-}
-
-const editorTypeName: Record<number, string> = {
-  0: 'Graphic',
-  1: 'Document',
-  2: 'Whiteboard',
+  onCreated: (createdTemplate: TemplateDTO, openEditor: boolean) => void
 }
 
 function toSlug(value: string) {
@@ -31,6 +26,7 @@ export default function CreateTemplateModal({ isOpen, onClose, onCreated }: Crea
   const [categories, setCategories] = useState<CategoryDTO[]>([])
   const [loadingCategories, setLoadingCategories] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [submitMode, setSubmitMode] = useState<'create' | 'create-and-edit'>('create')
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -87,7 +83,7 @@ export default function CreateTemplateModal({ isOpen, onClose, onCreated }: Crea
       setSubmitting(true)
       setError(null)
 
-      await createTemplate({
+      const createdTemplate = await createTemplate({
         title: title.trim(),
         slug: normalizedSlug,
         categoryId: selectedCategory.id,
@@ -97,12 +93,13 @@ export default function CreateTemplateModal({ isOpen, onClose, onCreated }: Crea
       setTitle('')
       setSlug('')
       setCategoryId('')
-      onCreated(title.trim())
+      onCreated(createdTemplate, submitMode === 'create-and-edit')
       onClose()
     } catch (err: any) {
       setError(err?.message ?? 'Failed to create template')
     } finally {
       setSubmitting(false)
+      setSubmitMode('create')
     }
   }
 
@@ -151,7 +148,7 @@ export default function CreateTemplateModal({ isOpen, onClose, onCreated }: Crea
             <option value="">{loadingCategories ? 'Loading categories...' : 'Select a category'}</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
-                {category.name} ({editorTypeName[category.editorTypeId] ?? `Type ${category.editorTypeId}`})
+                {category.name} ({EDITOR_TYPE_LABELS[category.editorTypeId] ?? `Type ${category.editorTypeId}`})
               </option>
             ))}
           </select>
@@ -166,8 +163,16 @@ export default function CreateTemplateModal({ isOpen, onClose, onCreated }: Crea
             <button type="button" className="ghost-btn" onClick={onClose} disabled={submitting}>
               Cancel
             </button>
+            <button
+              type="submit"
+              className="ghost-btn"
+              disabled={!canSubmit}
+              onClick={() => setSubmitMode('create-and-edit')}
+            >
+              {submitting && submitMode === 'create-and-edit' ? 'Opening editor...' : 'Create & Edit Content'}
+            </button>
             <button type="submit" className="primary-btn" disabled={!canSubmit}>
-              {submitting ? 'Creating...' : 'Create Template'}
+              {submitting && submitMode === 'create' ? 'Creating...' : 'Create Template'}
             </button>
           </div>
         </form>

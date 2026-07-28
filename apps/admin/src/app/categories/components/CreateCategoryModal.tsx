@@ -1,15 +1,13 @@
 import React, { FormEvent, useMemo, useState } from 'react'
 import { createCategory } from '../api/categories.api'
 import { useAppSelector } from '../../store/hooks'
+import { DEFAULT_EDITOR_TYPE_ID, EDITOR_TYPES, EDITOR_TYPE_LABELS } from '../constants/editorTypes'
 
 type CreateCategoryModalProps = {
   isOpen: boolean
   onClose: () => void
   onCreated: () => void
 }
-
-const DEFAULT_EDITOR_TYPE_ID =
-  Number(import.meta.env.VITE_CATEGORY_EDITOR_TYPE_ID ?? 0)
 
 export default function CreateCategoryModal({ isOpen, onClose, onCreated }: CreateCategoryModalProps) {
   const categories = useAppSelector((s) =>
@@ -18,13 +16,13 @@ export default function CreateCategoryModal({ isOpen, onClose, onCreated }: Crea
 
   const [name, setName] = useState('')
   const [slug, setSlug] = useState('')
-  const [editorTypeId, setEditorTypeId] = useState<number>(DEFAULT_EDITOR_TYPE_ID)
+  const [editorTypeId, setEditorTypeId] = useState(DEFAULT_EDITOR_TYPE_ID)
   const [parentId, setParentId] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const canSubmit = useMemo(
-    () => name.trim().length > 0 && [0, 1, 2].includes(editorTypeId) && !submitting,
+    () => name.trim().length > 0 && Number.isInteger(editorTypeId) && !submitting,
     [name, editorTypeId, submitting]
   )
 
@@ -95,9 +93,11 @@ export default function CreateCategoryModal({ isOpen, onClose, onCreated }: Crea
             onChange={(e) => setEditorTypeId(Number(e.target.value))}
             required
           >
-            <option value={0}>Graphic</option>
-            <option value={1}>Document</option>
-            <option value={2}>Whiteboard</option>
+            {EDITOR_TYPES.map((item) => (
+              <option key={item.id} value={item.id}>
+                {EDITOR_TYPE_LABELS[item.id]}
+              </option>
+            ))}
           </select>
 
           <label className="field-label" htmlFor="category-parent">Parent Category (optional)</label>

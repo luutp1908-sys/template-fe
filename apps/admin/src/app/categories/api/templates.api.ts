@@ -1,4 +1,5 @@
 import { CreateTemplateRequest, TemplateDTO } from './dtos'
+import { normalizeEditorTypeId, EDITOR_TYPE_LABELS } from '../constants/editorTypes'
 
 interface ApiEnvelope<T> {
   success: boolean
@@ -24,19 +25,6 @@ export interface TemplateListResult {
   pageSize: number
 }
 
-function parseEditorTypeId(value: unknown): number {
-  if (typeof value === 'number' && Number.isFinite(value)) return value
-  if (typeof value === 'string') {
-    const trimmed = value.trim().toLowerCase()
-    if (trimmed === 'graphic') return 0
-    if (trimmed === 'document') return 1
-    if (trimmed === 'whiteboard') return 2
-    const n = Number(trimmed)
-    if (Number.isFinite(n)) return n
-  }
-  return 0
-}
-
 function toTemplateDTO(item: any): TemplateDTO {
   return {
     id: item.id,
@@ -44,9 +32,11 @@ function toTemplateDTO(item: any): TemplateDTO {
     slug: item.slug,
     status: item.status ?? 'draft',
     categoryId: item.category?.id ?? item.categoryId ?? '',
-    editorTypeId: parseEditorTypeId(item.editorType?.id ?? item.editorTypeId ?? 0),
+    editorTypeId: normalizeEditorTypeId(item.editorType?.id ?? item.editorTypeId),
     categoryName: item.category?.name ?? '',
-    editorTypeName: item.editorType?.name ?? '',
+    editorTypeName: item.editorType?.type
+      ? EDITOR_TYPE_LABELS[normalizeEditorTypeId(item.editorType.id)]
+      : EDITOR_TYPE_LABELS[normalizeEditorTypeId(item.editorTypeId)] ?? '',
     createdAt: typeof item.createdAt === 'string' ? item.createdAt : new Date(item.createdAt).toISOString(),
     updatedAt: typeof item.updatedAt === 'string' ? item.updatedAt : new Date(item.updatedAt).toISOString(),
   }

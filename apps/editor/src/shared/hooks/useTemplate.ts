@@ -4,7 +4,7 @@ import { getAccessToken } from '../auth/tokenStore'
 
 // If draftId is provided, this hook will fetch the draft-backed endpoint
 // and return both the selected `template` content and the `draft` object.
-export const useTemplate = (templateId = 'tmpl_001', draftId?: string | null) => {
+export const useTemplate = (templateId?: string | null, draftId?: string | null) => {
   const queryClient = useQueryClient()
 
   // Draft-backed content — private, requires auth.
@@ -29,7 +29,7 @@ export const useTemplate = (templateId = 'tmpl_001', draftId?: string | null) =>
       const body = await fetchJson(`/api/v1/template-content/${templateId}`)
       return body?.data?.content ?? null
     },
-    enabled: !draftId,
+    enabled: !draftId && !!templateId,
     staleTime: 5 * 60 * 1000,
   })
 

@@ -13,16 +13,18 @@ High-level data model
   - `slug: string`
   - `description?: string`
   - `parentId?: string | null`
-  - `editorTypeId: string`
+  - `editorTypeId: number` (`0=graphic`, `1=document`, `2=whiteboard`, `3=form`)
   - `templateCount: number`
   - `sortOrder: number`
   - `createdAt: string`
   - `updatedAt: string`
   - `version?: number` — optimistic concurrency
 
-- EditorType
-  - `id: string`
-  - `name: string`
+- EditorType (hardcoded constant)
+  - `{ id: 0, type: 'graphic' }`
+  - `{ id: 1, type: 'document' }`
+  - `{ id: 2, type: 'whiteboard' }`
+  - `{ id: 3, type: 'form' }`
 
 Design decisions
 ----------------

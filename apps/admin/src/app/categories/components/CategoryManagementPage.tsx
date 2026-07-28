@@ -5,8 +5,7 @@ import CategoryDetailPanel from './CategoryDetailPanel'
 import { fetchCategories } from '../api/categories.api'
 import { useAppDispatch } from '../../store/hooks'
 import { setCategories, setError } from '../store/categories.slice'
-
-const DEFAULT_EDITOR_TYPE_ID = Number(import.meta.env.VITE_CATEGORY_EDITOR_TYPE_ID ?? 0)
+import { DEFAULT_EDITOR_TYPE_ID } from '../constants/editorTypes'
 
 export default function CategoryManagementPage() {
   const dispatch = useAppDispatch()

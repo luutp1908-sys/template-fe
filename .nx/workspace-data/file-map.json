@@ -20,10 +20,6 @@
         "hash": "727459774344292173"
       },
       {
-        "file": ".gitignore",
-        "hash": "13046175384202504187"
-      },
-      {
         "file": "nx.json",
         "hash": "9917378610941575468"
       },
@@ -32,12 +28,16 @@
         "hash": "563961152393806487"
       },
       {
-        "file": "test-results/.last-run.json",
-        "hash": "11141884120100644736"
-      },
-      {
         "file": "yarn.lock",
         "hash": "11673186063741775697"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "2070325066638866827"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "10810935158920023040"
       },
       {
         "file": "README.nx.md",
@@ -48,11 +48,129 @@
         "hash": "12775075012423230082"
       },
       {
-        "file": "package-lock.json",
-        "hash": "10810935158920023040"
+        "file": "test-results/.last-run.json",
+        "hash": "11141884120100644736"
       }
     ],
     "projectFileMap": {
+      "admin": [
+        {
+          "file": "apps/admin/docs/CATEGORY_MANAGEMENT_DESIGN.md",
+          "hash": "528432090345489567"
+        },
+        {
+          "file": "apps/admin/docs/todo-tracker.json",
+          "hash": "11004805886273190633"
+        },
+        {
+          "file": "apps/admin/index.html",
+          "hash": "1355500690598162564"
+        },
+        {
+          "file": "apps/admin/project.json",
+          "hash": "533850372054138463"
+        },
+        {
+          "file": "apps/admin/src/App.tsx",
+          "hash": "3983984402341266434"
+        },
+        {
+          "file": "apps/admin/src/app/categories/api/categories.api.ts",
+          "hash": "9547548598799436238"
+        },
+        {
+          "file": "apps/admin/src/app/categories/api/dtos.ts",
+          "hash": "12292279016425005236"
+        },
+        {
+          "file": "apps/admin/src/app/categories/api/templates.api.ts",
+          "hash": "17571940023418570498"
+        },
+        {
+          "file": "apps/admin/src/app/categories/components/CategoryDetailPanel.tsx",
+          "hash": "4196539111699234748"
+        },
+        {
+          "file": "apps/admin/src/app/categories/components/CategoryManagementPage.tsx",
+          "hash": "14244966344187055049"
+        },
+        {
+          "file": "apps/admin/src/app/categories/components/CategoryTree.tsx",
+          "hash": "15683864021306678964"
+        },
+        {
+          "file": "apps/admin/src/app/categories/components/CategoryTreePanel.tsx",
+          "hash": "15602441312697054356"
+        },
+        {
+          "file": "apps/admin/src/app/categories/components/CreateCategoryModal.tsx",
+          "hash": "3912919578307738707"
+        },
+        {
+          "file": "apps/admin/src/app/categories/components/CreateTemplateModal.tsx",
+          "hash": "14382192701102179907"
+        },
+        {
+          "file": "apps/admin/src/app/categories/components/TemplateManagementPage.tsx",
+          "hash": "5854820463200935790"
+        },
+        {
+          "file": "apps/admin/src/app/categories/components/Toolbar.tsx",
+          "hash": "7769378600868269707"
+        },
+        {
+          "file": "apps/admin/src/app/categories/components/TreeNode.tsx",
+          "hash": "14126395129985749384"
+        },
+        {
+          "file": "apps/admin/src/app/categories/components/index.ts",
+          "hash": "8066951516403502095"
+        },
+        {
+          "file": "apps/admin/src/app/categories/constants/editorTypes.ts",
+          "hash": "11340249061666517012"
+        },
+        {
+          "file": "apps/admin/src/app/categories/store/categories.slice.ts",
+          "hash": "6771381363155894987"
+        },
+        {
+          "file": "apps/admin/src/app/categories/store/selectors.ts",
+          "hash": "10516219021466434386"
+        },
+        {
+          "file": "apps/admin/src/app/categories/utils/treeUtils.ts",
+          "hash": "11503285437266890028"
+        },
+        {
+          "file": "apps/admin/src/app/store/hooks.ts",
+          "hash": "8814247913507135232"
+        },
+        {
+          "file": "apps/admin/src/app/store/index.ts",
+          "hash": "10065290927469441860"
+        },
+        {
+          "file": "apps/admin/src/global.d.ts",
+          "hash": "4540153483862992893"
+        },
+        {
+          "file": "apps/admin/src/index.css",
+          "hash": "9103688378521456267"
+        },
+        {
+          "file": "apps/admin/src/main.tsx",
+          "hash": "4034218379384655179"
+        },
+        {
+          "file": "apps/admin/tsconfig.json",
+          "hash": "3204959499965294023"
+        },
+        {
+          "file": "apps/admin/vite.config.js",
+          "hash": "5470818788146540909"
+        }
+      ],
       "editor": [
         {
           "file": "apps/editor/README.md",
@@ -120,7 +238,7 @@
         },
         {
           "file": "apps/editor/src/App.tsx",
-          "hash": "1582265725169918645"
+          "hash": "18008557443240565208"
         },
         {
           "file": "apps/editor/src/assets/hero.png",
@@ -212,7 +330,7 @@
         },
         {
           "file": "apps/editor/src/shared/api/client.ts",
-          "hash": "13130471577517093245"
+          "hash": "3617476256695074436"
         },
         {
           "file": "apps/editor/src/shared/auth/tokenStore.ts",
@@ -244,7 +362,7 @@
         },
         {
           "file": "apps/editor/src/shared/hooks/useTemplate.ts",
-          "hash": "17341480183484135767"
+          "hash": "142050227998079348"
         },
         {
           "file": "apps/editor/src/shared/types/editor.ts",
@@ -272,121 +390,7 @@
         },
         {
           "file": "apps/editor/vite.config.js",
-          "hash": "5517292966376885498"
-        }
-      ],
-      "admin": [
-        {
-          "file": "apps/admin/docs/CATEGORY_MANAGEMENT_DESIGN.md",
-          "hash": "5903381322358508129"
-        },
-        {
-          "file": "apps/admin/docs/todo-tracker.json",
-          "hash": "11004805886273190633"
-        },
-        {
-          "file": "apps/admin/index.html",
-          "hash": "1355500690598162564"
-        },
-        {
-          "file": "apps/admin/project.json",
-          "hash": "533850372054138463"
-        },
-        {
-          "file": "apps/admin/src/App.tsx",
-          "hash": "3983984402341266434"
-        },
-        {
-          "file": "apps/admin/src/app/categories/api/categories.api.ts",
-          "hash": "7974575247201909773"
-        },
-        {
-          "file": "apps/admin/src/app/categories/api/dtos.ts",
-          "hash": "11175575204595745105"
-        },
-        {
-          "file": "apps/admin/src/app/categories/api/templates.api.ts",
-          "hash": "7884126907997361554"
-        },
-        {
-          "file": "apps/admin/src/app/categories/components/CategoryDetailPanel.tsx",
-          "hash": "10048901037233101014"
-        },
-        {
-          "file": "apps/admin/src/app/categories/components/CategoryManagementPage.tsx",
-          "hash": "3060803716443003164"
-        },
-        {
-          "file": "apps/admin/src/app/categories/components/CategoryTree.tsx",
-          "hash": "15683864021306678964"
-        },
-        {
-          "file": "apps/admin/src/app/categories/components/CategoryTreePanel.tsx",
-          "hash": "15602441312697054356"
-        },
-        {
-          "file": "apps/admin/src/app/categories/components/CreateCategoryModal.tsx",
-          "hash": "18445301483586356087"
-        },
-        {
-          "file": "apps/admin/src/app/categories/components/CreateTemplateModal.tsx",
-          "hash": "6554025587368837718"
-        },
-        {
-          "file": "apps/admin/src/app/categories/components/TemplateManagementPage.tsx",
-          "hash": "11913750882872719580"
-        },
-        {
-          "file": "apps/admin/src/app/categories/components/Toolbar.tsx",
-          "hash": "7769378600868269707"
-        },
-        {
-          "file": "apps/admin/src/app/categories/components/TreeNode.tsx",
-          "hash": "14126395129985749384"
-        },
-        {
-          "file": "apps/admin/src/app/categories/components/index.ts",
-          "hash": "8066951516403502095"
-        },
-        {
-          "file": "apps/admin/src/app/categories/store/categories.slice.ts",
-          "hash": "6771381363155894987"
-        },
-        {
-          "file": "apps/admin/src/app/categories/store/selectors.ts",
-          "hash": "10516219021466434386"
-        },
-        {
-          "file": "apps/admin/src/app/categories/utils/treeUtils.ts",
-          "hash": "11503285437266890028"
-        },
-        {
-          "file": "apps/admin/src/app/store/hooks.ts",
-          "hash": "8814247913507135232"
-        },
-        {
-          "file": "apps/admin/src/app/store/index.ts",
-          "hash": "10065290927469441860"
-        },
-        {
-          "file": "apps/admin/src/global.d.ts",
-          "hash": "16702849627393673146"
-        },
-        {
-          "file": "apps/admin/src/index.css",
-          "hash": "5318729510127770882"
-        },
-        {
-          "file": "apps/admin/src/main.tsx",
-          "hash": "4034218379384655179"
-        },
-        {
-          "file": "apps/admin/tsconfig.json",
-          "hash": "3204959499965294023"
-        },
-        {
-          "file": "apps/admin/vite.config.js",
-          "hash": "16800205413230004650"
+          "hash": "3211989133134468904"
         }
       ]
     }
