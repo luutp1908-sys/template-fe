@@ -65,14 +65,20 @@ export async function fetchCurrentUser() {
   // if unauthorized, try to refresh tokens once and retry
   if (res.status === 401) {
     const refreshed = await refreshTokens()
-    if (!refreshed) return null
+    if (!refreshed) {
+      logoutAdmin()
+      return null
+    }
     // refresh response includes user context; return immediately if present
     if (refreshed.user) return refreshed.user
     // otherwise retry /me with new token
     const headers2: Record<string, string> = {}
     if (currentAccessToken) headers2['Authorization'] = `Bearer ${currentAccessToken}`
     const res2 = await fetch(`${base}/api/v1/auth/me`, { credentials: 'include', headers: headers2 })
-    if (!res2.ok) return null
+    if (!res2.ok) {
+      logoutAdmin()
+      return null
+    }
     const body2 = (await res2.json()) as ApiEnvelope<AuthUser>
     return body2?.data ?? null
   }

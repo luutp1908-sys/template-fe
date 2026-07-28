@@ -301,18 +301,15 @@ function App() {
       return
     }
 
-    const resolvedTemplateId = shouldSaveCanonical
-      ? templateIdFromQuery
-      : (template?.id ?? template?.templateId ?? defaultLocalTemplate.id)
-
-    if (!resolvedTemplateId) {
-      console.warn('No template loaded to save')
-      return
-    }
-
     setIsSaving(true)
     try {
       if (shouldSaveCanonical) {
+        const resolvedTemplateId = templateIdFromQuery
+        if (!resolvedTemplateId) {
+          console.warn('No template loaded to save')
+          return
+        }
+
         await putJson(`/api/v1/template-content/${resolvedTemplateId}`, {
           content: { pages: editor.pages },
         })
@@ -320,28 +317,12 @@ function App() {
         return
       }
 
-      // ensure templateId is a UUID to satisfy backend DTO validation
-      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-      let templateIdToSend = String(resolvedTemplateId)
-      if (!uuidRegex.test(templateIdToSend)) {
-        // use browser crypto.randomUUID when available
-        try {
-          // @ts-ignore - crypto.randomUUID exists in modern browsers
-          templateIdToSend = (typeof crypto !== 'undefined' && (crypto as any).randomUUID)
-            ? (crypto as any).randomUUID()
-            : templateIdToSend
-        } catch (e) {
-          // fallback: leave as-is (server mock may still accept), but prefer a generated UUID
-        }
-      }
-
       const payload = {
-        templateId: templateIdToSend,
         name: template?.title || template?.name || `Draft ${new Date().toISOString()}`,
         content: { pages: editor.pages },
       }
       if (localDraftId) {
-        const res = await patchJson(`/api/v1/user-draft/${localDraftId}`, payload)
+        await patchJson(`/api/v1/user-draft/${localDraftId}`, payload)
         console.info('Draft updated')
         return
       }

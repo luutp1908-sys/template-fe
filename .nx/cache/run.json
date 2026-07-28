@@ -1,21 +1,21 @@
 {
   "run": {
-    "command": "nx serve editor",
-    "startTime": "2026-07-28T15:10:43.971Z",
-    "endTime": "2026-07-28T18:21:06.335Z",
+    "command": "nx build admin --silent",
+    "startTime": "2026-07-28T19:25:44.206Z",
+    "endTime": "2026-07-28T19:25:47.319Z",
     "inner": false
   },
   "tasks": [
     {
-      "taskId": "editor:serve",
-      "target": "serve",
-      "projectName": "editor",
-      "hash": "14421595345245926654",
-      "startTime": "2026-07-28T15:10:44.005Z",
-      "endTime": "2026-07-28T18:21:06.282Z",
+      "taskId": "admin:build",
+      "target": "build",
+      "projectName": "admin",
+      "hash": "10329833956324940403",
+      "startTime": "2026-07-28T19:25:44.308Z",
+      "endTime": "2026-07-28T19:25:47.307Z",
       "params": "",
       "cacheStatus": "cache-miss",
-      "status": 1
+      "status": 0
     }
   ]
 }
