@@ -79,6 +79,8 @@ export interface TemplateDTO {
   status: 'draft' | 'published' | 'archived';
   categoryId: string;
   editorTypeId: number;
+  categoryName?: string;
+  editorTypeName?: string;
   createdAt: string;
   updatedAt: string;
 }

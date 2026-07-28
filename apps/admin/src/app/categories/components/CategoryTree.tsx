@@ -1,5 +1,5 @@
 import React from 'react'
-import { DndContext, closestCenter, DragOverlay } from '@dnd-kit/core'
+import { DndContext, closestCenter, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useAppSelector, useAppDispatch } from '../../store/hooks'
 import { selectTreeRootsForEditor, selectCategoriesById, selectExpandedIds } from '../store/selectors'
@@ -14,6 +14,13 @@ export default function CategoryTree({ editorTypeId }: { editorTypeId?: number }
   const childrenByParent = useAppSelector((s) => s.categories.childrenByParent)
   const roots = useAppSelector((s) => selectTreeRootsForEditor(s, editorTypeId))
   const expandedIds = useAppSelector(selectExpandedIds)
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    })
+  )
 
   const flattened = flattenTree(roots, byId, childrenByParent, expandedIds)
 
@@ -82,7 +89,7 @@ export default function CategoryTree({ editorTypeId }: { editorTypeId?: number }
   }
 
   return (
-    <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <SortableContext items={flattened.map((n) => n.id)} strategy={verticalListSortingStrategy}>
         <div role="tree" aria-label="Category tree">
           {flattened.map((n) => (
