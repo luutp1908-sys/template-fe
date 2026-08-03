@@ -16,28 +16,12 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "yarn.lock",
-        "hash": "11673186063741775697"
-      },
-      {
-        "file": "package.json",
-        "hash": "727459774344292173"
-      },
-      {
-        "file": "test-results/.last-run.json",
-        "hash": "11141884120100644736"
-      },
-      {
-        "file": "package-lock.json",
-        "hash": "10810935158920023040"
+        "file": ".github/copilot-instructions.md",
+        "hash": "563961152393806487"
       },
       {
         "file": ".gitignore",
         "hash": "2070325066638866827"
-      },
-      {
-        "file": "tsconfig.base.json",
-        "hash": "12775075012423230082"
       },
       {
         "file": "README.nx.md",
@@ -48,8 +32,24 @@
         "hash": "9917378610941575468"
       },
       {
-        "file": ".github/copilot-instructions.md",
-        "hash": "563961152393806487"
+        "file": "package-lock.json",
+        "hash": "10810935158920023040"
+      },
+      {
+        "file": "package.json",
+        "hash": "727459774344292173"
+      },
+      {
+        "file": "test-results/.last-run.json",
+        "hash": "11141884120100644736"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "12775075012423230082"
+      },
+      {
+        "file": "yarn.lock",
+        "hash": "11673186063741775697"
       }
     ],
     "projectFileMap": {
