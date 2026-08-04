@@ -119,6 +119,14 @@ const defaultLocalTemplate = {
 function App() {
   const searchParams = useMemo(() => new URLSearchParams(window.location.search), [])
   const templateIdFromQuery = useMemo(() => searchParams.get('templateId'), [searchParams])
+  const workspaceIdFromQuery = useMemo(() => searchParams.get('workspaceId'), [searchParams])
+  const workspaceIdFromStorage = useMemo(() => {
+    try {
+      return window.sessionStorage.getItem('homepage_active_workspace_id')
+    } catch {
+      return null
+    }
+  }, [])
   const adminEditParam = useMemo(() => (searchParams.get('adminEdit') || '').toLowerCase(), [searchParams])
   const isAdminEditMode = adminEditParam === '1' || adminEditParam === 'true'
 
@@ -137,8 +145,10 @@ function App() {
   const canonicalTemplateId = draftIdFromPath ? null : (templateIdFromQuery || null)
   const { template, draft, loading, error } = useTemplate(canonicalTemplateId, draftIdFromPath ?? undefined)
   if (error) console.error('Template load error:', error)
+  const activeWorkspaceId = workspaceIdFromQuery || draft?.workspaceId || workspaceIdFromStorage || null
 
   const [authModalOpen, setAuthModalOpen] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
 
   const editor = useEditor(template || defaultLocalTemplate)
   const [isSaving, setIsSaving] = useState(false)
@@ -295,12 +305,19 @@ function App() {
 
   const handleSave = useCallback(async () => {
     const shouldSaveCanonical = !draftIdFromPath && isAdminEditMode && !!templateIdFromQuery
+    const isCreatingNewDraft = !localDraftId && !draftIdFromPath
 
     if (!user && !shouldSaveCanonical) {
       setAuthModalOpen(true)
       return
     }
 
+    if (!shouldSaveCanonical && isCreatingNewDraft && !activeWorkspaceId) {
+      setSaveError('Please select a workspace before saving this template as a draft.')
+      return
+    }
+
+    setSaveError(null)
     setIsSaving(true)
     try {
       if (shouldSaveCanonical) {
@@ -320,6 +337,7 @@ function App() {
       const payload = {
         name: template?.title || template?.name || `Draft ${new Date().toISOString()}`,
         content: { pages: editor.pages },
+        ...(activeWorkspaceId ? { workspaceId: activeWorkspaceId } : {}),
       }
       if (localDraftId) {
         await patchJson(`/api/v1/user-draft/${localDraftId}`, payload)
@@ -330,7 +348,9 @@ function App() {
       const res = await postJson('/api/v1/user-draft', payload)
       const id = res?.data?.id ?? null
       if (id) {
-        window.history.replaceState({}, '', `/draft/${encodeURIComponent(id)}`)
+        const nextPath = `/draft/${encodeURIComponent(id)}`
+        const nextQuery = activeWorkspaceId ? `?workspaceId=${encodeURIComponent(activeWorkspaceId)}` : ''
+        window.history.replaceState({}, '', `${nextPath}${nextQuery}`)
         setLocalDraftId(id)
       }
       console.info('Draft saved')
@@ -340,7 +360,7 @@ function App() {
     } finally {
       setIsSaving(false)
     }
-  }, [user, draftIdFromPath, isAdminEditMode, templateIdFromQuery, template, editor.pages])
+  }, [user, draftIdFromPath, isAdminEditMode, templateIdFromQuery, template, editor.pages, activeWorkspaceId, localDraftId])
 
   const shouldSaveCanonical = !draftIdFromPath && isAdminEditMode && !!templateIdFromQuery
 
@@ -365,6 +385,7 @@ function App() {
             {isSaving ? 'Saving…' : shouldSaveCanonical ? 'Save Template Content' : 'Save Draft'}
           </SaveButton>
         </HeaderContent>
+        {saveError ? <p style={{ margin: '0 20px', color: '#b91c1c', fontSize: '0.85rem' }}>{saveError}</p> : null}
       </TopHeader>
 
       <AppContainer>
