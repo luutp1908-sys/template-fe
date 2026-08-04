@@ -16,6 +16,12 @@ import AuthModal from './widgets/AuthModal'
 import useAuth from './shared/hooks/useAuth'
 import { Sidebar } from './widgets/Sidebar'
 import { Canvas } from './features/canvas/Canvas'
+import {
+  clearStoredActiveWorkspaceId,
+  fetchActiveWorkspaceIdFromBridge,
+  getStoredActiveWorkspaceId,
+  storeActiveWorkspaceId,
+} from './shared/workspaces/activeWorkspaceBridge'
 import type { EditorObject } from './shared/types/editor'
 
 const AppShell = styled.div`
@@ -120,13 +126,6 @@ function App() {
   const searchParams = useMemo(() => new URLSearchParams(window.location.search), [])
   const templateIdFromQuery = useMemo(() => searchParams.get('templateId'), [searchParams])
   const workspaceIdFromQuery = useMemo(() => searchParams.get('workspaceId'), [searchParams])
-  const workspaceIdFromStorage = useMemo(() => {
-    try {
-      return window.sessionStorage.getItem('homepage_active_workspace_id')
-    } catch {
-      return null
-    }
-  }, [])
   const adminEditParam = useMemo(() => (searchParams.get('adminEdit') || '').toLowerCase(), [searchParams])
   const isAdminEditMode = adminEditParam === '1' || adminEditParam === 'true'
 
@@ -141,11 +140,13 @@ function App() {
 
   const auth = useAuth()
   const { user } = auth
+  const [bridgeWorkspaceId, setBridgeWorkspaceId] = useState<string | null>(() => getStoredActiveWorkspaceId())
+  const [bridgeWorkspaceResolved, setBridgeWorkspaceResolved] = useState(false)
 
   const canonicalTemplateId = draftIdFromPath ? null : (templateIdFromQuery || null)
   const { template, draft, loading, error } = useTemplate(canonicalTemplateId, draftIdFromPath ?? undefined)
   if (error) console.error('Template load error:', error)
-  const activeWorkspaceId = workspaceIdFromQuery || draft?.workspaceId || workspaceIdFromStorage || null
+  const activeWorkspaceId = bridgeWorkspaceId || draft?.workspaceId || workspaceIdFromQuery || null
 
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
@@ -196,6 +197,45 @@ function App() {
   useEffect(() => {
     if (draft?.id) setLocalDraftId(draft.id)
   }, [draft])
+
+  useEffect(() => {
+    let cancelled = false
+
+    const run = async () => {
+      try {
+        const workspaceId = await fetchActiveWorkspaceIdFromBridge()
+        if (cancelled) return
+
+        if (workspaceId) {
+          setBridgeWorkspaceId(workspaceId)
+          return
+        }
+
+        setBridgeWorkspaceId((prev) => {
+          if (!prev) return null
+          clearStoredActiveWorkspaceId()
+          return null
+        })
+      } catch {
+        // Keep local fallback path when homepage bridge is unavailable.
+      } finally {
+        if (!cancelled) {
+          setBridgeWorkspaceResolved(true)
+        }
+      }
+    }
+
+    run()
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!activeWorkspaceId) return
+    storeActiveWorkspaceId(activeWorkspaceId)
+  }, [activeWorkspaceId])
 
   const handleAddShape = () => {
     editor.addObject('rect', {
@@ -313,6 +353,11 @@ function App() {
     }
 
     if (!shouldSaveCanonical && isCreatingNewDraft && !activeWorkspaceId) {
+      if (!bridgeWorkspaceResolved) {
+        setSaveError('Resolving active workspace context. Please try saving again in a moment.')
+        return
+      }
+
       setSaveError('Please select a workspace before saving this template as a draft.')
       return
     }
@@ -349,8 +394,7 @@ function App() {
       const id = res?.data?.id ?? null
       if (id) {
         const nextPath = `/draft/${encodeURIComponent(id)}`
-        const nextQuery = activeWorkspaceId ? `?workspaceId=${encodeURIComponent(activeWorkspaceId)}` : ''
-        window.history.replaceState({}, '', `${nextPath}${nextQuery}`)
+        window.history.replaceState({}, '', nextPath)
         setLocalDraftId(id)
       }
       console.info('Draft saved')
@@ -360,7 +404,17 @@ function App() {
     } finally {
       setIsSaving(false)
     }
-  }, [user, draftIdFromPath, isAdminEditMode, templateIdFromQuery, template, editor.pages, activeWorkspaceId, localDraftId])
+  }, [
+    user,
+    draftIdFromPath,
+    isAdminEditMode,
+    templateIdFromQuery,
+    template,
+    editor.pages,
+    activeWorkspaceId,
+    localDraftId,
+    bridgeWorkspaceResolved,
+  ])
 
   const shouldSaveCanonical = !draftIdFromPath && isAdminEditMode && !!templateIdFromQuery
 

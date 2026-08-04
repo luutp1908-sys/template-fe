@@ -7,6 +7,8 @@ declare module '*.svg'
 interface ImportMetaEnv {
   readonly VITE_API_BASE?: string
   readonly VITE_API_ORIGIN?: string
+  readonly VITE_HOMEPAGE_ORIGIN?: string
+  readonly VITE_HOMEPAGE_URL?: string
   readonly MODE?: string
   readonly DEV?: boolean
   readonly PROD?: boolean
