@@ -1,6 +1,6 @@
 {
   "version": "6.0",
-  "nxVersion": "23.1.0",
+  "nxVersion": "23.1.1",
   "pathMappings": {
     "@editor/*": [
       "apps/editor/src/*"
@@ -16,24 +16,40 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "package-lock.json",
-        "hash": "10810935158920023040"
-      },
-      {
-        "file": ".gitignore",
-        "hash": "2070325066638866827"
-      },
-      {
         "file": "package.json",
-        "hash": "727459774344292173"
+        "hash": "16593524440016082591"
+      },
+      {
+        "file": "yarn.lock",
+        "hash": "2180998519155062469"
+      },
+      {
+        "file": "PROJECT_CONTEXT.md",
+        "hash": "190274584879683839"
+      },
+      {
+        "file": "nx.json",
+        "hash": "9917378610941575468"
       },
       {
         "file": "tsconfig.base.json",
         "hash": "12775075012423230082"
       },
       {
-        "file": "nx.json",
-        "hash": "9917378610941575468"
+        "file": "test-results/.last-run.json",
+        "hash": "11141884120100644736"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "2070325066638866827"
+      },
+      {
+        "file": ".storybook/preview.ts",
+        "hash": "16363248719033371589"
+      },
+      {
+        "file": ".storybook/main.ts",
+        "hash": "7926010696189104013"
       },
       {
         "file": "README.nx.md",
@@ -42,18 +58,6 @@
       {
         "file": ".github/copilot-instructions.md",
         "hash": "563961152393806487"
-      },
-      {
-        "file": "yarn.lock",
-        "hash": "11673186063741775697"
-      },
-      {
-        "file": "test-results/.last-run.json",
-        "hash": "11141884120100644736"
-      },
-      {
-        "file": "PROJECT_CONTEXT.md",
-        "hash": "190274584879683839"
       }
     ],
     "projectFileMap": {
@@ -124,7 +128,7 @@
         },
         {
           "file": "apps/editor/src/App.tsx",
-          "hash": "3585888048376515817"
+          "hash": "14743575927167671145"
         },
         {
           "file": "apps/editor/src/assets/hero.png",
@@ -204,7 +208,7 @@
         },
         {
           "file": "apps/editor/src/global.d.ts",
-          "hash": "18113466401432664784"
+          "hash": "4864663136318082423"
         },
         {
           "file": "apps/editor/src/index.css",
@@ -255,12 +259,24 @@
           "hash": "8913721436230768637"
         },
         {
+          "file": "apps/editor/src/shared/workspaces/activeWorkspaceBridge.ts",
+          "hash": "2965232933887501639"
+        },
+        {
           "file": "apps/editor/src/test/setup.ts",
           "hash": "8528460375559093105"
         },
         {
           "file": "apps/editor/src/widgets/AuthModal.tsx",
-          "hash": "3681425981959905409"
+          "hash": "17440511787962392329"
+        },
+        {
+          "file": "apps/editor/src/widgets/LoginPopup.stories.tsx",
+          "hash": "7733005339807786309"
+        },
+        {
+          "file": "apps/editor/src/widgets/LoginPopup.tsx",
+          "hash": "13477973742414183874"
         },
         {
           "file": "apps/editor/src/widgets/MenuBar.tsx",
@@ -407,5 +423,5 @@
       ]
     }
   },
-  "externalNodesHash": "5916978317463778950"
+  "externalNodesHash": "17468515648047513304"
 }

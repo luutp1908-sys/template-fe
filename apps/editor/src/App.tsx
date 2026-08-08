@@ -12,7 +12,7 @@ import {
 import { HEADER_HEIGHT } from './shared/constants/layout'
 import { MenuBar } from './widgets/MenuBar'
 import FRAME_PRESETS from './data/framePresets'
-import AuthModal from './widgets/AuthModal'
+import AuthModal from './widgets/LoginPopup'
 import useAuth from './shared/hooks/useAuth'
 import { Sidebar } from './widgets/Sidebar'
 import { Canvas } from './features/canvas/Canvas'
