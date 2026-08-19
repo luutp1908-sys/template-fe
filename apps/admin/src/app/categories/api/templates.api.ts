@@ -68,6 +68,18 @@ export async function fetchTemplates(query: TemplateListQuery): Promise<Template
   }
 }
 
+export async function fetchCategoryTemplates(categoryId: string): Promise<TemplateDTO[]> {
+  const response = await fetch(`${API_BASE}/category/${categoryId}/templates`)
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch category templates: ${response.status}`)
+  }
+
+  const json = (await response.json()) as ApiEnvelope<any>
+  const rows = Array.isArray(json?.data) ? json.data : []
+  return rows.map(toTemplateDTO)
+}
+
 export async function createTemplate(payload: CreateTemplateRequest): Promise<TemplateDTO> {
   const accessToken = sessionStorage.getItem('admin_access_token')
   const response = await fetch(`${API_BASE}/template`, {

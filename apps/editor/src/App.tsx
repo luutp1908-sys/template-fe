@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { computeFitZoom, useEditor } from './shared/hooks/useEditor'
 import { DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_HEIGHT, DEFAULT_TEXT_WIDTH, DEFAULT_TEXT_HEIGHT, DEFAULT_TEXT_COLOR, DEFAULT_TEXT_FONT_SIZE } from './shared/constants/editorGeometry'
 import useTemplate from './shared/hooks/useTemplate'
-import { postJson, patchJson, putJson } from './shared/api/client'
+import { postJson, patchJson, putJson, getApiBase, fetchJson, fetchBlob } from './shared/api/client'
 import {
   PAGE_HEIGHT,
   PAGE_WIDTH,
@@ -96,6 +96,27 @@ const SaveButton = styled.button`
   }
 `
 
+const SecondaryButton = styled.button`
+  padding: 8px 12px;
+  background: #eef4ff;
+  color: #1248a8;
+  border: 1px solid #cfe0ff;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+`
+
+const ActionGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`
+
 const AppContainer = styled.div`
   display: flex;
   width: 100%;
@@ -150,9 +171,12 @@ function App() {
 
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
+  const [exportError, setExportError] = useState<string | null>(null)
+  const [isExporting, setIsExporting] = useState(false)
 
   const editor = useEditor(template || defaultLocalTemplate)
   const [isSaving, setIsSaving] = useState(false)
+  const exportPollRef = useRef<number | null>(null)
   const [name, setName] = useState('untitled')
   const [localDraftId, setLocalDraftId] = useState<string | null>(null)
   const [sidebarPanel, setSidebarPanel] = useState<'none' | 'image' | 'background' | 'layers' | 'frames'>('none')
@@ -343,6 +367,13 @@ function App() {
     setSidebarPanel('background')
   }
 
+  const stopExportPolling = useCallback(() => {
+    if (exportPollRef.current !== null) {
+      window.clearInterval(exportPollRef.current)
+      exportPollRef.current = null
+    }
+  }, [])
+
   const handleSave = useCallback(async () => {
     const shouldSaveCanonical = !draftIdFromPath && isAdminEditMode && !!templateIdFromQuery
     const isCreatingNewDraft = !localDraftId && !draftIdFromPath
@@ -416,6 +447,94 @@ function App() {
     bridgeWorkspaceResolved,
   ])
 
+  const handleDownloadPdf = useCallback(async () => {
+    if (!user) {
+      setAuthModalOpen(true)
+      return
+    }
+
+    const payload = {
+      format: 'pdf',
+      content: { pages: editor.pages },
+      ...(draft?.id ? { draftId: draft.id } : {}),
+      ...(templateIdFromQuery ? { templateId: templateIdFromQuery } : {}),
+      ...(activeWorkspaceId ? { workspaceId: activeWorkspaceId } : {}),
+      templateName: template?.title || template?.name || 'template',
+    }
+
+    setExportError(null)
+    setIsExporting(true)
+    try {
+      const created = await postJson('/api/v1/export/jobs', payload)
+      const jobId = created?.id ?? created?.data?.id
+      if (!jobId) {
+        throw new Error('Export job was not created')
+      }
+
+      const pollJob = async () => {
+        try {
+          const statusRes = await fetchJson(`/api/v1/export/jobs/${jobId}`)
+          const job = statusRes?.data ?? statusRes
+          const nextStatus = job?.status
+
+          if (nextStatus === 'completed') {
+            stopExportPolling()
+            setIsExporting(false)
+
+            try {
+              const blob = await fetchBlob(`/api/v1/export/jobs/${jobId}/download`)
+              const url = URL.createObjectURL(blob)
+              const link = document.createElement('a')
+              link.href = url
+              link.setAttribute('download', job?.fileName || `${payload.templateName || 'template'}.pdf`)
+              document.body.appendChild(link)
+              link.click()
+              link.remove()
+              URL.revokeObjectURL(url)
+              return
+            } catch (downloadError) {
+              console.error('Failed to download export PDF via fetch', downloadError)
+              setExportError(downloadError instanceof Error ? downloadError.message : 'Unable to download PDF export')
+            }
+            return
+          }
+
+          if (nextStatus === 'failed') {
+            stopExportPolling()
+            setIsExporting(false)
+            setExportError(job?.errorMessage || 'PDF export failed')
+          }
+        } catch (error) {
+          stopExportPolling()
+          setIsExporting(false)
+          setExportError(error instanceof Error ? error.message : 'Unable to track export job status')
+        }
+      }
+
+      await pollJob()
+      exportPollRef.current = window.setInterval(() => {
+        void pollJob()
+      }, 1500)
+    } catch (error) {
+      setIsExporting(false)
+      setExportError(error instanceof Error ? error.message : 'Unable to start PDF export')
+    }
+  }, [
+    user,
+    draft,
+    template,
+    templateIdFromQuery,
+    activeWorkspaceId,
+    editor.pages,
+    stopExportPolling,
+  ])
+
+  useEffect(() => {
+    return () => {
+      stopExportPolling()
+    }
+  }, [stopExportPolling])
+
   const shouldSaveCanonical = !draftIdFromPath && isAdminEditMode && !!templateIdFromQuery
 
   return (
@@ -435,11 +554,17 @@ function App() {
             />
             <ZoomValue>{Math.round(editor.zoom * 100)}%</ZoomValue>
           </ZoomControl>
-          <SaveButton onClick={handleSave} disabled={isSaving}>
-            {isSaving ? 'Saving…' : shouldSaveCanonical ? 'Save Template Content' : 'Save Draft'}
-          </SaveButton>
+          <ActionGroup>
+            <SecondaryButton onClick={handleDownloadPdf} disabled={isSaving || isExporting}>
+              {isExporting ? 'Exporting…' : 'Download PDF'}
+            </SecondaryButton>
+            <SaveButton onClick={handleSave} disabled={isSaving || isExporting}>
+              {isSaving ? 'Saving…' : shouldSaveCanonical ? 'Save Template Content' : 'Save Draft'}
+            </SaveButton>
+          </ActionGroup>
         </HeaderContent>
         {saveError ? <p style={{ margin: '0 20px', color: '#b91c1c', fontSize: '0.85rem' }}>{saveError}</p> : null}
+        {exportError ? <p style={{ margin: '0 20px', color: '#b91c1c', fontSize: '0.85rem' }}>{exportError}</p> : null}
       </TopHeader>
 
       <AppContainer>

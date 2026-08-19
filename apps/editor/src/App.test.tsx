@@ -1,21 +1,66 @@
-import { fireEvent, render, screen } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import App from './App'
+import { postJson, fetchJson, setAuthHeaderGetter, fetchBlob } from './shared/api/client'
+
+afterEach(() => {
+  cleanup()
+})
 
 vi.mock('react-moveable', () => ({
   default: () => null,
 }))
 
+vi.mock('./shared/hooks/useAuth', () => ({
+  default: () => ({
+    user: { id: 'user-1', email: 'test@example.com' },
+    loading: false,
+    error: null,
+    signIn: vi.fn(),
+    signUp: vi.fn(),
+    logout: vi.fn(),
+    refresh: vi.fn(),
+    me: vi.fn(),
+    signInState: {},
+    signUpState: {},
+  }),
+}))
+
+vi.mock('./shared/api/client', async () => {
+  const actual = await vi.importActual<typeof import('./shared/api/client')>('./shared/api/client')
+  return {
+    ...actual,
+    postJson: vi.fn(),
+    fetchJson: vi.fn(),
+  }
+})
+
+function renderApp() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false },
+    },
+  })
+
+  return render(
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>,
+  )
+}
+
 describe('App integration', () => {
   it('renders initial layers in sidebar', () => {
-    render(<App />)
+    renderApp()
 
     expect(screen.getByText('Shape 1')).toBeInTheDocument()
     expect(screen.getByText('Text 2')).toBeInTheDocument()
   })
 
   it('does not render a properties panel', () => {
-    render(<App />)
+    renderApp()
 
     fireEvent.click(screen.getByText('Your design'))
     fireEvent.click(screen.getByTestId('canvas-area'))
@@ -24,7 +69,7 @@ describe('App integration', () => {
   })
 
   it('wires add and delete actions across menu and sidebar', () => {
-    render(<App />)
+    renderApp()
 
     expect(screen.getAllByTitle('Delete')).toHaveLength(2)
 
@@ -41,7 +86,7 @@ describe('App integration', () => {
   })
 
   it('enters text edit mode on double click and saves on blur', () => {
-    render(<App />)
+    renderApp()
 
     const textNode = screen.getByText('Your design')
     fireEvent.doubleClick(textNode)
@@ -54,7 +99,7 @@ describe('App integration', () => {
   })
 
   it('cancels text edit on Escape and restores previous value', () => {
-    render(<App />)
+    renderApp()
 
     const textNode = screen.getByText('Your design')
     fireEvent.doubleClick(textNode)
@@ -68,7 +113,7 @@ describe('App integration', () => {
   })
 
   it('auto-grows text box height while typing long wrapped content', () => {
-    render(<App />)
+    renderApp()
 
     const textObject = screen.getByTestId('canvas-object-2')
     const initialHeight = Number.parseFloat(textObject.style.height)
@@ -94,7 +139,7 @@ describe('App integration', () => {
   })
 
   it('opens stock list in sidebar from add image menu action', () => {
-    render(<App />)
+    renderApp()
 
     fireEvent.click(screen.getByTitle('Add Image'))
 
@@ -102,7 +147,7 @@ describe('App integration', () => {
   })
 
   it('adds image layer from left stock list', () => {
-    render(<App />)
+    renderApp()
 
     fireEvent.click(screen.getByTitle('Add Image'))
     fireEvent.click(screen.getByLabelText('Stock Mountain Lake'))
@@ -111,7 +156,7 @@ describe('App integration', () => {
   })
 
   it('selects stock image from left menu stock list', () => {
-    render(<App />)
+    renderApp()
 
     fireEvent.click(screen.getByTitle('Add Image'))
     fireEvent.click(screen.getByLabelText('Stock Mountain Lake'))
@@ -123,7 +168,7 @@ describe('App integration', () => {
   })
 
   it('closes stock list when switching to a non-image tool', () => {
-    render(<App />)
+    renderApp()
 
     fireEvent.click(screen.getByTitle('Add Image'))
     expect(screen.getByLabelText('Left Stock Panel')).toBeInTheDocument()
@@ -133,7 +178,7 @@ describe('App integration', () => {
   })
 
   it('opens background sidebar from menu bar', () => {
-    render(<App />)
+    renderApp()
 
     fireEvent.click(screen.getByTitle('Background'))
 
@@ -143,7 +188,7 @@ describe('App integration', () => {
   })
 
   it('shows inline toolbar for selected object and hides on backdrop click', () => {
-    render(<App />)
+    renderApp()
 
     fireEvent.click(screen.getByText('Your design'))
     expect(screen.getByLabelText('Inline Toolbar')).toBeInTheDocument()
@@ -153,7 +198,7 @@ describe('App integration', () => {
   })
 
   it('duplicates selected object from inline toolbar', () => {
-    render(<App />)
+    renderApp()
 
     fireEvent.click(screen.getByText('Your design'))
     fireEvent.click(screen.getByLabelText('Duplicate Selected'))
@@ -162,7 +207,7 @@ describe('App integration', () => {
   })
 
   it('toggles lock and unlock labels from inline toolbar', () => {
-    render(<App />)
+    renderApp()
 
     fireEvent.click(screen.getByText('Your design'))
     const lockButton = screen.getByLabelText('Lock Selected')
@@ -175,7 +220,7 @@ describe('App integration', () => {
   })
 
   it('deletes selected object from inline toolbar', () => {
-    render(<App />)
+    renderApp()
 
     fireEvent.click(screen.getByText('Your design'))
     fireEvent.click(screen.getByLabelText('Delete Selected'))
@@ -184,7 +229,7 @@ describe('App integration', () => {
   })
 
   it('updates page background color from background sidebar picker', () => {
-    render(<App />)
+    renderApp()
 
     fireEvent.click(screen.getByTitle('Background'))
     fireEvent.change(screen.getByLabelText('Background Sidebar Color'), { target: { value: '#ff0000' } })
@@ -195,12 +240,60 @@ describe('App integration', () => {
   })
 
   it('sets page background image from background sidebar stock list', () => {
-    render(<App />)
+    renderApp()
 
     fireEvent.click(screen.getByTitle('Background'))
     fireEvent.click(screen.getByLabelText('Stock Mountain Lake'))
 
     const backgroundImage = getComputedStyle(screen.getByTestId('page-surface')).backgroundImage
     expect(backgroundImage).toContain('picsum.photos')
+  })
+
+  it('creates an export job and starts polling when download pdf is clicked', async () => {
+    vi.mocked(postJson).mockResolvedValue({ id: 'exp_123' })
+    vi.mocked(fetchJson)
+      .mockResolvedValueOnce({ id: 'exp_123', status: 'pending' })
+      .mockResolvedValueOnce({ id: 'exp_123', status: 'completed', fileName: 'template.pdf' })
+
+    renderApp()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Download PDF' }))
+
+    await waitFor(() => {
+      expect(postJson).toHaveBeenCalledWith('/api/v1/export/jobs', expect.objectContaining({
+        format: 'pdf',
+        content: expect.objectContaining({ pages: expect.any(Array) }),
+      }))
+    })
+
+    await waitFor(() => {
+      expect(fetchJson).toHaveBeenCalledWith('/api/v1/export/jobs/exp_123')
+    })
+  })
+
+  it('fetches protected export downloads with credentials and auth headers', async () => {
+    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+      ok: true,
+      status: 200,
+      statusText: 'OK',
+      headers: new Headers({ 'Content-Type': 'application/pdf' }),
+      blob: vi.fn().mockResolvedValue(new Blob(['pdf'], { type: 'application/pdf' })),
+      text: vi.fn().mockResolvedValue('pdf'),
+    } as Response)
+
+    setAuthHeaderGetter(() => 'mock-token')
+
+    const blob = await fetchBlob('/api/v1/export/jobs/exp_123/download')
+
+    expect(blob).toBeInstanceOf(Blob)
+    expect(fetchSpy).toHaveBeenCalledWith(
+      expect.stringContaining('/api/v1/export/jobs/exp_123/download'),
+      expect.objectContaining({
+        credentials: 'include',
+        headers: expect.objectContaining({ Authorization: 'Bearer mock-token' }),
+      }),
+    )
+
+    fetchSpy.mockRestore()
   })
 })

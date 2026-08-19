@@ -16,6 +16,10 @@ export function setAuthHeaderGetter(getter: () => string | null) {
   authHeaderGetter = getter
 }
 
+export function getAuthHeaderValue(): string | null {
+  return authHeaderGetter ? authHeaderGetter() : null
+}
+
 let refreshHandler: (() => Promise<boolean>) | null = null
 export function setRefreshHandler(fn: (() => Promise<boolean>) | null) {
   refreshHandler = fn
@@ -39,7 +43,7 @@ export async function fetchJson<T = any>(path: string, options: RequestInit = {}
     ...(options.headers as Record<string, string> || {}),
   }
 
-  const token = authHeaderGetter ? authHeaderGetter() : null
+  const token = getAuthHeaderValue()
   if (token) {
     headers.Authorization = `Bearer ${token}`
   }
@@ -56,7 +60,7 @@ export async function fetchJson<T = any>(path: string, options: RequestInit = {}
     const refreshed = await refreshHandler()
     if (refreshed) {
       // retry with new token
-      const retryToken = authHeaderGetter ? authHeaderGetter() : null
+      const retryToken = getAuthHeaderValue()
       if (retryToken) {
         init.headers = { ...(init.headers as Record<string, string>), Authorization: `Bearer ${retryToken}` }
       }
@@ -74,6 +78,51 @@ export async function fetchJson<T = any>(path: string, options: RequestInit = {}
     throw new Error(`${res.status} ${res.statusText} ${text}`)
   }
   return res.json()
+}
+
+export async function fetchBlob(path: string, options: RequestInit = {}): Promise<Blob> {
+  const base = getApiBase()
+  const url = new URL(path, base).toString()
+
+  const headers: Record<string, string> = {
+    Accept: 'application/pdf, application/octet-stream, */*',
+    ...(options.headers as Record<string, string> || {}),
+  }
+
+  const token = getAuthHeaderValue()
+  if (token) {
+    headers.Authorization = `Bearer ${token}`
+  }
+
+  const init: RequestInit = {
+    credentials: 'include',
+    headers,
+    ...options,
+  }
+
+  const res = await fetch(url, init)
+  if (res.status === 401 && refreshHandler) {
+    const refreshed = await refreshHandler()
+    if (refreshed) {
+      const retryToken = getAuthHeaderValue()
+      if (retryToken) {
+        init.headers = { ...(init.headers as Record<string, string>), Authorization: `Bearer ${retryToken}` }
+      }
+      const retry = await fetch(url, init)
+      if (!retry.ok) {
+        const text = await retry.text().catch(() => '')
+        throw new Error(`${retry.status} ${retry.statusText} ${text}`)
+      }
+      return retry.blob()
+    }
+  }
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => '')
+    throw new Error(`${res.status} ${res.statusText} ${text}`)
+  }
+
+  return res.blob()
 }
 
 export async function postJson<T = any>(path: string, body: any, options: RequestInit = {}) {

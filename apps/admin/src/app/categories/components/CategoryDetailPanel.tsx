@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAppSelector } from '../../store/hooks'
 import {
   selectSelectedId,
@@ -8,6 +8,8 @@ import {
   selectDescendants,
 } from '../store/selectors'
 import { EDITOR_TYPE_LABELS } from '../constants/editorTypes'
+import { fetchCategoryTemplates } from '../api/templates.api'
+import { TemplateDTO } from '../api/dtos'
 
 function formatDate(value: string | undefined) {
   if (!value) return '-'
@@ -28,6 +30,46 @@ export default function CategoryDetailPanel() {
   const breadcrumbs = useAppSelector((s) => selectBreadcrumbs(s, selectedId as any))
   const children = useAppSelector((s) => selectChildren(s, selectedId as any))
   const descendants = useAppSelector((s) => selectDescendants(s, selectedId as any))
+  const [templates, setTemplates] = useState<TemplateDTO[]>([])
+  const [loadingTemplates, setLoadingTemplates] = useState(false)
+  const [templatesError, setTemplatesError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let active = true
+
+    async function loadTemplates(categoryId: string) {
+      try {
+        setLoadingTemplates(true)
+        setTemplatesError(null)
+        const rows = await fetchCategoryTemplates(categoryId)
+        if (!active) return
+        setTemplates(rows)
+      } catch (error: any) {
+        if (!active) return
+        setTemplates([])
+        setTemplatesError(error?.message ?? 'Failed to load category templates')
+      } finally {
+        if (active) {
+          setLoadingTemplates(false)
+        }
+      }
+    }
+
+    if (!category?.id) {
+      setTemplates([])
+      setTemplatesError(null)
+      setLoadingTemplates(false)
+      return () => {
+        active = false
+      }
+    }
+
+    void loadTemplates(category.id)
+
+    return () => {
+      active = false
+    }
+  }, [category?.id])
 
   if (!category) {
     return (
@@ -75,6 +117,49 @@ export default function CategoryDetailPanel() {
         </article>
       </div>
 
+      <div className="category-detail-templates">
+        <div className="category-detail-template-list-head">
+          <div>
+            <div className="category-detail-eyebrow">Templates in Category</div>
+            <h3>Category Templates</h3>
+          </div>
+          <span className="category-detail-editor-chip">{templates.length} loaded</span>
+        </div>
+
+        {loadingTemplates ? (
+          <div className="template-table-state">Loading templates...</div>
+        ) : templatesError ? (
+          <div className="form-error">{templatesError}</div>
+        ) : templates.length === 0 ? (
+          <div className="template-table-state">No templates found for this category.</div>
+        ) : (
+          <div className="template-table-wrap">
+            <table className="template-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Slug</th>
+                  <th>Status</th>
+                  <th>Updated</th>
+                </tr>
+              </thead>
+              <tbody>
+                {templates.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.title}</td>
+                    <td>{item.slug}</td>
+                    <td>
+                      <span className={`status-chip status-${item.status}`}>{item.status}</span>
+                    </td>
+                    <td>{formatDate(item.updatedAt)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+{/* 
       <div className="category-detail-meta-grid">
         <div className="category-detail-meta-item">
           <span className="category-detail-meta-key">Slug</span>
@@ -100,7 +185,7 @@ export default function CategoryDetailPanel() {
           <span className="category-detail-meta-key">Updated At</span>
           <span className="category-detail-meta-value">{formatDate(category.updatedAt)}</span>
         </div>
-      </div>
+      </div> */}
     </section>
   )
 }

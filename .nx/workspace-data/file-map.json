@@ -16,48 +16,48 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "package.json",
-        "hash": "16593524440016082591"
-      },
-      {
-        "file": "yarn.lock",
-        "hash": "2180998519155062469"
-      },
-      {
-        "file": "PROJECT_CONTEXT.md",
-        "hash": "190274584879683839"
-      },
-      {
-        "file": "nx.json",
-        "hash": "9917378610941575468"
-      },
-      {
-        "file": "tsconfig.base.json",
-        "hash": "12775075012423230082"
-      },
-      {
-        "file": "test-results/.last-run.json",
-        "hash": "11141884120100644736"
-      },
-      {
         "file": ".gitignore",
         "hash": "2070325066638866827"
-      },
-      {
-        "file": ".storybook/preview.ts",
-        "hash": "16363248719033371589"
-      },
-      {
-        "file": ".storybook/main.ts",
-        "hash": "7926010696189104013"
       },
       {
         "file": "README.nx.md",
         "hash": "11498756923445397898"
       },
       {
+        "file": ".storybook/preview.ts",
+        "hash": "16363248719033371589"
+      },
+      {
+        "file": "test-results/.last-run.json",
+        "hash": "11141884120100644736"
+      },
+      {
+        "file": ".storybook/main.ts",
+        "hash": "7926010696189104013"
+      },
+      {
+        "file": "package.json",
+        "hash": "3847978361143081404"
+      },
+      {
+        "file": "yarn.lock",
+        "hash": "2180998519155062469"
+      },
+      {
+        "file": "nx.json",
+        "hash": "9917378610941575468"
+      },
+      {
         "file": ".github/copilot-instructions.md",
         "hash": "563961152393806487"
+      },
+      {
+        "file": "PROJECT_CONTEXT.md",
+        "hash": "190274584879683839"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "12775075012423230082"
       }
     ],
     "projectFileMap": {
@@ -124,11 +124,11 @@
         },
         {
           "file": "apps/editor/src/App.test.tsx",
-          "hash": "15978003414490920464"
+          "hash": "11973059619133508737"
         },
         {
           "file": "apps/editor/src/App.tsx",
-          "hash": "14743575927167671145"
+          "hash": "7816153851871934899"
         },
         {
           "file": "apps/editor/src/assets/hero.png",
@@ -220,7 +220,7 @@
         },
         {
           "file": "apps/editor/src/shared/api/client.ts",
-          "hash": "3617476256695074436"
+          "hash": "1406470016323530379"
         },
         {
           "file": "apps/editor/src/shared/auth/tokenStore.ts",
@@ -334,11 +334,11 @@
         },
         {
           "file": "apps/admin/src/app/categories/api/templates.api.ts",
-          "hash": "403831537437825974"
+          "hash": "15784171669182618085"
         },
         {
           "file": "apps/admin/src/app/categories/components/CategoryDetailPanel.tsx",
-          "hash": "4196539111699234748"
+          "hash": "5809733715040250717"
         },
         {
           "file": "apps/admin/src/app/categories/components/CategoryManagementPage.tsx",
