@@ -152,7 +152,7 @@ function App() {
   const modeConfig = useMemo(
     () => ({
       showHeader: runtimeMode === 'standalone',
-      showAuthModal: true,
+      showAuthModal: runtimeMode === 'standalone',
     }),
     [runtimeMode],
   )
