@@ -38,6 +38,7 @@
     "token-design": "./token-design-v0.0.5.tgz"
   },
   "devDependencies": {
+    "@module-federation/vite": "^1.8.1",
     "@eslint/js": "^9.3.1",
     "@nx/vite": "latest",
     "@nx/vitest": "latest",

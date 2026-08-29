@@ -16,20 +16,20 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": ".github/copilot-instructions.md",
-        "hash": "563961152393806487"
+        "file": "nx.json",
+        "hash": "9917378610941575468"
+      },
+      {
+        "file": ".storybook/preview.ts",
+        "hash": "16363248719033371589"
       },
       {
         "file": ".gitignore",
         "hash": "2070325066638866827"
       },
       {
-        "file": ".storybook/main.ts",
-        "hash": "7926010696189104013"
-      },
-      {
-        "file": ".storybook/preview.ts",
-        "hash": "16363248719033371589"
+        "file": "package.json",
+        "hash": "11834891123599804203"
       },
       {
         "file": "PROJECT_CONTEXT.md",
@@ -40,12 +40,12 @@
         "hash": "11498756923445397898"
       },
       {
-        "file": "nx.json",
-        "hash": "9917378610941575468"
+        "file": ".storybook/main.ts",
+        "hash": "7926010696189104013"
       },
       {
-        "file": "package.json",
-        "hash": "3847978361143081404"
+        "file": "yarn.lock",
+        "hash": "2180998519155062469"
       },
       {
         "file": "test-results/.last-run.json",
@@ -56,8 +56,8 @@
         "hash": "12775075012423230082"
       },
       {
-        "file": "yarn.lock",
-        "hash": "2180998519155062469"
+        "file": ".github/copilot-instructions.md",
+        "hash": "563961152393806487"
       }
     ],
     "projectFileMap": {
@@ -277,6 +277,10 @@
           "hash": "49858423769339789"
         },
         {
+          "file": "apps/editor/src/embedded/EditorRemoteEntry.tsx",
+          "hash": "10482682703585052723"
+        },
+        {
           "file": "apps/editor/src/features/canvas/Canvas.styles.ts",
           "hash": "2316015485532322369"
         },
@@ -418,7 +422,7 @@
         },
         {
           "file": "apps/editor/vite.config.js",
-          "hash": "3211989133134468904"
+          "hash": "15994764332590784013"
         }
       ]
     }
