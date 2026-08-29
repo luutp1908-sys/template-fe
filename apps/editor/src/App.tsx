@@ -25,10 +25,10 @@ import {
 import { useEditorHostBridge } from './embedded/EditorHostBridge'
 import type { EditorObject } from './shared/types/editor'
 
-const AppShell = styled.div`
+const AppShell = styled.div<{ $withHeader: boolean }>`
   height: 100vh;
   box-sizing: border-box;
-  padding-top: ${HEADER_HEIGHT}px;
+  padding-top: ${({ $withHeader }) => ($withHeader ? `${HEADER_HEIGHT}px` : '0px')};
   background: #f5f8fc;
 `
 
@@ -151,8 +151,7 @@ function App() {
   const runtimeMode: EditorRuntimeMode = bridge?.isEmbedded ? 'embedded' : 'standalone'
   const modeConfig = useMemo(
     () => ({
-      // Keep current behavior in both modes for this step.
-      showHeader: true,
+      showHeader: runtimeMode === 'standalone',
       showAuthModal: true,
     }),
     [runtimeMode],
@@ -552,7 +551,7 @@ function App() {
   const shouldSaveCanonical = !draftIdFromPath && isAdminEditMode && !!templateIdFromQuery
 
   return (
-    <AppShell data-editor-mode={runtimeMode}>
+    <AppShell data-editor-mode={runtimeMode} $withHeader={modeConfig.showHeader}>
       {modeConfig.showHeader ? (
       <TopHeader>
         <HeaderContent>
