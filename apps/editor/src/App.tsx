@@ -22,6 +22,7 @@ import {
   getStoredActiveWorkspaceId,
   storeActiveWorkspaceId,
 } from './shared/workspaces/activeWorkspaceBridge'
+import { useEditorHostBridge } from './embedded/EditorHostBridge'
 import type { EditorObject } from './shared/types/editor'
 
 const AppShell = styled.div`
@@ -143,7 +144,20 @@ const defaultLocalTemplate = {
   ],
 }
 
+type EditorRuntimeMode = 'standalone' | 'embedded'
+
 function App() {
+  const bridge = useEditorHostBridge()
+  const runtimeMode: EditorRuntimeMode = bridge?.isEmbedded ? 'embedded' : 'standalone'
+  const modeConfig = useMemo(
+    () => ({
+      // Keep current behavior in both modes for this step.
+      showHeader: true,
+      showAuthModal: true,
+    }),
+    [runtimeMode],
+  )
+
   const searchParams = useMemo(() => new URLSearchParams(window.location.search), [])
   const templateIdFromQuery = useMemo(() => searchParams.get('templateId'), [searchParams])
   const workspaceIdFromQuery = useMemo(() => searchParams.get('workspaceId'), [searchParams])
@@ -538,7 +552,8 @@ function App() {
   const shouldSaveCanonical = !draftIdFromPath && isAdminEditMode && !!templateIdFromQuery
 
   return (
-    <AppShell>
+    <AppShell data-editor-mode={runtimeMode}>
+      {modeConfig.showHeader ? (
       <TopHeader>
         <HeaderContent>
           <h1>{shouldSaveCanonical ? 'Canva Editor · Admin Template Mode' : 'Canva Editor'}</h1>
@@ -566,6 +581,7 @@ function App() {
         {saveError ? <p style={{ margin: '0 20px', color: '#b91c1c', fontSize: '0.85rem' }}>{saveError}</p> : null}
         {exportError ? <p style={{ margin: '0 20px', color: '#b91c1c', fontSize: '0.85rem' }}>{exportError}</p> : null}
       </TopHeader>
+      ) : null}
 
       <AppContainer>
         <MenuBar
@@ -582,6 +598,7 @@ function App() {
           onLogout={() => auth.logout()}
         />
 
+        {modeConfig.showAuthModal ? (
         <AuthModal
           visible={authModalOpen}
           onClose={() => setAuthModalOpen(false)}
@@ -590,6 +607,7 @@ function App() {
           loading={auth.loading}
           error={auth.error}
         />
+        ) : null}
 
         <Sidebar
           selectedObject={editor.selectedObject}
