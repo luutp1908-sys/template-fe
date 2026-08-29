@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { fetchJson, postJson, setAuthHeaderGetter, setRefreshHandler, parseError } from '../api/client'
 import tokenStore, { clearTokens, getAccessToken, setTokens } from '../auth/tokenStore'
+import { useEditorHostBridge } from '../../embedded/EditorHostBridge'
 
 type SignInPayload = { email: string; password: string }
 type SignUpPayload = { email: string; password: string; displayName?: string }
@@ -28,9 +29,23 @@ async function fetchMe() {
 
 export const useAuth = () => {
   const queryClient = useQueryClient()
+  const bridge = useEditorHostBridge()
+  const isEmbedded = Boolean(bridge?.isEmbedded)
+  const embeddedUser = bridge?.auth?.user ?? null
+  const embeddedAccessToken = bridge?.auth?.accessToken ?? null
 
   // Wire auth header getter + refresh handler once on mount
   useEffect(() => {
+    if (isEmbedded) {
+      setAuthHeaderGetter(() => embeddedAccessToken)
+      setRefreshHandler(null)
+
+      return () => {
+        setAuthHeaderGetter(() => null)
+        setRefreshHandler(null)
+      }
+    }
+
     setAuthHeaderGetter(() => tokenStore.getAccessToken())
     setRefreshHandler(async () => {
       try {
@@ -45,26 +60,27 @@ export const useAuth = () => {
       setAuthHeaderGetter(() => null)
       setRefreshHandler(null)
     }
-  }, [queryClient])
+  }, [embeddedAccessToken, isEmbedded, queryClient])
 
   // Single deduplicated query for the current user session.
   // - Only fires when an access token is present (initAuth sets it before render).
   // - TanStack deduplicates: multiple components calling useAuth share one request.
   const {
-    data: user = tokenStore.getUser(),
+    data: queriedUser = tokenStore.getUser(),
     isLoading: loading,
     error: queryError,
     refetch: refetchMe,
   } = useQuery({
     queryKey: ['me'],
     queryFn: fetchMe,
-    enabled: !!getAccessToken(),
+    enabled: !isEmbedded && !!getAccessToken(),
     staleTime: 5 * 60 * 1000,
     retry: false,
-    initialData: tokenStore.getUser() ?? undefined,
+    initialData: isEmbedded ? embeddedUser ?? undefined : tokenStore.getUser() ?? undefined,
   })
 
-  const error = queryError ? parseError(queryError) : null
+  const user = isEmbedded ? embeddedUser : queriedUser
+  const error = isEmbedded ? null : (queryError ? parseError(queryError) : null)
 
   // --- mutations ---
 
@@ -120,7 +136,7 @@ export const useAuth = () => {
 
   return {
     user,
-    loading,
+    loading: isEmbedded ? Boolean(bridge?.auth?.isLoading) : loading,
     error,
     signIn: (payload: SignInPayload) => signInMutation.mutateAsync(payload),
     signUp: (payload: SignUpPayload) => signUpMutation.mutateAsync(payload),
