@@ -16,32 +16,24 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "test-results/.last-run.json",
-        "hash": "11141884120100644736"
+        "file": ".github/copilot-instructions.md",
+        "hash": "563961152393806487"
       },
       {
-        "file": ".storybook/preview.ts",
-        "hash": "16363248719033371589"
+        "file": ".gitignore",
+        "hash": "2070325066638866827"
       },
       {
-        "file": "tsconfig.base.json",
-        "hash": "12775075012423230082"
+        "file": "package.json",
+        "hash": "11834891123599804203"
       },
       {
         "file": "PROJECT_CONTEXT.md",
         "hash": "190274584879683839"
       },
       {
-        "file": ".github/copilot-instructions.md",
-        "hash": "563961152393806487"
-      },
-      {
-        "file": "README.nx.md",
-        "hash": "11498756923445397898"
-      },
-      {
-        "file": "nx.json",
-        "hash": "9917378610941575468"
+        "file": "test-results/.last-run.json",
+        "hash": "11141884120100644736"
       },
       {
         "file": ".storybook/main.ts",
@@ -52,12 +44,20 @@
         "hash": "2180998519155062469"
       },
       {
-        "file": ".gitignore",
-        "hash": "2070325066638866827"
+        "file": "tsconfig.base.json",
+        "hash": "12775075012423230082"
       },
       {
-        "file": "package.json",
-        "hash": "11834891123599804203"
+        "file": ".storybook/preview.ts",
+        "hash": "16363248719033371589"
+      },
+      {
+        "file": "README.nx.md",
+        "hash": "11498756923445397898"
+      },
+      {
+        "file": "nx.json",
+        "hash": "9917378610941575468"
       }
     ],
     "projectFileMap": {
@@ -254,7 +254,7 @@
         },
         {
           "file": "apps/editor/src/App.tsx",
-          "hash": "9927817246118478788"
+          "hash": "8144254483823144723"
         },
         {
           "file": "apps/editor/src/assets/hero.png",
@@ -374,7 +374,7 @@
         },
         {
           "file": "apps/editor/src/shared/hooks/useAuth.ts",
-          "hash": "17775619739622296945"
+          "hash": "18300562963332862962"
         },
         {
           "file": "apps/editor/src/shared/hooks/useEditor.test.tsx",

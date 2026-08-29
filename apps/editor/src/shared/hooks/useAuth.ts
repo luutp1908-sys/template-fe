@@ -33,6 +33,9 @@ export const useAuth = () => {
   const isEmbedded = Boolean(bridge?.isEmbedded)
   const embeddedUser = bridge?.auth?.user ?? null
   const embeddedAccessToken = bridge?.auth?.accessToken ?? null
+  const requestLoginPrompt = () => {
+    bridge?.callbacks?.onRequestLogin?.()
+  }
 
   // Wire auth header getter + refresh handler once on mount
   useEffect(() => {
@@ -86,6 +89,11 @@ export const useAuth = () => {
 
   const signInMutation = useMutation({
     mutationFn: async (payload: SignInPayload) => {
+      if (isEmbedded) {
+        requestLoginPrompt()
+        return embeddedUser
+      }
+
       const body = await postJson('/api/v1/auth/login', payload)
       const data = (body && (body.data ?? body)) as any
       const accessToken = data?.accessToken ?? null
@@ -100,6 +108,11 @@ export const useAuth = () => {
 
   const signUpMutation = useMutation({
     mutationFn: async (payload: SignUpPayload) => {
+      if (isEmbedded) {
+        requestLoginPrompt()
+        return embeddedUser
+      }
+
       const body = await postJson('/api/v1/auth/register', payload)
       const data = (body && (body.data ?? body)) as any
       const accessToken = data?.accessToken ?? null

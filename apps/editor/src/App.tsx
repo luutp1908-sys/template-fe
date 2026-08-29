@@ -196,6 +196,15 @@ function App() {
   const canvasViewportRef = useRef<HTMLDivElement | null>(null)
   const hasAutoFitApplied = useRef(false)
 
+  const requestLoginPrompt = useCallback(() => {
+    if (runtimeMode === 'embedded') {
+      bridge?.callbacks?.onRequestLogin?.()
+      return
+    }
+
+    setAuthModalOpen(true)
+  }, [bridge, runtimeMode])
+
   const centerCanvasViewport = (viewportEl: HTMLDivElement) => {
     const left = Math.max(0, (viewportEl.scrollWidth - viewportEl.clientWidth) / 2)
     const top = Math.max(0, (viewportEl.scrollHeight - viewportEl.clientHeight) / 2)
@@ -392,7 +401,7 @@ function App() {
     const isCreatingNewDraft = !localDraftId && !draftIdFromPath
 
     if (!user && !shouldSaveCanonical) {
-      setAuthModalOpen(true)
+      requestLoginPrompt()
       return
     }
 
@@ -449,6 +458,7 @@ function App() {
       setIsSaving(false)
     }
   }, [
+    requestLoginPrompt,
     user,
     draftIdFromPath,
     isAdminEditMode,
@@ -462,7 +472,7 @@ function App() {
 
   const handleDownloadPdf = useCallback(async () => {
     if (!user) {
-      setAuthModalOpen(true)
+      requestLoginPrompt()
       return
     }
 
@@ -533,6 +543,7 @@ function App() {
       setExportError(error instanceof Error ? error.message : 'Unable to start PDF export')
     }
   }, [
+    requestLoginPrompt,
     user,
     draft,
     template,
@@ -592,7 +603,7 @@ function App() {
           onOpenImageStock={handleOpenImageStock}
           onOpenBackgroundPanel={handleOpenBackgroundPanel}
           onAddFrame={handleAddFrame}
-          onOpenAuth={() => setAuthModalOpen(true)}
+          onOpenAuth={requestLoginPrompt}
           user={user}
           onLogout={() => auth.logout()}
         />
