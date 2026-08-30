@@ -1934,6 +1934,78 @@
         "hash": "sha512-f++rKLQgUVYDAtECQ6fn/is15GkEH9+nZPM3MS0RcxVqoTfawHvDlSCH7JbMhAM6uJ32v3eXLvLmLvjGu7PTQw=="
       }
     },
+    "npm:@module-federation/dts-plugin": {
+      "type": "npm",
+      "name": "npm:@module-federation/dts-plugin",
+      "data": {
+        "version": "2.9.0",
+        "packageName": "@module-federation/dts-plugin",
+        "hash": "sha512-uMGqEG/p9odG2BVr7WRbBe2OgrvzBd3LPzcp5WP+bm3djBdUJ4PZ3ozqKp6qpy+NFnlh6vnM815Xn6AXkKy1Vw=="
+      }
+    },
+    "npm:@module-federation/error-codes": {
+      "type": "npm",
+      "name": "npm:@module-federation/error-codes",
+      "data": {
+        "version": "2.9.0",
+        "packageName": "@module-federation/error-codes",
+        "hash": "sha512-IGpd+VRlji3NyGOGGTsk7YEmPRKcDoBK4YHqIuP+OQwyb2YhHCUHO2vW9RXeQxCuKwi+c6xkTweRYG+Umy+0Zw=="
+      }
+    },
+    "npm:@module-federation/managers": {
+      "type": "npm",
+      "name": "npm:@module-federation/managers",
+      "data": {
+        "version": "2.9.0",
+        "packageName": "@module-federation/managers",
+        "hash": "sha512-8KhB2PF4g+M0hGaethU1H4GVWabLn5sF5TvnM6VxgAcDL4TfLY8aC/YobAXHG/SV0jpU5lsGe6s6xy6ccV0MQw=="
+      }
+    },
+    "npm:@module-federation/runtime-core": {
+      "type": "npm",
+      "name": "npm:@module-federation/runtime-core",
+      "data": {
+        "version": "2.9.0",
+        "packageName": "@module-federation/runtime-core",
+        "hash": "sha512-dLykRYfpbEJBTdk2NlbNoVVTB196O3qujawTBguLABJkPCWETJNk60NR1yZO34eI+DTH+eGwHU3m7FddAWnbnw=="
+      }
+    },
+    "npm:@module-federation/runtime": {
+      "type": "npm",
+      "name": "npm:@module-federation/runtime",
+      "data": {
+        "version": "2.9.0",
+        "packageName": "@module-federation/runtime",
+        "hash": "sha512-3cyAav0hWP+dNvB7qrcK9CKxQn+JvkbRvLtZz3zS2g0EyxtDFDjgbHY0Afcf7oHf8IHhKeEdzb/3Kjr1Pjmr7A=="
+      }
+    },
+    "npm:@module-federation/sdk": {
+      "type": "npm",
+      "name": "npm:@module-federation/sdk",
+      "data": {
+        "version": "2.9.0",
+        "packageName": "@module-federation/sdk",
+        "hash": "sha512-IMjObgBGQTXd33jTTCYcxvz8iOQGLsZ2QIPOj90rDxuBtJsN4WJwYyXqligrhY/e5p/BipUPdbIgKmWL7zFhTw=="
+      }
+    },
+    "npm:@module-federation/third-party-dts-extractor": {
+      "type": "npm",
+      "name": "npm:@module-federation/third-party-dts-extractor",
+      "data": {
+        "version": "2.9.0",
+        "packageName": "@module-federation/third-party-dts-extractor",
+        "hash": "sha512-R1Xuqnqzw6wQxWV3yU9fX1FydXAeZF2TNVFAVo1N1oLBA2j5y7aUO/Fc3VSNgd9/gxMzJgTVBdA+nMiD2SFCgg=="
+      }
+    },
+    "npm:@module-federation/vite": {
+      "type": "npm",
+      "name": "npm:@module-federation/vite",
+      "data": {
+        "version": "1.21.0",
+        "packageName": "@module-federation/vite",
+        "hash": "sha512-HVrbTmV2/8gwzqspT4Pc7o3RzD4q7tm9wMtRlxHPkmljbB26Qnbbcc6ncocQ7yhIpUz/8/SJ45Sj5GWnzrj9cw=="
+      }
+    },
     "npm:@napi-rs/lzma-linux-x64-gnu": {
       "type": "npm",
       "name": "npm:@napi-rs/lzma-linux-x64-gnu",
@@ -2861,22 +2933,31 @@
         "hash": "sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw=="
       }
     },
+    "npm:@types/prop-types": {
+      "type": "npm",
+      "name": "npm:@types/prop-types",
+      "data": {
+        "version": "15.7.15",
+        "packageName": "@types/prop-types",
+        "hash": "sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw=="
+      }
+    },
     "npm:@types/react-dom": {
       "type": "npm",
       "name": "npm:@types/react-dom",
       "data": {
-        "version": "19.2.4",
+        "version": "18.3.7",
         "packageName": "@types/react-dom",
-        "hash": "sha512-Bsc+QHgp+P/F02XDzNCY9jnZNCUuLki36KT7VKrTXXLdHf+vHMNZnW1rVu5DNW/rCK+fya3DATySbLM4yhtKUw=="
+        "hash": "sha512-MEe3UeoENYVFXzoXEWsvcpg6ZvlrFNlOQ7EOsvhI3CfAXwzPfO8Qwuxd40nepsYKqyyVQnTdEfv68q91yLcKrQ=="
       }
     },
     "npm:@types/react": {
       "type": "npm",
       "name": "npm:@types/react",
       "data": {
-        "version": "19.2.18",
+        "version": "18.3.31",
         "packageName": "@types/react",
-        "hash": "sha512-AnzbBERsrLKtk2XSfTbYRLjQPdy116Sty4q+T+Bp3IC4l6jNBvreVPAHmpq9qhXQM7CXZPjLVmGMw9sy+hxQ3w=="
+        "hash": "sha512-vfEqpXTvwT91yhmwdfouStN2hSKwTvyRs8qpLfADyrq/kxDw0hZM7Wk9Ug1FELj8hIby+S/+kQCSRFF32nv2Qw=="
       }
     },
     "npm:@types/resolve": {
@@ -3138,6 +3219,15 @@
         "version": "2.0.3",
         "packageName": "address",
         "hash": "sha512-XNAb/a6TCqou+TufU8/u11HCu9x1gYvOoxLwtlXgIqmkrYQADVv6ljyW2zwiPhHz9R1gItAWpuDrdJMmrOBFEA=="
+      }
+    },
+    "npm:adm-zip": {
+      "type": "npm",
+      "name": "npm:adm-zip",
+      "data": {
+        "version": "0.6.0",
+        "packageName": "adm-zip",
+        "hash": "sha512-XleryMhbuksdKtofnWZ9Sk+4CUTbms4Mb/EU32SZwToAyZ5RgVos/ki8n+yr0LWHOGKuakbXTuuYNHLQjhddgg=="
       }
     },
     "npm:agent-base": {
@@ -4958,6 +5048,15 @@
         "hash": "sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw=="
       }
     },
+    "npm:isomorphic-ws": {
+      "type": "npm",
+      "name": "npm:isomorphic-ws",
+      "data": {
+        "version": "5.0.0",
+        "packageName": "isomorphic-ws",
+        "hash": "sha512-muId7Zzn9ywDsyXgTIafTry2sV3nySZeUDe6YedVd1Hvuuep5AsIlqK+XefWpYTyJG5e503F2xIuT2lcU6rCSw=="
+      }
+    },
     "npm:jackspeak": {
       "type": "npm",
       "name": "npm:jackspeak",
@@ -5181,6 +5280,15 @@
         "version": "4.1.0",
         "packageName": "log-symbols",
         "hash": "sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg=="
+      }
+    },
+    "npm:loose-envify": {
+      "type": "npm",
+      "name": "npm:loose-envify",
+      "data": {
+        "version": "1.4.0",
+        "packageName": "loose-envify",
+        "hash": "sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q=="
       }
     },
     "npm:loupe": {
@@ -5424,6 +5532,15 @@
         "version": "23.1.1",
         "packageName": "nx",
         "hash": "sha512-oDdW2JgVllgfyyN6OqlRzeABw0QrlXdxyl9rtOUMMXQzlkpYA1RTs8jinJCe6QSo7aEn0dZ+Ar7dd09hMudBsg=="
+      }
+    },
+    "npm:object-assign": {
+      "type": "npm",
+      "name": "npm:object-assign",
+      "data": {
+        "version": "4.1.1",
+        "packageName": "object-assign",
+        "hash": "sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg=="
       }
     },
     "npm:once": {
@@ -5714,6 +5831,15 @@
         "hash": "sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A=="
       }
     },
+    "npm:prop-types": {
+      "type": "npm",
+      "name": "npm:prop-types",
+      "data": {
+        "version": "15.8.1",
+        "packageName": "prop-types",
+        "hash": "sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg=="
+      }
+    },
     "npm:proxy-from-env": {
       "type": "npm",
       "name": "npm:proxy-from-env",
@@ -5763,14 +5889,23 @@
       "type": "npm",
       "name": "npm:react-dom",
       "data": {
+        "version": "18.3.1",
+        "packageName": "react-dom",
+        "hash": "sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw=="
+      }
+    },
+    "npm:react-dom@19.2.8": {
+      "type": "npm",
+      "name": "npm:react-dom@19.2.8",
+      "data": {
         "version": "19.2.8",
         "packageName": "react-dom",
         "hash": "sha512-rVprimfGBG3DR+Tq0IQG2DT5PxKth1WIGDmj5yPmlzr4YBe7uyE+Du4oVqTDXZSHGGGXRtTJEGSSePyQCMBglQ=="
       }
     },
-    "npm:react-is@16.13.1": {
+    "npm:react-is": {
       "type": "npm",
-      "name": "npm:react-is@16.13.1",
+      "name": "npm:react-is",
       "data": {
         "version": "16.13.1",
         "packageName": "react-is",
@@ -5786,9 +5921,9 @@
         "hash": "sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w=="
       }
     },
-    "npm:react-is": {
+    "npm:react-is@18.3.1": {
       "type": "npm",
-      "name": "npm:react-is",
+      "name": "npm:react-is@18.3.1",
       "data": {
         "version": "18.3.1",
         "packageName": "react-is",
@@ -5834,6 +5969,15 @@
     "npm:react": {
       "type": "npm",
       "name": "npm:react",
+      "data": {
+        "version": "18.3.1",
+        "packageName": "react",
+        "hash": "sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ=="
+      }
+    },
+    "npm:react@19.2.8": {
+      "type": "npm",
+      "name": "npm:react@19.2.8",
       "data": {
         "version": "19.2.8",
         "packageName": "react",
@@ -6050,6 +6194,15 @@
     "npm:scheduler": {
       "type": "npm",
       "name": "npm:scheduler",
+      "data": {
+        "version": "0.23.2",
+        "packageName": "scheduler",
+        "hash": "sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ=="
+      }
+    },
+    "npm:scheduler@0.27.0": {
+      "type": "npm",
+      "name": "npm:scheduler@0.27.0",
       "data": {
         "version": "0.27.0",
         "packageName": "scheduler",
@@ -6479,6 +6632,15 @@
         "hash": "sha512-e0votIpp4Uo2AJYSzVHV6xCcawuiez3DzqDAbrTc3YxBkplN6e+dM13ZeIcZnDg/QpSuU2zfZ3rzwY8ukEnaXw=="
       }
     },
+    "npm:token-design": {
+      "type": "npm",
+      "name": "npm:token-design",
+      "data": {
+        "version": "0.0.5",
+        "packageName": "token-design",
+        "hash": "451288601452099596"
+      }
+    },
     "npm:tough-cookie": {
       "type": "npm",
       "name": "npm:tough-cookie",
@@ -6833,6 +6995,15 @@
     "npm:ws": {
       "type": "npm",
       "name": "npm:ws",
+      "data": {
+        "version": "8.21.0",
+        "packageName": "ws",
+        "hash": "sha512-Vsp28b7DRcimFQvrqu2Wek3z1iYxDCWqHYB8Qsnk/S4RfaCQzPGPyBNuVjJV3cd6UiKtUtp6sNM77gWvzcCH+g=="
+      }
+    },
+    "npm:ws@8.21.3": {
+      "type": "npm",
+      "name": "npm:ws@8.21.3",
       "data": {
         "version": "8.21.3",
         "packageName": "ws",
@@ -8920,6 +9091,101 @@
         "type": "static"
       }
     ],
+    "npm:@module-federation/dts-plugin": [
+      {
+        "source": "npm:@module-federation/dts-plugin",
+        "target": "npm:@module-federation/error-codes",
+        "type": "static"
+      },
+      {
+        "source": "npm:@module-federation/dts-plugin",
+        "target": "npm:@module-federation/managers",
+        "type": "static"
+      },
+      {
+        "source": "npm:@module-federation/dts-plugin",
+        "target": "npm:@module-federation/sdk",
+        "type": "static"
+      },
+      {
+        "source": "npm:@module-federation/dts-plugin",
+        "target": "npm:@module-federation/third-party-dts-extractor",
+        "type": "static"
+      },
+      {
+        "source": "npm:@module-federation/dts-plugin",
+        "target": "npm:adm-zip",
+        "type": "static"
+      },
+      {
+        "source": "npm:@module-federation/dts-plugin",
+        "target": "npm:isomorphic-ws",
+        "type": "static"
+      },
+      {
+        "source": "npm:@module-federation/dts-plugin",
+        "target": "npm:undici",
+        "type": "static"
+      },
+      {
+        "source": "npm:@module-federation/dts-plugin",
+        "target": "npm:ws",
+        "type": "static"
+      }
+    ],
+    "npm:@module-federation/managers": [
+      {
+        "source": "npm:@module-federation/managers",
+        "target": "npm:@module-federation/sdk",
+        "type": "static"
+      }
+    ],
+    "npm:@module-federation/runtime-core": [
+      {
+        "source": "npm:@module-federation/runtime-core",
+        "target": "npm:@module-federation/error-codes",
+        "type": "static"
+      },
+      {
+        "source": "npm:@module-federation/runtime-core",
+        "target": "npm:@module-federation/sdk",
+        "type": "static"
+      }
+    ],
+    "npm:@module-federation/runtime": [
+      {
+        "source": "npm:@module-federation/runtime",
+        "target": "npm:@module-federation/error-codes",
+        "type": "static"
+      },
+      {
+        "source": "npm:@module-federation/runtime",
+        "target": "npm:@module-federation/runtime-core",
+        "type": "static"
+      },
+      {
+        "source": "npm:@module-federation/runtime",
+        "target": "npm:@module-federation/sdk",
+        "type": "static"
+      }
+    ],
+    "npm:@module-federation/vite": [
+      {
+        "source": "npm:@module-federation/vite",
+        "target": "npm:@module-federation/dts-plugin",
+        "type": "static"
+      },
+      {
+        "source": "npm:@module-federation/vite",
+        "target": "npm:@module-federation/runtime",
+        "type": "static"
+      },
+      {
+        "source": "npm:@module-federation/vite",
+        "target": "npm:@module-federation/sdk",
+        "type": "static"
+      }
+    ],
     "npm:@napi-rs/wasm-runtime": [
       {
         "source": "npm:@napi-rs/wasm-runtime",
@@ -9432,12 +9698,12 @@
       },
       {
         "source": "npm:@storybook/addon-docs",
-        "target": "npm:react",
+        "target": "npm:react@19.2.8",
         "type": "static"
       },
       {
         "source": "npm:@storybook/addon-docs",
-        "target": "npm:react-dom",
+        "target": "npm:react-dom@19.2.8",
         "type": "static"
       },
       {
@@ -9645,7 +9911,7 @@
       },
       {
         "source": "npm:@storybook/core",
-        "target": "npm:ws",
+        "target": "npm:ws@8.21.3",
         "type": "static"
       }
     ],
@@ -10045,6 +10311,11 @@
       }
     ],
     "npm:@types/react": [
+      {
+        "source": "npm:@types/react",
+        "target": "npm:@types/prop-types",
+        "type": "static"
+      },
       {
         "source": "npm:@types/react",
         "target": "npm:csstype",
@@ -11820,7 +12091,7 @@
     "npm:hoist-non-react-statics": [
       {
         "source": "npm:hoist-non-react-statics",
-        "target": "npm:react-is@16.13.1",
+        "target": "npm:react-is",
         "type": "static"
       }
     ],
@@ -12148,6 +12419,13 @@
       {
         "source": "npm:log-symbols",
         "target": "npm:is-unicode-supported",
+        "type": "static"
+      }
+    ],
+    "npm:loose-envify": [
+      {
+        "source": "npm:loose-envify",
+        "target": "npm:js-tokens",
         "type": "static"
       }
     ],
@@ -13127,6 +13405,23 @@
         "type": "static"
       }
     ],
+    "npm:prop-types": [
+      {
+        "source": "npm:prop-types",
+        "target": "npm:loose-envify",
+        "type": "static"
+      },
+      {
+        "source": "npm:prop-types",
+        "target": "npm:object-assign",
+        "type": "static"
+      },
+      {
+        "source": "npm:prop-types",
+        "target": "npm:react-is",
+        "type": "static"
+      }
+    ],
     "npm:react-css-styled": [
       {
         "source": "npm:react-css-styled",
@@ -13194,7 +13489,19 @@
     "npm:react-dom": [
       {
         "source": "npm:react-dom",
+        "target": "npm:loose-envify",
+        "type": "static"
+      },
+      {
+        "source": "npm:react-dom",
         "target": "npm:scheduler",
+        "type": "static"
+      }
+    ],
+    "npm:react-dom@19.2.8": [
+      {
+        "source": "npm:react-dom@19.2.8",
+        "target": "npm:scheduler@0.27.0",
         "type": "static"
       }
     ],
@@ -13288,7 +13595,7 @@
       },
       {
         "source": "npm:react-redux",
-        "target": "npm:react-is",
+        "target": "npm:react-is@18.3.1",
         "type": "static"
       },
       {
@@ -13301,6 +13608,13 @@
       {
         "source": "npm:react-selecto",
         "target": "npm:selecto",
+        "type": "static"
+      }
+    ],
+    "npm:react": [
+      {
+        "source": "npm:react",
+        "target": "npm:loose-envify",
         "type": "static"
       }
     ],
@@ -13613,6 +13927,13 @@
         "type": "static"
       }
     ],
+    "npm:scheduler": [
+      {
+        "source": "npm:scheduler",
+        "target": "npm:loose-envify",
+        "type": "static"
+      }
+    ],
     "npm:selecto": [
       {
         "source": "npm:selecto",
@@ -13888,6 +14209,13 @@
       {
         "source": "npm:tldts",
         "target": "npm:tldts-core",
+        "type": "static"
+      }
+    ],
+    "npm:token-design": [
+      {
+        "source": "npm:token-design",
+        "target": "npm:prop-types",
         "type": "static"
       }
     ],
@@ -14402,5 +14730,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1788016802863
+  "computedAt": 1788105269315
 }

@@ -2275,6 +2275,91 @@
     "type": "static"
   },
   {
+    "source": "npm:@module-federation/dts-plugin",
+    "target": "npm:@module-federation/error-codes",
+    "type": "static"
+  },
+  {
+    "source": "npm:@module-federation/dts-plugin",
+    "target": "npm:@module-federation/managers",
+    "type": "static"
+  },
+  {
+    "source": "npm:@module-federation/dts-plugin",
+    "target": "npm:@module-federation/sdk",
+    "type": "static"
+  },
+  {
+    "source": "npm:@module-federation/dts-plugin",
+    "target": "npm:@module-federation/third-party-dts-extractor",
+    "type": "static"
+  },
+  {
+    "source": "npm:@module-federation/dts-plugin",
+    "target": "npm:adm-zip",
+    "type": "static"
+  },
+  {
+    "source": "npm:@module-federation/dts-plugin",
+    "target": "npm:isomorphic-ws",
+    "type": "static"
+  },
+  {
+    "source": "npm:@module-federation/dts-plugin",
+    "target": "npm:undici",
+    "type": "static"
+  },
+  {
+    "source": "npm:@module-federation/dts-plugin",
+    "target": "npm:ws",
+    "type": "static"
+  },
+  {
+    "source": "npm:@module-federation/managers",
+    "target": "npm:@module-federation/sdk",
+    "type": "static"
+  },
+  {
+    "source": "npm:@module-federation/runtime-core",
+    "target": "npm:@module-federation/error-codes",
+    "type": "static"
+  },
+  {
+    "source": "npm:@module-federation/runtime-core",
+    "target": "npm:@module-federation/sdk",
+    "type": "static"
+  },
+  {
+    "source": "npm:@module-federation/runtime",
+    "target": "npm:@module-federation/error-codes",
+    "type": "static"
+  },
+  {
+    "source": "npm:@module-federation/runtime",
+    "target": "npm:@module-federation/runtime-core",
+    "type": "static"
+  },
+  {
+    "source": "npm:@module-federation/runtime",
+    "target": "npm:@module-federation/sdk",
+    "type": "static"
+  },
+  {
+    "source": "npm:@module-federation/vite",
+    "target": "npm:@module-federation/dts-plugin",
+    "type": "static"
+  },
+  {
+    "source": "npm:@module-federation/vite",
+    "target": "npm:@module-federation/runtime",
+    "type": "static"
+  },
+  {
+    "source": "npm:@module-federation/vite",
+    "target": "npm:@module-federation/sdk",
+    "type": "static"
+  },
+  {
     "source": "npm:@napi-rs/wasm-runtime",
     "target": "npm:@emnapi/core@1.11.3",
     "type": "static"
@@ -2786,12 +2871,12 @@
   },
   {
     "source": "npm:@storybook/addon-docs",
-    "target": "npm:react",
+    "target": "npm:react@19.2.8",
     "type": "static"
   },
   {
     "source": "npm:@storybook/addon-docs",
-    "target": "npm:react-dom",
+    "target": "npm:react-dom@19.2.8",
     "type": "static"
   },
   {
@@ -2981,7 +3066,7 @@
   },
   {
     "source": "npm:@storybook/core",
-    "target": "npm:ws",
+    "target": "npm:ws@8.21.3",
     "type": "static"
   },
   {
@@ -3372,6 +3457,11 @@
   {
     "source": "npm:@types/hoist-non-react-statics",
     "target": "npm:hoist-non-react-statics",
+    "type": "static"
+  },
+  {
+    "source": "npm:@types/react",
+    "target": "npm:@types/prop-types",
     "type": "static"
   },
   {
@@ -5636,12 +5726,12 @@
   },
   {
     "source": "npm:hoist-non-react-statics",
-    "target": "npm:react-is@16.13.1",
+    "target": "npm:react-is",
     "type": "static"
   },
   {
     "source": "npm:hoist-non-react-statics",
-    "target": "npm:react-is@16.13.1",
+    "target": "npm:react-is",
     "type": "static"
   },
   {
@@ -5957,6 +6047,16 @@
   {
     "source": "npm:log-symbols",
     "target": "npm:is-unicode-supported",
+    "type": "static"
+  },
+  {
+    "source": "npm:loose-envify",
+    "target": "npm:js-tokens",
+    "type": "static"
+  },
+  {
+    "source": "npm:loose-envify",
+    "target": "npm:js-tokens",
     "type": "static"
   },
   {
@@ -7570,6 +7670,21 @@
     "type": "static"
   },
   {
+    "source": "npm:prop-types",
+    "target": "npm:loose-envify",
+    "type": "static"
+  },
+  {
+    "source": "npm:prop-types",
+    "target": "npm:object-assign",
+    "type": "static"
+  },
+  {
+    "source": "npm:prop-types",
+    "target": "npm:react-is",
+    "type": "static"
+  },
+  {
     "source": "npm:react-css-styled",
     "target": "npm:css-styled",
     "type": "static"
@@ -7631,12 +7746,17 @@
   },
   {
     "source": "npm:react-dom",
-    "target": "npm:scheduler",
+    "target": "npm:loose-envify",
     "type": "static"
   },
   {
     "source": "npm:react-dom",
     "target": "npm:scheduler",
+    "type": "static"
+  },
+  {
+    "source": "npm:react-dom@19.2.8",
+    "target": "npm:scheduler@0.27.0",
     "type": "static"
   },
   {
@@ -7726,7 +7846,7 @@
   },
   {
     "source": "npm:react-redux",
-    "target": "npm:react-is",
+    "target": "npm:react-is@18.3.1",
     "type": "static"
   },
   {
@@ -7737,6 +7857,11 @@
   {
     "source": "npm:react-selecto",
     "target": "npm:selecto",
+    "type": "static"
+  },
+  {
+    "source": "npm:react",
+    "target": "npm:loose-envify",
     "type": "static"
   },
   {
@@ -8265,6 +8390,11 @@
     "type": "static"
   },
   {
+    "source": "npm:scheduler",
+    "target": "npm:loose-envify",
+    "type": "static"
+  },
+  {
     "source": "npm:selecto",
     "target": "npm:@daybrush/utils",
     "type": "static"
@@ -8612,6 +8742,11 @@
   {
     "source": "npm:tldts",
     "target": "npm:tldts-core",
+    "type": "static"
+  },
+  {
+    "source": "npm:token-design",
+    "target": "npm:prop-types",
     "type": "static"
   },
   {

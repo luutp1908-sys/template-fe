@@ -16,20 +16,32 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": ".github/copilot-instructions.md",
-        "hash": "563961152393806487"
+        "file": "README.nx.md",
+        "hash": "11498756923445397898"
+      },
+      {
+        "file": "nx.json",
+        "hash": "9917378610941575468"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "12775075012423230082"
+      },
+      {
+        "file": ".storybook/preview.ts",
+        "hash": "16363248719033371589"
       },
       {
         "file": ".gitignore",
         "hash": "2070325066638866827"
       },
       {
-        "file": "package.json",
-        "hash": "11834891123599804203"
-      },
-      {
         "file": "PROJECT_CONTEXT.md",
         "hash": "190274584879683839"
+      },
+      {
+        "file": "package.json",
+        "hash": "16550904237762062177"
       },
       {
         "file": "test-results/.last-run.json",
@@ -41,23 +53,11 @@
       },
       {
         "file": "yarn.lock",
-        "hash": "2180998519155062469"
+        "hash": "16245563189998429937"
       },
       {
-        "file": "tsconfig.base.json",
-        "hash": "12775075012423230082"
-      },
-      {
-        "file": ".storybook/preview.ts",
-        "hash": "16363248719033371589"
-      },
-      {
-        "file": "README.nx.md",
-        "hash": "11498756923445397898"
-      },
-      {
-        "file": "nx.json",
-        "hash": "9917378610941575468"
+        "file": ".github/copilot-instructions.md",
+        "hash": "563961152393806487"
       }
     ],
     "projectFileMap": {
@@ -426,10 +426,10 @@
         },
         {
           "file": "apps/editor/vite.config.js",
-          "hash": "15994764332590784013"
+          "hash": "12405366808361399642"
         }
       ]
     }
   },
-  "externalNodesHash": "17468515648047513304"
+  "externalNodesHash": "16975388778386190511"
 }
