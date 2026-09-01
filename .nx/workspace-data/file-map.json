@@ -16,48 +16,48 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "test-results/.last-run.json",
-        "hash": "11141884120100644736"
-      },
-      {
-        "file": "nx.json",
-        "hash": "9917378610941575468"
-      },
-      {
-        "file": ".github/copilot-instructions.md",
-        "hash": "563961152393806487"
-      },
-      {
         "file": "package.json",
         "hash": "16550904237762062177"
-      },
-      {
-        "file": ".storybook/preview.ts",
-        "hash": "16363248719033371589"
-      },
-      {
-        "file": ".storybook/main.ts",
-        "hash": "7926010696189104013"
       },
       {
         "file": "PROJECT_CONTEXT.md",
         "hash": "190274584879683839"
       },
       {
-        "file": "README.nx.md",
-        "hash": "11498756923445397898"
+        "file": "yarn.lock",
+        "hash": "16245563189998429937"
       },
       {
-        "file": "tsconfig.base.json",
-        "hash": "12775075012423230082"
+        "file": ".storybook/main.ts",
+        "hash": "7926010696189104013"
+      },
+      {
+        "file": "README.nx.md",
+        "hash": "11498756923445397898"
       },
       {
         "file": ".gitignore",
         "hash": "2070325066638866827"
       },
       {
-        "file": "yarn.lock",
-        "hash": "16245563189998429937"
+        "file": "test-results/.last-run.json",
+        "hash": "11141884120100644736"
+      },
+      {
+        "file": ".github/copilot-instructions.md",
+        "hash": "563961152393806487"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "12775075012423230082"
+      },
+      {
+        "file": "nx.json",
+        "hash": "9917378610941575468"
+      },
+      {
+        "file": ".storybook/preview.ts",
+        "hash": "16363248719033371589"
       }
     ],
     "projectFileMap": {
@@ -128,7 +128,7 @@
         },
         {
           "file": "apps/editor/src/App.test.tsx",
-          "hash": "11973059619133508737"
+          "hash": "9917458968191806634"
         },
         {
           "file": "apps/editor/src/App.tsx",
@@ -300,7 +300,7 @@
         },
         {
           "file": "apps/editor/tsconfig.json",
-          "hash": "3204959499965294023"
+          "hash": "5138248742360485712"
         },
         {
           "file": "apps/editor/vite.config.js",

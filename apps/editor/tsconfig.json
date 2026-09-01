@@ -14,5 +14,6 @@
     "strict": false,
     "types": ["vitest/globals", "@testing-library/jest-dom"]
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/**/*.stories.ts", "src/**/*.stories.tsx"]
 }

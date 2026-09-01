@@ -279,7 +279,7 @@ describe('App integration', () => {
       headers: new Headers({ 'Content-Type': 'application/pdf' }),
       blob: vi.fn().mockResolvedValue(new Blob(['pdf'], { type: 'application/pdf' })),
       text: vi.fn().mockResolvedValue('pdf'),
-    } as Response)
+    } as unknown as Response)
 
     setAuthHeaderGetter(() => 'mock-token')
 
