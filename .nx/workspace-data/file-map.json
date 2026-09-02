@@ -16,40 +16,36 @@
   "fileMap": {
     "nonProjectFiles": [
       {
+        "file": "package.json",
+        "hash": "16733359513731819112"
+      },
+      {
         "file": "yarn.lock",
         "hash": "10450513307255346230"
       },
       {
-        "file": ".storybook/main.ts",
-        "hash": "7926010696189104013"
+        "file": ".github/workflows/deploy-editor-prod.yml",
+        "hash": "13216060109129859461"
       },
       {
-        "file": "tsconfig.base.json",
-        "hash": "12775075012423230082"
-      },
-      {
-        "file": "PROJECT_CONTEXT.md",
-        "hash": "190274584879683839"
+        "file": ".storybook/preview.ts",
+        "hash": "16363248719033371589"
       },
       {
         "file": ".gitignore",
         "hash": "2070325066638866827"
       },
       {
-        "file": "README.nx.md",
-        "hash": "11498756923445397898"
-      },
-      {
-        "file": ".github/workflows/deploy-editor-prod.yml",
-        "hash": "11166523541354928967"
-      },
-      {
-        "file": "package.json",
-        "hash": "16733359513731819112"
-      },
-      {
         "file": ".github/copilot-instructions.md",
         "hash": "563961152393806487"
+      },
+      {
+        "file": "PROJECT_CONTEXT.md",
+        "hash": "190274584879683839"
+      },
+      {
+        "file": ".storybook/main.ts",
+        "hash": "7926010696189104013"
       },
       {
         "file": "nx.json",
@@ -60,8 +56,12 @@
         "hash": "11141884120100644736"
       },
       {
-        "file": ".storybook/preview.ts",
-        "hash": "16363248719033371589"
+        "file": "README.nx.md",
+        "hash": "11498756923445397898"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "12775075012423230082"
       }
     ],
     "projectFileMap": {

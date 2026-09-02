@@ -30,6 +30,8 @@ jobs:
     name: Build and Deploy Editor
     runs-on: ubuntu-latest
     environment: production
+    env:
+      AWS_DEPLOY_ROLE_ARN: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
 
     defaults:
       run:
@@ -73,10 +75,18 @@ jobs:
           echo "EDITOR_S3_BUCKET=$EDITOR_S3_BUCKET" >> "$GITHUB_ENV"
           echo "EDITOR_CLOUDFRONT_DISTRIBUTION_ID=$EDITOR_CLOUDFRONT_DISTRIBUTION_ID" >> "$GITHUB_ENV"
 
+      - name: Debug AWS role
+        shell: bash
+        env:
+          AWS_DEPLOY_ROLE_ARN: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+        run: |
+          ROLE_NAME="${AWS_DEPLOY_ROLE_ARN##*/}"
+          echo "AWS role name: $ROLE_NAME"
+
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          role-to-assume: ${{ env.AWS_DEPLOY_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Sync editor build to S3
