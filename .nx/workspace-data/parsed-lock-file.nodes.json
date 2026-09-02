@@ -3447,9 +3447,9 @@
         "hash": "sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w=="
       }
     },
-    "npm:brace-expansion": {
+    "npm:brace-expansion@5.0.8": {
       "type": "npm",
-      "name": "npm:brace-expansion",
+      "name": "npm:brace-expansion@5.0.8",
       "data": {
         "version": "5.0.8",
         "packageName": "brace-expansion",
@@ -3474,9 +3474,9 @@
         "hash": "sha512-hGfVzPxthbf3+2yjg/RBs60cB0FhqBS/zvdV/4wn4/BmN0bNMMHPc4V/BbFieqf1TKAGGAHnY4eSjajCl0f2Xg=="
       }
     },
-    "npm:brace-expansion@5.0.9": {
+    "npm:brace-expansion": {
       "type": "npm",
-      "name": "npm:brace-expansion@5.0.9",
+      "name": "npm:brace-expansion",
       "data": {
         "version": "5.0.9",
         "packageName": "brace-expansion",
@@ -3861,18 +3861,18 @@
         "hash": "sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ=="
       }
     },
-    "npm:default-browser-id": {
+    "npm:default-browser-id@5.0.0": {
       "type": "npm",
-      "name": "npm:default-browser-id",
+      "name": "npm:default-browser-id@5.0.0",
       "data": {
         "version": "5.0.0",
         "packageName": "default-browser-id",
         "hash": "sha512-A6p/pu/6fyBcA1TRz/GqWYPViplrftcW2gZC9q79ngNCKAeR/X3gcEdXQHl4KNXV+3wgIJ1CPkJQ3IHM6lcsyA=="
       }
     },
-    "npm:default-browser-id@5.0.1": {
+    "npm:default-browser-id": {
       "type": "npm",
-      "name": "npm:default-browser-id@5.0.1",
+      "name": "npm:default-browser-id",
       "data": {
         "version": "5.0.1",
         "packageName": "default-browser-id",
@@ -4131,18 +4131,18 @@
         "hash": "sha512-jEQoCwk8hyb2AZziIOLhDqpm5+2ww5uIE6lkO/6jcOCusfk6LhMHpXXfBLXTZ7Ydyt0j4VoUQv6uGNYbdW+kBA=="
       }
     },
-    "npm:es-object-atoms": {
+    "npm:es-object-atoms@1.1.1": {
       "type": "npm",
-      "name": "npm:es-object-atoms",
+      "name": "npm:es-object-atoms@1.1.1",
       "data": {
         "version": "1.1.1",
         "packageName": "es-object-atoms",
         "hash": "sha512-FGgH2h8zKNim9ljj7dankFPcICIK9Cp5bm+c2gQSYePhpaG5+esrLODihIorn+Pe6FGJzWhXQotPv73jTaldXA=="
       }
     },
-    "npm:es-object-atoms@1.1.2": {
+    "npm:es-object-atoms": {
       "type": "npm",
-      "name": "npm:es-object-atoms@1.1.2",
+      "name": "npm:es-object-atoms",
       "data": {
         "version": "1.1.2",
         "packageName": "es-object-atoms",
@@ -4824,18 +4824,18 @@
         "hash": "sha512-evOr8xfXKxE6qSR0hSXL2r3sd7ALj8+7jQEUvPYcm5sgZFdJ+AYzT6yNmJenvIYQBgIGwfwz08sL8zoL7yq2BA=="
       }
     },
-    "npm:is-docker": {
+    "npm:is-docker@3.0.0": {
       "type": "npm",
-      "name": "npm:is-docker",
+      "name": "npm:is-docker@3.0.0",
       "data": {
         "version": "3.0.0",
         "packageName": "is-docker",
         "hash": "sha512-eljcgEDlEns/7AXFosB5K/2nCM4P7FQPkGc/DWLy5rmFEWvZayGrik1d9/QIY5nJ4f9YsVvBkA6kJpHn9rISdQ=="
       }
     },
-    "npm:is-docker@2.2.1": {
+    "npm:is-docker": {
       "type": "npm",
-      "name": "npm:is-docker@2.2.1",
+      "name": "npm:is-docker",
       "data": {
         "version": "2.2.1",
         "packageName": "is-docker",
@@ -5346,9 +5346,9 @@
         "hash": "sha512-I9jwMn07Sy/IwOj3zVkVik2JTvgpaykDZEigL6Rx6N9LbMywwUSMtxET+7lVoDLLd3O3IXwJwvuuns8UB/HeAg=="
       }
     },
-    "npm:minimatch": {
+    "npm:minimatch@10.2.5": {
       "type": "npm",
-      "name": "npm:minimatch",
+      "name": "npm:minimatch@10.2.5",
       "data": {
         "version": "10.2.5",
         "packageName": "minimatch",
@@ -5364,9 +5364,9 @@
         "hash": "sha512-vpLQEs+VLCr1nU0BXS07maYoFwlDAH0gngQuuttxIwutDFEMHq2blX+8vpgxDdK3J1PwjCJiep77OitTZ4Ll1A=="
       }
     },
-    "npm:minimatch@3.1.5": {
+    "npm:minimatch": {
       "type": "npm",
-      "name": "npm:minimatch@3.1.5",
+      "name": "npm:minimatch",
       "data": {
         "version": "3.1.5",
         "packageName": "minimatch",
@@ -5452,15 +5452,6 @@
         "version": "23.1.1",
         "packageName": "nx",
         "hash": "sha512-oDdW2JgVllgfyyN6OqlRzeABw0QrlXdxyl9rtOUMMXQzlkpYA1RTs8jinJCe6QSo7aEn0dZ+Ar7dd09hMudBsg=="
-      }
-    },
-    "npm:object-assign": {
-      "type": "npm",
-      "name": "npm:object-assign",
-      "data": {
-        "version": "4.1.1",
-        "packageName": "object-assign",
-        "hash": "sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg=="
       }
     },
     "npm:once": {
@@ -5751,15 +5742,6 @@
         "hash": "sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A=="
       }
     },
-    "npm:prop-types": {
-      "type": "npm",
-      "name": "npm:prop-types",
-      "data": {
-        "version": "15.8.1",
-        "packageName": "prop-types",
-        "hash": "sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg=="
-      }
-    },
     "npm:proxy-from-env": {
       "type": "npm",
       "name": "npm:proxy-from-env",
@@ -5823,9 +5805,9 @@
         "hash": "sha512-rVprimfGBG3DR+Tq0IQG2DT5PxKth1WIGDmj5yPmlzr4YBe7uyE+Du4oVqTDXZSHGGGXRtTJEGSSePyQCMBglQ=="
       }
     },
-    "npm:react-is": {
+    "npm:react-is@16.13.1": {
       "type": "npm",
-      "name": "npm:react-is",
+      "name": "npm:react-is@16.13.1",
       "data": {
         "version": "16.13.1",
         "packageName": "react-is",
@@ -5841,9 +5823,9 @@
         "hash": "sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w=="
       }
     },
-    "npm:react-is@18.3.1": {
+    "npm:react-is": {
       "type": "npm",
-      "name": "npm:react-is@18.3.1",
+      "name": "npm:react-is",
       "data": {
         "version": "18.3.1",
         "packageName": "react-is",
@@ -6147,18 +6129,18 @@
         "hash": "sha512-rUCObTnP32Q08R2uuIrt7r9PlEonuTmtuXYcW6s5kjdlj3xbnwe+21yXptAUYcMAABLkYYTtnmzb3w3EDZfueA=="
       }
     },
-    "npm:semver@6.3.1": {
+    "npm:semver": {
       "type": "npm",
-      "name": "npm:semver@6.3.1",
+      "name": "npm:semver",
       "data": {
         "version": "6.3.1",
         "packageName": "semver",
         "hash": "sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA=="
       }
     },
-    "npm:semver": {
+    "npm:semver@7.8.5": {
       "type": "npm",
-      "name": "npm:semver",
+      "name": "npm:semver@7.8.5",
       "data": {
         "version": "7.8.5",
         "packageName": "semver",
@@ -6550,15 +6532,6 @@
         "version": "0.2.7",
         "packageName": "tmp",
         "hash": "sha512-e0votIpp4Uo2AJYSzVHV6xCcawuiez3DzqDAbrTc3YxBkplN6e+dM13ZeIcZnDg/QpSuU2zfZ3rzwY8ukEnaXw=="
-      }
-    },
-    "npm:token-design": {
-      "type": "npm",
-      "name": "npm:token-design",
-      "data": {
-        "version": "0.0.5",
-        "packageName": "token-design",
-        "hash": "451288601452099596"
       }
     },
     "npm:tough-cookie": {
@@ -7289,9 +7262,8 @@
     "@nx/nx-linux-x64-musl@23.1.1": "npm:@nx/nx-linux-x64-musl",
     "@nx/nx-win32-arm64-msvc@23.1.1": "npm:@nx/nx-win32-arm64-msvc",
     "@nx/nx-win32-x64-msvc@23.1.1": "npm:@nx/nx-win32-x64-msvc",
-    "@nx/vite@latest": "npm:@nx/vite",
+    "@nx/vite@23.1.1": "npm:@nx/vite",
     "@nx/vitest@23.1.1": "npm:@nx/vitest",
-    "@nx/vitest@latest": "npm:@nx/vitest",
     "@nx/workspace@23.1.1": "npm:@nx/workspace",
     "@phenomnomnominal/tsquery@~6.2.0": "npm:@phenomnomnominal/tsquery",
     "@pkgjs/parseargs@^0.11.0": "npm:@pkgjs/parseargs",
@@ -7469,11 +7441,11 @@
     "bl@4.1.0": "npm:bl",
     "bl@^4.0.3": "npm:bl",
     "bl@^4.1.0": "npm:bl",
-    "brace-expansion@5.0.8": "npm:brace-expansion",
+    "brace-expansion@5.0.8": "npm:brace-expansion@5.0.8",
     "brace-expansion@^1.1.7": "npm:brace-expansion@1.1.18",
     "brace-expansion@^2.0.2": "npm:brace-expansion@2.1.4",
-    "brace-expansion@^5.0.5": "npm:brace-expansion@5.0.9",
-    "brace-expansion@^5.0.8": "npm:brace-expansion@5.0.9",
+    "brace-expansion@^5.0.5": "npm:brace-expansion",
+    "brace-expansion@^5.0.8": "npm:brace-expansion",
     "browser-assert@^1.2.1": "npm:browser-assert",
     "browserslist@^4.24.0": "npm:browserslist",
     "browserslist@^4.28.7": "npm:browserslist",
@@ -7542,8 +7514,8 @@
     "decimal.js@^10.6.0": "npm:decimal.js",
     "deep-eql@^5.0.1": "npm:deep-eql",
     "deep-is@^0.1.3": "npm:deep-is",
-    "default-browser-id@5.0.0": "npm:default-browser-id",
-    "default-browser-id@^5.0.0": "npm:default-browser-id@5.0.1",
+    "default-browser-id@5.0.0": "npm:default-browser-id@5.0.0",
+    "default-browser-id@^5.0.0": "npm:default-browser-id",
     "default-browser@5.2.1": "npm:default-browser",
     "default-browser@^5.2.1": "npm:default-browser@5.5.0",
     "defaults@1.0.4": "npm:defaults",
@@ -7583,9 +7555,9 @@
     "es-errors@1.3.0": "npm:es-errors",
     "es-errors@^1.3.0": "npm:es-errors",
     "es-module-lexer@^1.7.0": "npm:es-module-lexer",
-    "es-object-atoms@1.1.1": "npm:es-object-atoms",
-    "es-object-atoms@^1.0.0": "npm:es-object-atoms@1.1.2",
-    "es-object-atoms@^1.1.1": "npm:es-object-atoms@1.1.2",
+    "es-object-atoms@1.1.1": "npm:es-object-atoms@1.1.1",
+    "es-object-atoms@^1.0.0": "npm:es-object-atoms",
+    "es-object-atoms@^1.1.1": "npm:es-object-atoms",
     "es-set-tostringtag@2.1.0": "npm:es-set-tostringtag",
     "es-set-tostringtag@^2.1.0": "npm:es-set-tostringtag",
     "esbuild-register@^3.5.0": "npm:esbuild-register",
@@ -7696,10 +7668,10 @@
     "is-arrayish@^0.2.1": "npm:is-arrayish",
     "is-callable@^1.2.7": "npm:is-callable",
     "is-core-module@^2.16.1": "npm:is-core-module",
-    "is-docker@3.0.0": "npm:is-docker",
-    "is-docker@^3.0.0": "npm:is-docker",
-    "is-docker@^2.0.0": "npm:is-docker@2.2.1",
-    "is-docker@^2.1.1": "npm:is-docker@2.2.1",
+    "is-docker@3.0.0": "npm:is-docker@3.0.0",
+    "is-docker@^3.0.0": "npm:is-docker@3.0.0",
+    "is-docker@^2.0.0": "npm:is-docker",
+    "is-docker@^2.1.1": "npm:is-docker",
     "is-extglob@^2.1.1": "npm:is-extglob",
     "is-fullwidth-code-point@3.0.0": "npm:is-fullwidth-code-point",
     "is-fullwidth-code-point@^3.0.0": "npm:is-fullwidth-code-point",
@@ -7753,7 +7725,6 @@
     "log-symbols@4.1.0": "npm:log-symbols",
     "log-symbols@^4.1.0": "npm:log-symbols",
     "loose-envify@^1.1.0": "npm:loose-envify",
-    "loose-envify@^1.4.0": "npm:loose-envify",
     "loupe@^3.1.0": "npm:loupe",
     "loupe@^3.1.1": "npm:loupe",
     "loupe@^3.1.2": "npm:loupe",
@@ -7776,9 +7747,9 @@
     "mimic-fn@2.1.0": "npm:mimic-fn",
     "mimic-fn@^2.1.0": "npm:mimic-fn",
     "min-indent@^1.0.0": "npm:min-indent",
-    "minimatch@10.2.5": "npm:minimatch",
+    "minimatch@10.2.5": "npm:minimatch@10.2.5",
     "minimatch@^10.2.2": "npm:minimatch@10.2.6",
-    "minimatch@^3.1.5": "npm:minimatch@3.1.5",
+    "minimatch@^3.1.5": "npm:minimatch",
     "minimatch@^9.0.4": "npm:minimatch@9.0.9",
     "minimist@1.2.8": "npm:minimist",
     "minimist@^1.2.6": "npm:minimist",
@@ -7792,8 +7763,6 @@
     "npm-run-path@4.0.1": "npm:npm-run-path",
     "npm-run-path@^4.0.1": "npm:npm-run-path",
     "nx@23.1.1": "npm:nx",
-    "nx@latest": "npm:nx",
-    "object-assign@^4.1.1": "npm:object-assign",
     "once@1.4.0": "npm:once",
     "once@^1.4.0": "npm:once",
     "onetime@5.1.2": "npm:onetime",
@@ -7835,7 +7804,6 @@
     "prelude-ls@^1.2.1": "npm:prelude-ls",
     "pretty-format@^27.0.2": "npm:pretty-format",
     "process@^0.11.10": "npm:process",
-    "prop-types@^15.8.1": "npm:prop-types",
     "proxy-from-env@2.1.0": "npm:proxy-from-env",
     "proxy-from-env@^2.1.0": "npm:proxy-from-env",
     "punycode@^2.1.0": "npm:punycode",
@@ -7845,10 +7813,9 @@
     "react-docgen@^7.0.0": "npm:react-docgen",
     "react-dom@18.3.1": "npm:react-dom",
     "react-dom@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0": "npm:react-dom@19.2.8",
-    "react-is@^16.13.1": "npm:react-is",
-    "react-is@^16.7.0": "npm:react-is",
+    "react-is@^16.7.0": "npm:react-is@16.13.1",
     "react-is@^17.0.1": "npm:react-is@17.0.2",
-    "react-is@^18.0.0": "npm:react-is@18.3.1",
+    "react-is@^18.0.0": "npm:react-is",
     "react-moveable@^0.56.0": "npm:react-moveable",
     "react-redux@^8.1.2": "npm:react-redux",
     "react-refresh@^0.18.0": "npm:react-refresh",
@@ -7891,10 +7858,10 @@
     "scheduler@^0.27.0": "npm:scheduler@0.27.0",
     "selecto@~1.26.3": "npm:selecto",
     "semver@7.8.4": "npm:semver@7.8.4",
-    "semver@^6.3.1": "npm:semver@6.3.1",
-    "semver@^7.6.2": "npm:semver",
-    "semver@^7.6.3": "npm:semver",
-    "semver@^7.7.3": "npm:semver",
+    "semver@^6.3.1": "npm:semver",
+    "semver@^7.6.2": "npm:semver@7.8.5",
+    "semver@^7.6.3": "npm:semver@7.8.5",
+    "semver@^7.7.3": "npm:semver@7.8.5",
     "set-function-length@^1.2.2": "npm:set-function-length",
     "shebang-command@^2.0.0": "npm:shebang-command",
     "shebang-regex@^3.0.0": "npm:shebang-regex",
@@ -7953,7 +7920,6 @@
     "tldts-core@^7.4.10": "npm:tldts-core",
     "tldts@^7.0.5": "npm:tldts",
     "tmp@0.2.7": "npm:tmp",
-    "token-design@./token-design-v0.0.5.tgz": "npm:token-design",
     "tough-cookie@^6.0.1": "npm:tough-cookie",
     "tr46@^6.0.0": "npm:tr46",
     "ts-api-utils@^2.5.0": "npm:ts-api-utils",

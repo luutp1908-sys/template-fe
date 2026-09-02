@@ -190,7 +190,6 @@ function App() {
   const editor = useEditor(template || defaultLocalTemplate)
   const [isSaving, setIsSaving] = useState(false)
   const exportPollRef = useRef<number | null>(null)
-  const [name, setName] = useState('untitled')
   const [localDraftId, setLocalDraftId] = useState<string | null>(null)
   const [sidebarPanel, setSidebarPanel] = useState<'none' | 'image' | 'background' | 'layers' | 'frames'>('none')
   const canvasViewportRef = useRef<HTMLDivElement | null>(null)
