@@ -179,7 +179,7 @@ function App() {
 
   const canonicalTemplateId = draftIdFromPath ? null : (templateIdFromQuery || null)
   const { template, draft, loading, error } = useTemplate(canonicalTemplateId, draftIdFromPath ?? undefined)
-  if (error) console.error('Template load error:', error)
+  if (error) console.error('Template load error: ', error)
   const activeWorkspaceId = bridgeWorkspaceId || draft?.workspaceId || workspaceIdFromQuery || null
 
   const [authModalOpen, setAuthModalOpen] = useState(false)
