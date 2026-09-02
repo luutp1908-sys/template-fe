@@ -1,0 +1,90 @@
+name: Deploy Editor Prod
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - apps/editor/**
+      - package.json
+      - yarn.lock
+      - nx.json
+      - .github/workflows/deploy-editor-prod.yml
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-editor-prod
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: ap-southeast-1
+  DEFAULT_EDITOR_S3_BUCKET: template-saas-prod-editor-site
+  DEFAULT_EDITOR_CLOUDFRONT_DISTRIBUTION_ID: E3JAM41O329LKS
+
+jobs:
+  deploy:
+    name: Build and Deploy Editor
+    runs-on: ubuntu-latest
+    environment: production
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+          cache-dependency-path: yarn.lock
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build editor
+        run: yarn build:editor
+
+      - name: Resolve deploy targets
+        env:
+          EDITOR_S3_BUCKET_VAR: ${{ vars.EDITOR_S3_BUCKET }}
+          EDITOR_CLOUDFRONT_DISTRIBUTION_ID_VAR: ${{ vars.EDITOR_CLOUDFRONT_DISTRIBUTION_ID }}
+        run: |
+          EDITOR_S3_BUCKET="${EDITOR_S3_BUCKET_VAR:-$DEFAULT_EDITOR_S3_BUCKET}"
+          EDITOR_CLOUDFRONT_DISTRIBUTION_ID="${EDITOR_CLOUDFRONT_DISTRIBUTION_ID_VAR:-$DEFAULT_EDITOR_CLOUDFRONT_DISTRIBUTION_ID}"
+
+          if [ -z "$EDITOR_S3_BUCKET" ]; then
+            echo "EDITOR_S3_BUCKET is empty. Set repo variable EDITOR_S3_BUCKET."
+            exit 1
+          fi
+
+          if [ -z "$EDITOR_CLOUDFRONT_DISTRIBUTION_ID" ]; then
+            echo "EDITOR_CLOUDFRONT_DISTRIBUTION_ID is empty. Set repo variable EDITOR_CLOUDFRONT_DISTRIBUTION_ID."
+            exit 1
+          fi
+
+          echo "EDITOR_S3_BUCKET=$EDITOR_S3_BUCKET" >> "$GITHUB_ENV"
+          echo "EDITOR_CLOUDFRONT_DISTRIBUTION_ID=$EDITOR_CLOUDFRONT_DISTRIBUTION_ID" >> "$GITHUB_ENV"
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Sync editor build to S3
+        run: |
+          aws s3 sync dist/apps/editor/ "s3://${EDITOR_S3_BUCKET}/" --delete
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "$EDITOR_CLOUDFRONT_DISTRIBUTION_ID" \
+            --paths "/remoteEntry.js" "/index.html"
