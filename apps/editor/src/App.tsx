@@ -178,7 +178,7 @@ function App() {
   const [bridgeWorkspaceResolved, setBridgeWorkspaceResolved] = useState(false)
 
   const canonicalTemplateId = draftIdFromPath ? null : (templateIdFromQuery || null)
-  const { template, draft, loading, error } = useTemplate(canonicalTemplateId, draftIdFromPath ?? undefined)
+  const { template, draft, error } = useTemplate(canonicalTemplateId, draftIdFromPath ?? undefined)
   if (error) console.error('Template load error: ', error)
   const activeWorkspaceId = bridgeWorkspaceId || draft?.workspaceId || workspaceIdFromQuery || null
 
