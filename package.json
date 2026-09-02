@@ -34,8 +34,7 @@
     "react-dom": "18.3.1",
     "react-moveable": "^0.56.0",
     "react-redux": "^8.1.2",
-    "styled-components": "^6.4.3",
-    "token-design": "./token-design-v0.0.5.tgz"
+    "styled-components": "^6.4.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.3.1",
