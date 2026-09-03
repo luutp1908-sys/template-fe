@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import {
   DEFAULT_IMAGE_CORNER_RADIUS,
   DEFAULT_IMAGE_FIT_MODE,
@@ -150,9 +150,13 @@ export const computeFitZoom = ({
 
 export const useEditor = (initialTemplate?: TemplateContent | EditorObject[] | null) => {
   // Normalize legacy input: if an array of EditorObject is provided, convert to TemplateContent
-  const normalizedInitial: TemplateContent | null = Array.isArray(initialTemplate)
-    ? { pages: [ { id: 'page_1', width: 1024, height: 768, background: { color: '#ffffff' }, layers: initialTemplate } ] }
-    : (initialTemplate as TemplateContent | null)
+  const normalizedInitial: TemplateContent | null = useMemo(
+    () =>
+      Array.isArray(initialTemplate)
+        ? { pages: [{ id: 'page_1', width: 1024, height: 768, background: { color: '#ffffff' }, layers: initialTemplate }] }
+        : (initialTemplate as TemplateContent | null),
+    [initialTemplate],
+  )
   const mapBlockToPage = (b: any): Page => {
     const width = typeof b?.config?.width === 'string' ? parseInt(String(b.config.width).replace(/px$/, '')) || 1024 : b?.config?.width || 1024
     const height = typeof b?.config?.height === 'string' ? parseInt(String(b.config.height).replace(/px$/, '')) || 768 : b?.config?.height || 768

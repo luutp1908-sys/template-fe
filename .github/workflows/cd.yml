@@ -1,15 +1,11 @@
 name: Deploy Editor Prod
 
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - apps/editor/**
-      - package.json
-      - yarn.lock
-      - nx.json
-      - .github/workflows/deploy-editor-prod.yml
+  workflow_run:
+    workflows:
+      - Editor CI
+    types:
+      - completed
   workflow_dispatch:
 
 concurrency:
@@ -28,6 +24,7 @@ env:
 jobs:
   deploy:
     name: Build and Deploy Editor
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'master')
     runs-on: ubuntu-latest
     environment: production
     env:
@@ -40,6 +37,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

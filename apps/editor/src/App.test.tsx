@@ -55,14 +55,14 @@ describe('App integration', () => {
   it('renders initial layers in sidebar', () => {
     renderApp()
 
-    expect(screen.getByText('Shape 1')).toBeInTheDocument()
-    expect(screen.getByText('Text 2')).toBeInTheDocument()
+    expect(screen.getByText('No objects yet')).toBeInTheDocument()
   })
 
   it('does not render a properties panel', () => {
     renderApp()
 
-    fireEvent.click(screen.getByText('Your design'))
+    fireEvent.click(screen.getByTitle('Add Text'))
+    fireEvent.click(screen.getByText('New text'))
     fireEvent.click(screen.getByTestId('canvas-area'))
 
     expect(screen.queryByText('Properties')).not.toBeInTheDocument()
@@ -71,24 +71,25 @@ describe('App integration', () => {
   it('wires add and delete actions across menu and sidebar', () => {
     renderApp()
 
-    expect(screen.getAllByTitle('Delete')).toHaveLength(2)
+    expect(screen.queryAllByTitle('Delete')).toHaveLength(0)
 
     fireEvent.click(screen.getByTitle('Add Text'))
 
-    expect(screen.getByText('Text 3')).toBeInTheDocument()
-    expect(screen.getAllByTitle('Delete')).toHaveLength(3)
+    expect(screen.getByText('Text 1')).toBeInTheDocument()
+    expect(screen.getAllByTitle('Delete')).toHaveLength(1)
 
     const deleteButtons = screen.getAllByTitle('Delete')
-    fireEvent.click(deleteButtons[2])
+    fireEvent.click(deleteButtons[0])
 
-    expect(screen.queryByText('Text 3')).not.toBeInTheDocument()
-    expect(screen.getAllByTitle('Delete')).toHaveLength(2)
+    expect(screen.queryByText('Text 1')).not.toBeInTheDocument()
+    expect(screen.queryAllByTitle('Delete')).toHaveLength(0)
   })
 
   it('enters text edit mode on double click and saves on blur', () => {
     renderApp()
 
-    const textNode = screen.getByText('Your design')
+    fireEvent.click(screen.getByTitle('Add Text'))
+    const textNode = screen.getByText('New text')
     fireEvent.doubleClick(textNode)
 
     const editor = screen.getByLabelText('Text Editor')
@@ -101,24 +102,26 @@ describe('App integration', () => {
   it('cancels text edit on Escape and restores previous value', () => {
     renderApp()
 
-    const textNode = screen.getByText('Your design')
+    fireEvent.click(screen.getByTitle('Add Text'))
+    const textNode = screen.getByText('New text')
     fireEvent.doubleClick(textNode)
 
     const editor = screen.getByLabelText('Text Editor')
     fireEvent.change(editor, { target: { value: 'Temp value' } })
     fireEvent.keyDown(editor, { key: 'Escape' })
 
-    expect(screen.getByText('Your design')).toBeInTheDocument()
+    expect(screen.getByText('New text')).toBeInTheDocument()
     expect(screen.queryByText('Temp value')).not.toBeInTheDocument()
   })
 
   it('auto-grows text box height while typing long wrapped content', () => {
     renderApp()
 
-    const textObject = screen.getByTestId('canvas-object-2')
+    fireEvent.click(screen.getByTitle('Add Text'))
+    const textObject = screen.getByText('New text').closest('[data-testid^="canvas-object-"]') as HTMLElement
     const initialHeight = Number.parseFloat(textObject.style.height)
 
-    fireEvent.doubleClick(screen.getByText('Your design'))
+    fireEvent.doubleClick(screen.getByText('New text'))
     const editor = screen.getByLabelText('Text Editor')
 
     Object.defineProperty(editor, 'scrollHeight', {
@@ -134,7 +137,8 @@ describe('App integration', () => {
 
     fireEvent.blur(editor)
 
-    const updatedHeight = Number.parseFloat(screen.getByTestId('canvas-object-2').style.height)
+    const updatedObject = screen.getByText('Long text that should wrap over multiple lines and force taller editor bounds.').closest('[data-testid^="canvas-object-"]') as HTMLElement
+    const updatedHeight = Number.parseFloat(updatedObject.style.height)
     expect(updatedHeight).toBeGreaterThan(initialHeight)
   })
 
@@ -152,16 +156,20 @@ describe('App integration', () => {
     fireEvent.click(screen.getByTitle('Add Image'))
     fireEvent.click(screen.getByLabelText('Stock Mountain Lake'))
 
-    expect(screen.getByText('Image 3')).toBeInTheDocument()
+    expect(screen.getByText('Image 1')).toBeInTheDocument()
   })
 
-  it('selects stock image from left menu stock list', () => {
+  it('selects stock image from left menu stock list', async () => {
     renderApp()
 
     fireEvent.click(screen.getByTitle('Add Image'))
     fireEvent.click(screen.getByLabelText('Stock Mountain Lake'))
 
-    const renderedImage = document.querySelector('img[data-testid^="canvas-image-"]') as HTMLImageElement
+    await waitFor(() => {
+      expect(document.querySelector('img[src*="picsum.photos"]')).toBeTruthy()
+    })
+
+    const renderedImage = document.querySelector('img[src*="picsum.photos"]') as HTMLImageElement
     expect(renderedImage).toBeTruthy()
     expect(renderedImage).toHaveAttribute('src')
     expect(renderedImage.getAttribute('src')).toContain('picsum.photos')
@@ -187,29 +195,38 @@ describe('App integration', () => {
     expect(screen.getByLabelText('Background Stock Panel')).toBeInTheDocument()
   })
 
-  it('shows inline toolbar for selected object and hides on backdrop click', () => {
+  it('shows inline toolbar for selected object and hides on backdrop click', async () => {
     renderApp()
 
-    fireEvent.click(screen.getByText('Your design'))
+    fireEvent.click(screen.getByTitle('Add Text'))
+    await waitFor(() => {
+      expect(screen.getByLabelText('Inline Toolbar')).toBeInTheDocument()
+    })
     expect(screen.getByLabelText('Inline Toolbar')).toBeInTheDocument()
 
     fireEvent.click(screen.getByTestId('canvas-area'))
     expect(screen.queryByLabelText('Inline Toolbar')).not.toBeInTheDocument()
   })
 
-  it('duplicates selected object from inline toolbar', () => {
+  it('duplicates selected object from inline toolbar', async () => {
     renderApp()
 
-    fireEvent.click(screen.getByText('Your design'))
+    fireEvent.click(screen.getByTitle('Add Text'))
+    await waitFor(() => {
+      expect(screen.getByLabelText('Inline Toolbar')).toBeInTheDocument()
+    })
     fireEvent.click(screen.getByLabelText('Duplicate Selected'))
 
-    expect(screen.getByText('Text 3')).toBeInTheDocument()
+    expect(screen.getByText('Text 2')).toBeInTheDocument()
   })
 
-  it('toggles lock and unlock labels from inline toolbar', () => {
+  it('toggles lock and unlock labels from inline toolbar', async () => {
     renderApp()
 
-    fireEvent.click(screen.getByText('Your design'))
+    fireEvent.click(screen.getByTitle('Add Text'))
+    await waitFor(() => {
+      expect(screen.getByLabelText('Inline Toolbar')).toBeInTheDocument()
+    })
     const lockButton = screen.getByLabelText('Lock Selected')
     fireEvent.click(lockButton)
 
@@ -219,13 +236,16 @@ describe('App integration', () => {
     expect(screen.getByLabelText('Lock Selected')).toBeInTheDocument()
   })
 
-  it('deletes selected object from inline toolbar', () => {
+  it('deletes selected object from inline toolbar', async () => {
     renderApp()
 
-    fireEvent.click(screen.getByText('Your design'))
+    fireEvent.click(screen.getByTitle('Add Text'))
+    await waitFor(() => {
+      expect(screen.getByLabelText('Inline Toolbar')).toBeInTheDocument()
+    })
     fireEvent.click(screen.getByLabelText('Delete Selected'))
 
-    expect(screen.queryByText('Your design')).not.toBeInTheDocument()
+    expect(screen.getByText('No objects yet')).toBeInTheDocument()
   })
 
   it('updates page background color from background sidebar picker', () => {

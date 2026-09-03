@@ -1,0 +1,64 @@
+name: Editor CI
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - apps/editor/**
+      - package.json
+      - yarn.lock
+      - nx.json
+      - .github/workflows/ci.yml
+      - .github/workflows/cd.yml
+  pull_request:
+    paths:
+      - apps/editor/**
+      - package.json
+      - yarn.lock
+      - nx.json
+      - .github/workflows/ci.yml
+      - .github/workflows/cd.yml
+  workflow_dispatch:
+
+concurrency:
+  group: editor-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: Lint, Typecheck, Test, and Build Editor
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+          cache-dependency-path: yarn.lock
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Typecheck
+        run: yarn typecheck
+
+      - name: Test
+        run: yarn test
+
+      - name: Build editor
+        run: yarn build:editor

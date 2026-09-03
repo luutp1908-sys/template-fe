@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react'
+import type { ReactNode } from 'react'
 
 export type EditorBridgeUser = {
   id: string
@@ -32,11 +33,12 @@ export function EditorHostBridgeProvider({
   children,
 }: {
   value: EditorHostBridgeValue
-  children: React.ReactNode
+  children: ReactNode
 }) {
   return <EditorHostBridgeContext.Provider value={value}>{children}</EditorHostBridgeContext.Provider>
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useEditorHostBridge() {
   return useContext(EditorHostBridgeContext)
 }

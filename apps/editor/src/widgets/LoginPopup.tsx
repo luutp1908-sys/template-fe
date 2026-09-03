@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { FormEvent } from 'react'
 import styled from 'styled-components'
 
 const Overlay = styled.div`
@@ -70,7 +71,7 @@ export const LoginPopup = ({ visible, onClose, onSignIn, onSignUp, loading, erro
 
   if (!visible) return null
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     if (tab === 'signin') {

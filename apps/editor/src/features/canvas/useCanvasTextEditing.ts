@@ -23,8 +23,6 @@ export const useCanvasTextEditing = ({
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null)
   const pendingHeightRef = useRef<number | null>(null)
 
-  const getObjectById = (id: number | null) => objects.find((obj) => obj.id === id)
-
   useEffect(() => {
     if (editingId === null || !textAreaRef.current) return
     textAreaRef.current.focus()
@@ -33,7 +31,7 @@ export const useCanvasTextEditing = ({
 
   useEffect(() => {
     if (editingId === null || !textAreaRef.current) return
-    const object = getObjectById(editingId)
+    const object = objects.find((obj) => obj.id === editingId)
     if (!object || object.type !== 'text') return
 
     const element = textAreaRef.current

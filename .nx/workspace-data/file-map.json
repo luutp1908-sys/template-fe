@@ -16,16 +16,40 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "tsconfig.base.json",
-        "hash": "12775075012423230082"
+        "file": "test-results/.last-run.json",
+        "hash": "11141884120100644736"
       },
       {
         "file": "README.nx.md",
         "hash": "11498756923445397898"
       },
       {
+        "file": ".github/workflows/ci.yml",
+        "hash": "7624529630810329791"
+      },
+      {
+        "file": "nx.json",
+        "hash": "9917378610941575468"
+      },
+      {
+        "file": "PROJECT_CONTEXT.md",
+        "hash": "190274584879683839"
+      },
+      {
         "file": "yarn.lock",
         "hash": "10450513307255346230"
+      },
+      {
+        "file": ".github/copilot-instructions.md",
+        "hash": "563961152393806487"
+      },
+      {
+        "file": ".storybook/main.ts",
+        "hash": "7926010696189104013"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "12775075012423230082"
       },
       {
         "file": ".storybook/preview.ts",
@@ -37,31 +61,11 @@
       },
       {
         "file": "package.json",
-        "hash": "16733359513731819112"
+        "hash": "10188880121078987475"
       },
       {
-        "file": ".github/workflows/deploy-editor-prod.yml",
-        "hash": "4509219803052932887"
-      },
-      {
-        "file": ".github/copilot-instructions.md",
-        "hash": "563961152393806487"
-      },
-      {
-        "file": "PROJECT_CONTEXT.md",
-        "hash": "190274584879683839"
-      },
-      {
-        "file": ".storybook/main.ts",
-        "hash": "7926010696189104013"
-      },
-      {
-        "file": "nx.json",
-        "hash": "9917378610941575468"
-      },
-      {
-        "file": "test-results/.last-run.json",
-        "hash": "11141884120100644736"
+        "file": ".github/workflows/cd.yml",
+        "hash": "4913877461799512908"
       }
     ],
     "projectFileMap": {
@@ -104,7 +108,7 @@
         },
         {
           "file": "apps/editor/eslint.config.js",
-          "hash": "1619063768437646049"
+          "hash": "11674857513395172885"
         },
         {
           "file": "apps/editor/index.html",
@@ -132,11 +136,11 @@
         },
         {
           "file": "apps/editor/src/App.test.tsx",
-          "hash": "9917458968191806634"
+          "hash": "16193194589899285103"
         },
         {
           "file": "apps/editor/src/App.tsx",
-          "hash": "7067070154033408663"
+          "hash": "18303501604206209022"
         },
         {
           "file": "apps/editor/src/assets/hero.png",
@@ -160,7 +164,7 @@
         },
         {
           "file": "apps/editor/src/embedded/EditorHostBridge.tsx",
-          "hash": "3984472102425729776"
+          "hash": "17434151078266307700"
         },
         {
           "file": "apps/editor/src/embedded/EditorRemoteEntry.tsx",
@@ -192,7 +196,7 @@
         },
         {
           "file": "apps/editor/src/features/canvas/useCanvasTextEditing.ts",
-          "hash": "15168464358038582088"
+          "hash": "5905592525975662128"
         },
         {
           "file": "apps/editor/src/features/layers/FrameLayerContent.tsx",
@@ -240,7 +244,7 @@
         },
         {
           "file": "apps/editor/src/shared/auth/tokenStore.ts",
-          "hash": "8686293096904788272"
+          "hash": "7646865516855413613"
         },
         {
           "file": "apps/editor/src/shared/constants/editorGeometry.ts",
@@ -264,7 +268,7 @@
         },
         {
           "file": "apps/editor/src/shared/hooks/useEditor.ts",
-          "hash": "7170882246554046742"
+          "hash": "3533217655961025505"
         },
         {
           "file": "apps/editor/src/shared/hooks/useTemplate.ts",
@@ -284,7 +288,7 @@
         },
         {
           "file": "apps/editor/src/widgets/AuthModal.tsx",
-          "hash": "17440511787962392329"
+          "hash": "11926861456609888015"
         },
         {
           "file": "apps/editor/src/widgets/LoginPopup.stories.tsx",
@@ -292,7 +296,7 @@
         },
         {
           "file": "apps/editor/src/widgets/LoginPopup.tsx",
-          "hash": "13477973742414183874"
+          "hash": "4207143255116877403"
         },
         {
           "file": "apps/editor/src/widgets/MenuBar.tsx",
@@ -308,7 +312,7 @@
         },
         {
           "file": "apps/editor/vite.config.js",
-          "hash": "12405366808361399642"
+          "hash": "4865327108666025484"
         }
       ],
       "admin": [

@@ -237,7 +237,7 @@ function App() {
       })
     })
     return () => cancelAnimationFrame(frame)
-  }, [])
+  }, [editor])
 
   useEffect(() => {
     if (draft?.id) setLocalDraftId(draft.id)

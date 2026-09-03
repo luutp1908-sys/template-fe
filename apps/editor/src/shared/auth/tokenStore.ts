@@ -56,7 +56,9 @@ export function clearTokens() {
   cache = { accessToken: null, refreshToken: null, user: null }
   try {
     localStorage.removeItem(STORAGE_KEY)
-  } catch {}
+  } catch (error) {
+    void error
+  }
   listeners.forEach((l) => l())
 }
 
