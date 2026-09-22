@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useState } from 'react'
-import FrameBrowser from '../components/FrameBrowser'
+import FrameBrowser from './FrameBrowser'
 import { MENU_BAR_WIDTH } from '../shared/constants/layout'
 import type { ActiveTool } from '../shared/types/editor'
 
