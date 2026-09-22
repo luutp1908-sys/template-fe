@@ -3987,6 +3987,15 @@
         "hash": "sha512-7ZgogeTnjuHbo+ct10G9Ffp0mif17idi0IyWNVA/wcwcm7NPOD/WEHVP3n7n3MhXqxoIYm8d6MuZohYWIZ4T3w=="
       }
     },
+    "npm:dotenv-cli": {
+      "type": "npm",
+      "name": "npm:dotenv-cli",
+      "data": {
+        "version": "11.0.0",
+        "packageName": "dotenv-cli",
+        "hash": "sha512-r5pA8idbk7GFWuHEU7trSTflWcdBpQEK+Aw17UrSHjS6CReuhrrPcyC3zcQBPQvhArRHnBo/h6eLH1fkCvNlww=="
+      }
+    },
     "npm:dotenv-expand": {
       "type": "npm",
       "name": "npm:dotenv-expand",
@@ -4012,6 +4021,15 @@
         "version": "16.6.1",
         "packageName": "dotenv",
         "hash": "sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow=="
+      }
+    },
+    "npm:dotenv@17.4.2": {
+      "type": "npm",
+      "name": "npm:dotenv@17.4.2",
+      "data": {
+        "version": "17.4.2",
+        "packageName": "dotenv",
+        "hash": "sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw=="
       }
     },
     "npm:dunder-proto": {
@@ -7532,9 +7550,12 @@
     "doctrine@^3.0.0": "npm:doctrine",
     "dom-accessibility-api@^0.5.9": "npm:dom-accessibility-api",
     "dom-accessibility-api@^0.6.3": "npm:dom-accessibility-api@0.6.3",
+    "dotenv-cli@^11.0.0": "npm:dotenv-cli",
     "dotenv-expand@12.0.3": "npm:dotenv-expand",
+    "dotenv-expand@^12.0.0": "npm:dotenv-expand",
     "dotenv@16.4.7": "npm:dotenv",
     "dotenv@^16.4.5": "npm:dotenv@16.6.1",
+    "dotenv@^17.1.0": "npm:dotenv@17.4.2",
     "dunder-proto@1.0.1": "npm:dunder-proto",
     "dunder-proto@^1.0.1": "npm:dunder-proto",
     "eastasianwidth@^0.2.0": "npm:eastasianwidth",

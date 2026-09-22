@@ -23,6 +23,7 @@ type CanvasProps = {
   onDuplicateObject: (id: number) => void
   onDeleteObject: (id: number) => void
   onToggleObjectLock: (id: number) => void
+  onDownloadTemplate?: () => void
   pageBackgroundColor?: string
   pageBackgroundImage?: string
   pageWidth?: number
@@ -39,6 +40,7 @@ export const Canvas = ({
   onDuplicateObject,
   onDeleteObject,
   onToggleObjectLock,
+  onDownloadTemplate,
   pageBackgroundColor = '#ffffff',
   pageBackgroundImage,
   pageWidth,
@@ -139,6 +141,7 @@ export const Canvas = ({
                 onDuplicateObject={onDuplicateObject}
                 onDeleteObject={onDeleteObject}
                 onToggleObjectLock={onToggleObjectLock}
+                onDownloadTemplate={() => onDownloadTemplate?.()}
               />
             )}
           </PageSurface>

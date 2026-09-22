@@ -6,6 +6,7 @@ type InlineObjectToolbarProps = {
   onDuplicateObject: (id: number) => void
   onDeleteObject: (id: number) => void
   onToggleObjectLock: (id: number) => void
+  onDownloadTemplate: () => void
 }
 
 export const InlineObjectToolbar = ({
@@ -13,6 +14,7 @@ export const InlineObjectToolbar = ({
   onDuplicateObject,
   onDeleteObject,
   onToggleObjectLock,
+  onDownloadTemplate,
 }: InlineObjectToolbarProps) => {
   return (
     <InlineToolbar
@@ -45,6 +47,14 @@ export const InlineObjectToolbar = ({
         onClick={() => onToggleObjectLock(selectedObject.id)}
       >
         {selectedObject.locked ? 'Unlock' : 'Lock'}
+      </ToolbarButton>
+      <ToolbarButton
+        type="button"
+        aria-label="Download Template"
+        onClick={onDownloadTemplate}
+        className='download-template-button'
+      >
+        Download Template
       </ToolbarButton>
     </InlineToolbar>
   )

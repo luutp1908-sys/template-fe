@@ -4067,6 +4067,15 @@
         "hash": "sha512-7ZgogeTnjuHbo+ct10G9Ffp0mif17idi0IyWNVA/wcwcm7NPOD/WEHVP3n7n3MhXqxoIYm8d6MuZohYWIZ4T3w=="
       }
     },
+    "npm:dotenv-cli": {
+      "type": "npm",
+      "name": "npm:dotenv-cli",
+      "data": {
+        "version": "11.0.0",
+        "packageName": "dotenv-cli",
+        "hash": "sha512-r5pA8idbk7GFWuHEU7trSTflWcdBpQEK+Aw17UrSHjS6CReuhrrPcyC3zcQBPQvhArRHnBo/h6eLH1fkCvNlww=="
+      }
+    },
     "npm:dotenv-expand": {
       "type": "npm",
       "name": "npm:dotenv-expand",
@@ -4092,6 +4101,15 @@
         "version": "16.6.1",
         "packageName": "dotenv",
         "hash": "sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow=="
+      }
+    },
+    "npm:dotenv@17.4.2": {
+      "type": "npm",
+      "name": "npm:dotenv@17.4.2",
+      "data": {
+        "version": "17.4.2",
+        "packageName": "dotenv",
+        "hash": "sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw=="
       }
     },
     "npm:dunder-proto": {
@@ -11267,6 +11285,28 @@
         "type": "static"
       }
     ],
+    "npm:dotenv-cli": [
+      {
+        "source": "npm:dotenv-cli",
+        "target": "npm:cross-spawn",
+        "type": "static"
+      },
+      {
+        "source": "npm:dotenv-cli",
+        "target": "npm:dotenv@17.4.2",
+        "type": "static"
+      },
+      {
+        "source": "npm:dotenv-cli",
+        "target": "npm:dotenv-expand",
+        "type": "static"
+      },
+      {
+        "source": "npm:dotenv-cli",
+        "target": "npm:minimist",
+        "type": "static"
+      }
+    ],
     "npm:dotenv-expand": [
       {
         "source": "npm:dotenv-expand",
@@ -14679,5 +14719,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1788453987719
+  "computedAt": 1789734794309
 }

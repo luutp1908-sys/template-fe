@@ -248,6 +248,29 @@ describe('App integration', () => {
     expect(screen.getByText('No objects yet')).toBeInTheDocument()
   })
 
+  it('downloads the current template from the inline toolbar export action', async () => {
+    vi.mocked(postJson).mockResolvedValue({ id: 'exp_123' })
+    vi.mocked(fetchJson)
+      .mockResolvedValueOnce({ id: 'exp_123', status: 'pending' })
+      .mockResolvedValueOnce({ id: 'exp_123', status: 'completed', fileName: 'template.pdf' })
+
+    renderApp()
+
+    fireEvent.click(screen.getByTitle('Add Text'))
+    await waitFor(() => {
+      expect(screen.getByLabelText('Inline Toolbar')).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getByLabelText('Download Template'))
+
+    await waitFor(() => {
+      expect(postJson).toHaveBeenCalledWith('/api/v1/export/jobs', expect.objectContaining({
+        format: 'pdf',
+        content: expect.objectContaining({ pages: expect.any(Array) }),
+      }))
+    })
+  })
+
   it('updates page background color from background sidebar picker', () => {
     renderApp()
 

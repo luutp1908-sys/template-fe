@@ -639,6 +639,7 @@ function App() {
           onDuplicateObject={editor.duplicateObject}
           onDeleteObject={editor.deleteObject}
           onToggleObjectLock={editor.toggleObjectLock}
+          onDownloadTemplate={handleDownloadPdf}
           pageBackgroundColor={editor.currentPageBackground?.color || '#ffffff'}
           pageBackgroundImage={editor.currentPageBackground?.image?.src}
           pageWidth={editor.pages?.[editor.currentPageIndex]?.width}

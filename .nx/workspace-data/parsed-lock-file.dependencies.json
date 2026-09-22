@@ -4555,6 +4555,31 @@
     "type": "static"
   },
   {
+    "source": "npm:dotenv-cli",
+    "target": "npm:cross-spawn",
+    "type": "static"
+  },
+  {
+    "source": "npm:dotenv-cli",
+    "target": "npm:dotenv@17.4.2",
+    "type": "static"
+  },
+  {
+    "source": "npm:dotenv-cli",
+    "target": "npm:dotenv-expand",
+    "type": "static"
+  },
+  {
+    "source": "npm:dotenv-cli",
+    "target": "npm:minimist",
+    "type": "static"
+  },
+  {
+    "source": "npm:dotenv-expand",
+    "target": "npm:dotenv@16.6.1",
+    "type": "static"
+  },
+  {
     "source": "npm:dotenv-expand",
     "target": "npm:dotenv@16.6.1",
     "type": "static"
