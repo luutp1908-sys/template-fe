@@ -9,7 +9,7 @@ Improve the editor architecture without disrupting current standalone and embedd
 ## Phase 1: App Shell Decomposition
 
 - [x] Extract runtime bootstrapping concerns from the app shell into a dedicated hook.
-- [ ] Extract URL and mode resolution into a dedicated hook for standalone versus embedded behavior.
+- [x] Extract URL and mode resolution into a dedicated hook for standalone versus embedded behavior.
 - [ ] Extract workspace resolution and persistence into a focused workspace context hook.
 - [ ] Extract draft save orchestration into a dedicated persistence hook.
 - [ ] Extract export job creation, polling, and download handling into a dedicated export hook.

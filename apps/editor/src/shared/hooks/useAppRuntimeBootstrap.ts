@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useEditorHostBridge } from '../../embedded/EditorHostBridge'
+import { useEffect, useRef, useState } from 'react'
 import { PAGE_HEIGHT, PAGE_WIDTH, WORKSPACE_PADDING } from '../constants/editorGeometry'
 import { computeFitZoom } from './useEditor'
 import {
@@ -9,11 +8,8 @@ import {
   storeActiveWorkspaceId,
 } from '../workspaces/activeWorkspaceBridge'
 
-export type EditorRuntimeMode = 'standalone' | 'embedded'
-
 type UseAppRuntimeBootstrapInput = {
   activeWorkspaceId: string | null
-  onRequestStandaloneLogin: () => void
   setZoom: (nextZoom: number) => void
 }
 
@@ -25,32 +21,12 @@ const centerCanvasViewport = (viewportEl: HTMLDivElement) => {
 
 export const useAppRuntimeBootstrap = ({
   activeWorkspaceId,
-  onRequestStandaloneLogin,
   setZoom,
 }: UseAppRuntimeBootstrapInput) => {
-  const bridge = useEditorHostBridge()
-  const runtimeMode: EditorRuntimeMode = bridge?.isEmbedded ? 'embedded' : 'standalone'
-  const modeConfig = useMemo(
-    () => ({
-      showHeader: runtimeMode === 'standalone',
-      showAuthModal: runtimeMode === 'standalone',
-    }),
-    [runtimeMode],
-  )
-
   const [bridgeWorkspaceId, setBridgeWorkspaceId] = useState<string | null>(() => getStoredActiveWorkspaceId())
   const [bridgeWorkspaceResolved, setBridgeWorkspaceResolved] = useState(false)
   const canvasViewportRef = useRef<HTMLDivElement | null>(null)
   const hasAutoFitApplied = useRef(false)
-
-  const requestLoginPrompt = useCallback(() => {
-    if (runtimeMode === 'embedded') {
-      bridge?.callbacks?.onRequestLogin?.()
-      return
-    }
-
-    onRequestStandaloneLogin()
-  }, [bridge, onRequestStandaloneLogin, runtimeMode])
 
   useEffect(() => {
     if (hasAutoFitApplied.current) return
@@ -125,9 +101,6 @@ export const useAppRuntimeBootstrap = ({
     bridgeWorkspaceId,
     bridgeWorkspaceResolved,
     canvasViewportRef,
-    modeConfig,
-    requestLoginPrompt,
-    runtimeMode,
   }
 }
 

@@ -1,7 +1,8 @@
-import { useRef, useState, useEffect, useCallback, useMemo } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import { useEditor } from './shared/hooks/useEditor'
 import { DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_HEIGHT, DEFAULT_TEXT_WIDTH, DEFAULT_TEXT_HEIGHT, DEFAULT_TEXT_COLOR, DEFAULT_TEXT_FONT_SIZE } from './shared/constants/editorGeometry'
+import useEditorRuntimeContext from './shared/hooks/useEditorRuntimeContext'
 import useTemplate from './shared/hooks/useTemplate'
 import { postJson, patchJson, putJson, fetchJson, fetchBlob } from './shared/api/client'
 import {
@@ -138,29 +139,25 @@ const defaultLocalTemplate = {
 }
 
 function App() {
-  const searchParams = useMemo(() => new URLSearchParams(window.location.search), [])
-  const templateIdFromQuery = useMemo(() => searchParams.get('templateId'), [searchParams])
-  const workspaceIdFromQuery = useMemo(() => searchParams.get('workspaceId'), [searchParams])
-  const adminEditParam = useMemo(() => (searchParams.get('adminEdit') || '').toLowerCase(), [searchParams])
-  const isAdminEditMode = adminEditParam === '1' || adminEditParam === 'true'
-
-  const draftIdFromPath = useMemo(() => {
-    try {
-      const m = window.location.pathname.match(/^\/draft\/([^/]+)$/)
-      return m ? decodeURIComponent(m[1]) : null
-    } catch (e) {
-      return null
-    }
-  }, [])
-
   const auth = useAuth()
   const { user } = auth
+  const [authModalOpen, setAuthModalOpen] = useState(false)
+  const {
+    canonicalTemplateId,
+    draftIdFromPath,
+    isAdminEditMode,
+    modeConfig,
+    requestLoginPrompt,
+    runtimeMode,
+    templateIdFromQuery,
+    workspaceIdFromQuery,
+  } = useEditorRuntimeContext({
+    onRequestStandaloneLogin: () => setAuthModalOpen(true),
+  })
 
-  const canonicalTemplateId = draftIdFromPath ? null : (templateIdFromQuery || null)
   const { template, draft, error } = useTemplate(canonicalTemplateId, draftIdFromPath ?? undefined)
   if (error) console.error('Template load error: ', error)
 
-  const [authModalOpen, setAuthModalOpen] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
   const [exportError, setExportError] = useState<string | null>(null)
   const [isExporting, setIsExporting] = useState(false)
@@ -175,12 +172,8 @@ function App() {
     bridgeWorkspaceId,
     bridgeWorkspaceResolved,
     canvasViewportRef,
-    modeConfig,
-    requestLoginPrompt,
-    runtimeMode,
   } = useAppRuntimeBootstrap({
     activeWorkspaceId,
-    onRequestStandaloneLogin: () => setAuthModalOpen(true),
     setZoom: editor.setZoom,
   })
   const resolvedActiveWorkspaceId = bridgeWorkspaceId || activeWorkspaceId
