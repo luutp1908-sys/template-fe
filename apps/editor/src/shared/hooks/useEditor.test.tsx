@@ -227,6 +227,45 @@ describe('useEditor', () => {
     expect(result.current.objects.find((obj) => obj.id === 1)?.locked).toBe(false)
   })
 
+  it('tracks history for content changes and can undo and redo them', () => {
+    const { result } = renderHook(() => useEditor(initialObjects))
+
+    expect(result.current.canUndo).toBe(false)
+    expect(result.current.canRedo).toBe(false)
+
+    act(() => {
+      result.current.updateObject(2, { x: 300 })
+    })
+
+    expect(result.current.canUndo).toBe(true)
+    expect(result.current.canRedo).toBe(false)
+    expect(result.current.objects.find((obj) => obj.id === 2)?.x).toBe(300)
+
+    act(() => {
+      result.current.undo()
+    })
+
+    expect(result.current.objects.find((obj) => obj.id === 2)?.x).toBe(240)
+    expect(result.current.canRedo).toBe(true)
+
+    act(() => {
+      result.current.redo()
+    })
+
+    expect(result.current.objects.find((obj) => obj.id === 2)?.x).toBe(300)
+  })
+
+  it('does not create undo history entries for selection-only changes', () => {
+    const { result } = renderHook(() => useEditor(initialObjects))
+
+    act(() => {
+      result.current.setSelectedId(2)
+    })
+
+    expect(result.current.selectedId).toBe(2)
+    expect(result.current.canUndo).toBe(false)
+  })
+
   it('maps block-based template content into page state via typed conversion helpers', () => {
     const blockTemplate: TemplateContent = {
       blocks: [

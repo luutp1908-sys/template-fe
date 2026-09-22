@@ -1,10 +1,10 @@
 {
   "latestErrorEvent": {
     "code": "TYPE-001",
-    "message": "Failed to generate type declaration. Execute the below cmd to reproduce and fix the error. #TYPE-001\nargs: {\"cmd\":\"/Users/luu/.nvm/versions/node/v22.23.1/bin/node /Users/luu/Desktop/templates/fe/node_modules/typescript/bin/tsc --project /Users/luu/Desktop/templates/fe/apps/editor/node_modules/.federation/tsconfig.859338a69ae6e2af4050146043f5f56f.json\"}\nView the docs to see how to solve: https://module-federation.io/guide/troubleshooting/type#type-001",
+    "message": "Failed to generate type declaration. Execute the below cmd to reproduce and fix the error. #TYPE-001\nargs: {\"cmd\":\"/Users/luu/.nvm/versions/node/v22.23.1/bin/node /Users/luu/Desktop/templates/fe/node_modules/typescript/bin/tsc --project /Users/luu/Desktop/templates/fe/apps/editor/node_modules/.federation/tsconfig.fdec814402b4f1a768a078223bb6aa64.json\"}\nView the docs to see how to solve: https://module-federation.io/guide/troubleshooting/type#type-001",
     "args": {
-      "cmd": "/Users/luu/.nvm/versions/node/v22.23.1/bin/node /Users/luu/Desktop/templates/fe/node_modules/typescript/bin/tsc --project /Users/luu/Desktop/templates/fe/apps/editor/node_modules/.federation/tsconfig.859338a69ae6e2af4050146043f5f56f.json"
+      "cmd": "/Users/luu/.nvm/versions/node/v22.23.1/bin/node /Users/luu/Desktop/templates/fe/node_modules/typescript/bin/tsc --project /Users/luu/Desktop/templates/fe/apps/editor/node_modules/.federation/tsconfig.fdec814402b4f1a768a078223bb6aa64.json"
     },
-    "timestamp": 1790078690790
+    "timestamp": 1790078977785
   }
 }

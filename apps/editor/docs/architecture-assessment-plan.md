@@ -43,7 +43,7 @@ Follow-up direction:
 - Keep side effects such as id generation, network persistence, export/download, and login prompting outside the reducer.
 - Preserve `useEditor` as the adapter that wires reducer state, derived selectors, and compatibility helpers for the UI.
 - [x] Add a clear boundary between editor domain state and app integration state.
-- [ ] Introduce a stable place for future undo and redo support.
+- [x] Introduce a stable place for future undo and redo support.
 - [ ] Document invariants for selection, page state, and object mutation behavior.
 
 ## Phase 4: Embedded Runtime Boundary
