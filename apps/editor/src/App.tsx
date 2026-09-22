@@ -1,28 +1,21 @@
 import { useRef, useState, useEffect, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
-import { computeFitZoom, useEditor } from './shared/hooks/useEditor'
+import { useEditor } from './shared/hooks/useEditor'
 import { DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_HEIGHT, DEFAULT_TEXT_WIDTH, DEFAULT_TEXT_HEIGHT, DEFAULT_TEXT_COLOR, DEFAULT_TEXT_FONT_SIZE } from './shared/constants/editorGeometry'
 import useTemplate from './shared/hooks/useTemplate'
-import { postJson, patchJson, putJson, getApiBase, fetchJson, fetchBlob } from './shared/api/client'
+import { postJson, patchJson, putJson, fetchJson, fetchBlob } from './shared/api/client'
 import {
   PAGE_HEIGHT,
   PAGE_WIDTH,
-  WORKSPACE_PADDING,
 } from './shared/constants/editorGeometry'
 import { HEADER_HEIGHT } from './shared/constants/layout'
 import { MenuBar } from './widgets/MenuBar'
 import FRAME_PRESETS from './data/framePresets'
 import AuthModal from './widgets/LoginPopup'
 import useAuth from './shared/hooks/useAuth'
+import useAppRuntimeBootstrap from './shared/hooks/useAppRuntimeBootstrap'
 import { Sidebar } from './widgets/Sidebar'
 import { Canvas } from './features/canvas/Canvas'
-import {
-  clearStoredActiveWorkspaceId,
-  fetchActiveWorkspaceIdFromBridge,
-  getStoredActiveWorkspaceId,
-  storeActiveWorkspaceId,
-} from './shared/workspaces/activeWorkspaceBridge'
-import { useEditorHostBridge } from './embedded/EditorHostBridge'
 import type { EditorObject } from './shared/types/editor'
 
 const AppShell = styled.div<{ $withHeader: boolean }>`
@@ -144,19 +137,7 @@ const defaultLocalTemplate = {
   ],
 }
 
-type EditorRuntimeMode = 'standalone' | 'embedded'
-
 function App() {
-  const bridge = useEditorHostBridge()
-  const runtimeMode: EditorRuntimeMode = bridge?.isEmbedded ? 'embedded' : 'standalone'
-  const modeConfig = useMemo(
-    () => ({
-      showHeader: runtimeMode === 'standalone',
-      showAuthModal: runtimeMode === 'standalone',
-    }),
-    [runtimeMode],
-  )
-
   const searchParams = useMemo(() => new URLSearchParams(window.location.search), [])
   const templateIdFromQuery = useMemo(() => searchParams.get('templateId'), [searchParams])
   const workspaceIdFromQuery = useMemo(() => searchParams.get('workspaceId'), [searchParams])
@@ -174,13 +155,10 @@ function App() {
 
   const auth = useAuth()
   const { user } = auth
-  const [bridgeWorkspaceId, setBridgeWorkspaceId] = useState<string | null>(() => getStoredActiveWorkspaceId())
-  const [bridgeWorkspaceResolved, setBridgeWorkspaceResolved] = useState(false)
 
   const canonicalTemplateId = draftIdFromPath ? null : (templateIdFromQuery || null)
   const { template, draft, error } = useTemplate(canonicalTemplateId, draftIdFromPath ?? undefined)
   if (error) console.error('Template load error: ', error)
-  const activeWorkspaceId = bridgeWorkspaceId || draft?.workspaceId || workspaceIdFromQuery || null
 
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
@@ -192,95 +170,24 @@ function App() {
   const exportPollRef = useRef<number | null>(null)
   const [localDraftId, setLocalDraftId] = useState<string | null>(null)
   const [sidebarPanel, setSidebarPanel] = useState<'none' | 'image' | 'background' | 'layers' | 'frames'>('none')
-  const canvasViewportRef = useRef<HTMLDivElement | null>(null)
-  const hasAutoFitApplied = useRef(false)
-
-  const requestLoginPrompt = useCallback(() => {
-    if (runtimeMode === 'embedded') {
-      bridge?.callbacks?.onRequestLogin?.()
-      return
-    }
-
-    setAuthModalOpen(true)
-  }, [bridge, runtimeMode])
-
-  const centerCanvasViewport = (viewportEl: HTMLDivElement) => {
-    const left = Math.max(0, (viewportEl.scrollWidth - viewportEl.clientWidth) / 2)
-    const top = Math.max(0, (viewportEl.scrollHeight - viewportEl.clientHeight) / 2)
-    viewportEl.scrollTo({ left, top, behavior: 'auto' })
-  }
-
-  useEffect(() => {
-    if (hasAutoFitApplied.current) return
-
-    const frame = requestAnimationFrame(() => {
-      const viewportEl = canvasViewportRef.current
-      if (!viewportEl) return
-
-      const rect = viewportEl.getBoundingClientRect()
-      const fitZoom = computeFitZoom({
-        viewportWidth: rect.width,
-        viewportHeight: rect.height,
-        pageWidth: PAGE_WIDTH,
-        pageHeight: PAGE_HEIGHT,
-        padding: WORKSPACE_PADDING,
-      })
-      if (!fitZoom) return
-      editor.setZoom(fitZoom)
-      hasAutoFitApplied.current = true
-
-      // Wait for zoom-driven layout to flush, then center viewport scroll.
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          centerCanvasViewport(viewportEl)
-        })
-      })
-    })
-    return () => cancelAnimationFrame(frame)
-  }, [editor])
+  const activeWorkspaceId = (draft?.workspaceId || workspaceIdFromQuery || null)
+  const {
+    bridgeWorkspaceId,
+    bridgeWorkspaceResolved,
+    canvasViewportRef,
+    modeConfig,
+    requestLoginPrompt,
+    runtimeMode,
+  } = useAppRuntimeBootstrap({
+    activeWorkspaceId,
+    onRequestStandaloneLogin: () => setAuthModalOpen(true),
+    setZoom: editor.setZoom,
+  })
+  const resolvedActiveWorkspaceId = bridgeWorkspaceId || activeWorkspaceId
 
   useEffect(() => {
     if (draft?.id) setLocalDraftId(draft.id)
   }, [draft])
-
-  useEffect(() => {
-    let cancelled = false
-
-    const run = async () => {
-      try {
-        const workspaceId = await fetchActiveWorkspaceIdFromBridge()
-        if (cancelled) return
-
-        if (workspaceId) {
-          setBridgeWorkspaceId(workspaceId)
-          return
-        }
-
-        setBridgeWorkspaceId((prev) => {
-          if (!prev) return null
-          clearStoredActiveWorkspaceId()
-          return null
-        })
-      } catch {
-        // Keep local fallback path when homepage bridge is unavailable.
-      } finally {
-        if (!cancelled) {
-          setBridgeWorkspaceResolved(true)
-        }
-      }
-    }
-
-    run()
-
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!activeWorkspaceId) return
-    storeActiveWorkspaceId(activeWorkspaceId)
-  }, [activeWorkspaceId])
 
   const handleAddShape = () => {
     editor.addObject('rect', {
@@ -404,7 +311,7 @@ function App() {
       return
     }
 
-    if (!shouldSaveCanonical && isCreatingNewDraft && !activeWorkspaceId) {
+    if (!shouldSaveCanonical && isCreatingNewDraft && !resolvedActiveWorkspaceId) {
       if (!bridgeWorkspaceResolved) {
         setSaveError('Resolving active workspace context. Please try saving again in a moment.')
         return
@@ -434,7 +341,7 @@ function App() {
       const payload = {
         name: template?.title || template?.name || `Draft ${new Date().toISOString()}`,
         content: { pages: editor.pages },
-        ...(activeWorkspaceId ? { workspaceId: activeWorkspaceId } : {}),
+        ...(resolvedActiveWorkspaceId ? { workspaceId: resolvedActiveWorkspaceId } : {}),
       }
       if (localDraftId) {
         await patchJson(`/api/v1/user-draft/${localDraftId}`, payload)
@@ -464,7 +371,7 @@ function App() {
     templateIdFromQuery,
     template,
     editor.pages,
-    activeWorkspaceId,
+    resolvedActiveWorkspaceId,
     localDraftId,
     bridgeWorkspaceResolved,
   ])
@@ -480,7 +387,7 @@ function App() {
       content: { pages: editor.pages },
       ...(draft?.id ? { draftId: draft.id } : {}),
       ...(templateIdFromQuery ? { templateId: templateIdFromQuery } : {}),
-      ...(activeWorkspaceId ? { workspaceId: activeWorkspaceId } : {}),
+      ...(resolvedActiveWorkspaceId ? { workspaceId: resolvedActiveWorkspaceId } : {}),
       templateName: template?.title || template?.name || 'template',
     }
 
@@ -547,7 +454,7 @@ function App() {
     draft,
     template,
     templateIdFromQuery,
-    activeWorkspaceId,
+    resolvedActiveWorkspaceId,
     editor.pages,
     stopExportPolling,
   ])
