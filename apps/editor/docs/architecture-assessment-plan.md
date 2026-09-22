@@ -26,8 +26,23 @@ Improve the editor architecture without disrupting current standalone and embedd
 ## Phase 3: Editor State Architecture
 
 - [x] Define explicit editor commands for add, update, delete, duplicate, lock, and page operations.
-- [ ] Evaluate whether the current hook-based state should remain local or move to a reducer/store.
-- [ ] Add a clear boundary between editor domain state and app integration state.
+- [x] Evaluate whether the current hook-based state should remain local or move to a reducer/store.
+
+Decision:
+Keep editor state local to the editor app, but move from the current multi-`useState` hook implementation toward a reducer-backed local domain state. Do not introduce a global app store yet.
+
+Rationale:
+- The editor state is currently owned by a single `useEditor` instance in `App` and is not shared across multiple independent feature roots.
+- App integration concerns such as auth, template loading, draft persistence, export orchestration, and embedded runtime context already sit outside the editor domain hook.
+- The new explicit `EditorCommand` layer provides the right action vocabulary for a reducer without requiring a global store.
+- Undo/redo, invariant checks, and state-transition testing will be easier once domain updates are handled by a pure reducer.
+- A global store would add coordination cost before there is a demonstrated cross-screen or cross-feature sharing need.
+
+Follow-up direction:
+- Extract an `EditorState` shape and pure reducer that applies `EditorCommand` actions.
+- Keep side effects such as id generation, network persistence, export/download, and login prompting outside the reducer.
+- Preserve `useEditor` as the adapter that wires reducer state, derived selectors, and compatibility helpers for the UI.
+- [x] Add a clear boundary between editor domain state and app integration state.
 - [ ] Introduce a stable place for future undo and redo support.
 - [ ] Document invariants for selection, page state, and object mutation behavior.
 
