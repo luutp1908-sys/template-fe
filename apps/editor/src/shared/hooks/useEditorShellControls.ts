@@ -18,7 +18,7 @@ type EditorShellState = {
   setActiveTool: (tool: 'element' | 'text' | 'image' | 'frame' | null) => void
   setPageBackground: (bg: PageBackground) => void
   addObject: (type: 'rect' | 'text' | 'image' | 'frame', defaults?: Partial<EditorObject>) => EditorObject
-  addFrameLayer?: (opts: { width?: number; height?: number; shape?: FrameShape; x?: number; y?: number }) => EditorObject
+  addFrameLayer: (opts: { width?: number; height?: number; shape?: FrameShape; x?: number; y?: number }) => EditorObject
 }
 
 export const useEditorShellControls = (editor: EditorShellState) => {
@@ -108,15 +108,7 @@ export const useEditorShellControls = (editor: EditorShellState) => {
     const preset = FRAME_PRESETS.find((item) => item.id === presetId)
     if (!preset) return
 
-    if (typeof editor.addFrameLayer === 'function') {
-      editor.addFrameLayer({ width: preset.width, height: preset.height, shape: preset.shape })
-    } else {
-      editor.addObject('frame', {
-        width: preset.width,
-        height: preset.height,
-        shape: preset.shape,
-      } as Partial<EditorObject>)
-    }
+    editor.addFrameLayer({ width: preset.width, height: preset.height, shape: preset.shape })
     setSidebarPanel('none')
   }
 

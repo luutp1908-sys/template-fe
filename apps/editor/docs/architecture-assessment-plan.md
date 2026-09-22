@@ -18,7 +18,7 @@ Improve the editor architecture without disrupting current standalone and embedd
 ## Phase 2: Domain Model Hardening
 
 - [x] Formalize frame shape in shared editor types instead of relying on loose casts.
-- [ ] Remove `@ts-ignore` and `as any` escapes related to frame rendering.
+- [x] Remove `@ts-ignore` and `as any` escapes related to frame rendering.
 - [ ] Align template, page, and block mapping rules behind typed conversion helpers.
 - [ ] Replace `Date.now()` identifiers with a safer client-side id strategy.
 - [ ] Separate persisted editor data from transient UI-only state where appropriate.
