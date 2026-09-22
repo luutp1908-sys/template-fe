@@ -20,7 +20,7 @@ Improve the editor architecture without disrupting current standalone and embedd
 - [x] Formalize frame shape in shared editor types instead of relying on loose casts.
 - [x] Remove `@ts-ignore` and `as any` escapes related to frame rendering.
 - [x] Align template, page, and block mapping rules behind typed conversion helpers.
-- [ ] Replace `Date.now()` identifiers with a safer client-side id strategy.
+- [x] Replace `Date.now()` identifiers with a safer client-side id strategy.
 - [ ] Separate persisted editor data from transient UI-only state where appropriate.
 
 ## Phase 3: Editor State Architecture

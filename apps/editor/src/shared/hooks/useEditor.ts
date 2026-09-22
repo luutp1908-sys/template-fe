@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import {
   DEFAULT_IMAGE_CORNER_RADIUS,
   DEFAULT_IMAGE_FIT_MODE,
@@ -16,6 +16,12 @@ import {
   MAX_ZOOM,
   MIN_ZOOM,
 } from '../constants/editorGeometry'
+import {
+  createObjectIdGenerator,
+  createPageIdGenerator,
+  getNextObjectIdSeed,
+  getNextPageIdSeed,
+} from './editorIdStrategy'
 import {
   createTemplateContentFromObjects,
   resolvePagesFromTemplateContent,
@@ -169,11 +175,14 @@ export const useEditor = (initialTemplate?: TemplateContent | EditorObject[] | n
   )
   const [activeTool, setActiveTool] = useState<ActiveTool>(null)
   const [zoom, setZoomState] = useState(1)
-  
+  const nextObjectIdRef = useRef(createObjectIdGenerator(getNextObjectIdSeed(initialPages)))
+  const nextPageIdRef = useRef(createPageIdGenerator(getNextPageIdSeed(initialPages)))
 
   useEffect(() => {
     if (!normalizedInitial) return
     const mappedPages = resolvePagesFromTemplateContent(normalizedInitial)
+    nextObjectIdRef.current = createObjectIdGenerator(getNextObjectIdSeed(mappedPages))
+    nextPageIdRef.current = createPageIdGenerator(getNextPageIdSeed(mappedPages))
     setPages(mappedPages)
     setCurrentPageIndexState(0)
     setSelectedId(mappedPages[0]?.layers?.[0]?.id || null)
@@ -193,7 +202,7 @@ export const useEditor = (initialTemplate?: TemplateContent | EditorObject[] | n
   }
 
   const addObject = (type: EditorObjectType, defaults: Partial<EditorObject> = {}) => {
-    const newId = Date.now()
+    const newId = nextObjectIdRef.current()
     const newObject = {
       id: newId,
       ...getDefaultLayerProps(type),
@@ -242,7 +251,7 @@ export const useEditor = (initialTemplate?: TemplateContent | EditorObject[] | n
     const source = objects.find((obj) => obj.id === id)
     if (!source) return null
 
-    const duplicateId = Date.now()
+    const duplicateId = nextObjectIdRef.current()
     const duplicatedObject = {
       ...source,
       id: duplicateId,
@@ -275,7 +284,7 @@ export const useEditor = (initialTemplate?: TemplateContent | EditorObject[] | n
 
   const addPage = (page: Partial<Page> = {}) => {
     const newPage: Page = {
-      id: page.id || `page_${Date.now()}`,
+      id: page.id || nextPageIdRef.current(),
       width: page.width || 1024,
       height: page.height || 768,
       background: page.background || { color: '#ffffff' },
