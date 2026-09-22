@@ -2,11 +2,11 @@ import type { FrameLayer } from '../../shared/types/editor'
 import { FrameBox } from '../canvas/Canvas.styles'
 
 type FrameLayerContentProps = {
-  object: FrameLayer & { shape?: string }
+  object: FrameLayer
 }
 
 export const FrameLayerContent = ({ object }: FrameLayerContentProps) => {
-  const shape = (object as any).shape || 'rect'
+  const shape = object.shape || 'rect'
 
   const renderShape = () => {
     if (shape === 'circle') {

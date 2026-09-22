@@ -21,6 +21,7 @@ import type {
   EditorObject,
   EditorObjectType,
   FrameLayer,
+  FrameShape,
   FitZoomInput,
   ImageLayer,
   RectLayer,
@@ -120,6 +121,7 @@ const getDefaultLayerProps = (type: EditorObjectType): DefaultLayerProps => {
       type: 'frame',
       borderColor: '#e5e7eb',
       borderWidth: 1,
+      shape: 'rect',
     } satisfies Omit<FrameLayer, 'id'>
   }
 
@@ -237,13 +239,13 @@ export const useEditor = (initialTemplate?: TemplateContent | EditorObject[] | n
     return newObject
   }
 
-  const addFrameLayer = (opts: { width?: number; height?: number; shape?: string; x?: number; y?: number } = {}) => {
-    const defaults: Partial<EditorObject> = {}
+  const addFrameLayer = (opts: { width?: number; height?: number; shape?: FrameShape; x?: number; y?: number } = {}) => {
+    const defaults: Partial<FrameLayer> = {}
     if (opts.width !== undefined) defaults.width = opts.width
     if (opts.height !== undefined) defaults.height = opts.height
     if (opts.x !== undefined) defaults.x = opts.x
     if (opts.y !== undefined) defaults.y = opts.y
-    if (opts.shape !== undefined) (defaults as any).shape = opts.shape
+    if (opts.shape !== undefined) defaults.shape = opts.shape
 
     return addObject('frame', defaults)
   }

@@ -8,7 +8,7 @@ import {
   DEFAULT_TEXT_HEIGHT,
   DEFAULT_TEXT_WIDTH,
 } from '../constants/editorGeometry'
-import type { EditorObject, PageBackground } from '../types/editor'
+import type { EditorObject, FrameShape, PageBackground } from '../types/editor'
 
 export type SidebarPanel = 'none' | 'image' | 'background' | 'layers' | 'frames'
 
@@ -18,7 +18,7 @@ type EditorShellState = {
   setActiveTool: (tool: 'element' | 'text' | 'image' | 'frame' | null) => void
   setPageBackground: (bg: PageBackground) => void
   addObject: (type: 'rect' | 'text' | 'image' | 'frame', defaults?: Partial<EditorObject>) => EditorObject
-  addFrameLayer?: (opts: { width?: number; height?: number; shape?: string; x?: number; y?: number }) => EditorObject
+  addFrameLayer?: (opts: { width?: number; height?: number; shape?: FrameShape; x?: number; y?: number }) => EditorObject
 }
 
 export const useEditorShellControls = (editor: EditorShellState) => {

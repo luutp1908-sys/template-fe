@@ -1,9 +1,11 @@
+import type { FrameShape } from '../shared/types/editor'
+
 export type FramePreset = {
   id: string
   name: string
   width: number
   height: number
-  shape: 'rect' | 'circle' | 'heart' | 'phone'
+  shape: FrameShape
 }
 
 export const FRAME_PRESETS: FramePreset[] = [

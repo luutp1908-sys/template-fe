@@ -62,6 +62,8 @@ export interface RectLayer extends BaseLayer {
   color?: string
 }
 
+export type FrameShape = 'rect' | 'circle' | 'heart' | 'phone'
+
 export type TextAlign = 'left' | 'center' | 'right' | 'justify'
 export type TextWeight = 'normal' | 'bold'
 
@@ -125,6 +127,7 @@ export interface FrameLayer extends BaseLayer {
   type: 'frame'
   borderColor?: string
   borderWidth?: number
+  shape?: FrameShape
 }
 
 export type Layer = RectLayer | TextLayer | ImageLayer | FrameLayer
