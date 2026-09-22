@@ -22,6 +22,7 @@ import {
   getNextObjectIdSeed,
   getNextPageIdSeed,
 } from './editorIdStrategy'
+import type { EditorCommand } from './editorCommands'
 import { toPersistedEditorContent } from './editorPersistence'
 import {
   createTemplateContentFromObjects,
@@ -193,29 +194,153 @@ export const useEditor = (initialTemplate?: TemplateContent | EditorObject[] | n
   const selectedObject = objects.find((obj) => obj.id === selectedId)
   const persistedContent = useMemo(() => toPersistedEditorContent(pages), [pages])
 
+  const dispatchCommand = (command: EditorCommand) => {
+    switch (command.type) {
+      case 'updateObject': {
+        setPages((current) =>
+          current.map((p, idx) =>
+            idx === currentPageIndex
+              ? {
+                ...p,
+                layers: p.layers.map((obj) =>
+                  obj.id === command.id ? { ...obj, ...command.updates } : obj,
+                ),
+              }
+              : p,
+          ),
+        )
+        return null
+      }
+
+      case 'addObject': {
+        const newId = nextObjectIdRef.current()
+        const newObject = {
+          id: newId,
+          ...getDefaultLayerProps(command.objectType),
+          ...(command.defaults || {}),
+        } as EditorObject
+
+        setPages((current) =>
+          current.map((p, idx) =>
+            idx === currentPageIndex ? { ...p, layers: [...p.layers, newObject] } : p,
+          ),
+        )
+        setSelectedId(newId)
+        return newObject
+      }
+
+      case 'deleteObject': {
+        let nextSelectedId: number | null | undefined
+
+        setPages((current) =>
+          current.map((p, idx) => {
+            if (idx !== currentPageIndex) return p
+            const remainingLayers = p.layers.filter((obj) => obj.id !== command.id)
+            if (selectedId === command.id) {
+              nextSelectedId = remainingLayers[0]?.id || null
+            }
+            return { ...p, layers: remainingLayers }
+          }),
+        )
+
+        if (nextSelectedId !== undefined) {
+          setSelectedId(nextSelectedId)
+        }
+        return null
+      }
+
+      case 'duplicateObject': {
+        let duplicatedObject: EditorObject | null = null
+
+        setPages((current) =>
+          current.map((p, idx) => {
+            if (idx !== currentPageIndex) return p
+
+            const source = p.layers.find((obj) => obj.id === command.id)
+            if (!source) return p
+
+            const duplicateId = nextObjectIdRef.current()
+            duplicatedObject = {
+              ...source,
+              id: duplicateId,
+              x: source.x + 20,
+              y: source.y + 20,
+            }
+
+            return { ...p, layers: [...p.layers, duplicatedObject] }
+          }),
+        )
+
+        if (duplicatedObject) {
+          setSelectedId(duplicatedObject.id)
+        }
+        return duplicatedObject
+      }
+
+      case 'toggleObjectLock': {
+        setPages((current) =>
+          current.map((p, idx) =>
+            idx === currentPageIndex
+              ? {
+                ...p,
+                layers: p.layers.map((obj) =>
+                  obj.id === command.id ? { ...obj, locked: !(obj.locked ?? false) } : obj,
+                ),
+              }
+              : p,
+          ),
+        )
+        return null
+      }
+
+      case 'addPage': {
+        const page = command.page || {}
+        const newPage: Page = {
+          id: page.id || nextPageIdRef.current(),
+          width: page.width || 1024,
+          height: page.height || 768,
+          background: page.background || { color: '#ffffff' },
+          layers: page.layers || [],
+        }
+
+        let newPageIndex = 0
+        setPages((current) => {
+          newPageIndex = current.length
+          return [...current, newPage]
+        })
+        setCurrentPageIndexState(newPageIndex)
+        return newPage
+      }
+
+      case 'setCurrentPageIndex': {
+        const safe = Math.max(0, Math.min(command.index, pages.length - 1))
+        setCurrentPageIndexState(safe)
+        return safe
+      }
+
+      case 'setPageBackground': {
+        setPages((current) =>
+          current.map((p, idx) =>
+            idx === currentPageIndex
+              ? { ...p, background: { ...(p.background || {}), ...command.background } }
+              : p,
+          ),
+        )
+        return null
+      }
+
+      default:
+        return null
+    }
+  }
+
   const updateObject = (id: number, updates: Partial<EditorObject>) => {
-    setPages((current) =>
-      current.map((p, idx) =>
-        idx === currentPageIndex
-          ? { ...p, layers: p.layers.map((obj) => (obj.id === id ? { ...obj, ...updates } : obj)) }
-          : p,
-      ),
-    )
+    dispatchCommand({ type: 'updateObject', id, updates })
   }
 
   const addObject = (type: EditorObjectType, defaults: Partial<EditorObject> = {}) => {
-    const newId = nextObjectIdRef.current()
-    const newObject = {
-      id: newId,
-      ...getDefaultLayerProps(type),
-      ...defaults,
-    } as EditorObject
-
-    setPages((current) =>
-      current.map((p, idx) => (idx === currentPageIndex ? { ...p, layers: [...p.layers, newObject] } : p)),
-    )
-    setSelectedId(newId)
-    return newObject
+    const result = dispatchCommand({ type: 'addObject', objectType: type, defaults })
+    return result as EditorObject
   }
 
   const addFrameLayer = (opts: { width?: number; height?: number; shape?: FrameShape; x?: number; y?: number } = {}) => {
@@ -230,17 +355,7 @@ export const useEditor = (initialTemplate?: TemplateContent | EditorObject[] | n
   }
 
   const deleteObject = (id: number) => {
-    setPages((current) =>
-      current.map((p, idx) =>
-        idx === currentPageIndex
-          ? { ...p, layers: p.layers.filter((obj) => obj.id !== id) }
-          : p,
-      ),
-    )
-    if (selectedId === id) {
-      const remaining = (pages[currentPageIndex]?.layers || []).filter((o) => o.id !== id)
-      setSelectedId(remaining[0]?.id || null)
-    }
+    dispatchCommand({ type: 'deleteObject', id })
   }
 
   const deleteSelected = () => {
@@ -250,32 +365,11 @@ export const useEditor = (initialTemplate?: TemplateContent | EditorObject[] | n
   }
 
   const duplicateObject = (id: number) => {
-    const source = objects.find((obj) => obj.id === id)
-    if (!source) return null
-
-    const duplicateId = nextObjectIdRef.current()
-    const duplicatedObject = {
-      ...source,
-      id: duplicateId,
-      x: source.x + 20,
-      y: source.y + 20,
-    }
-
-    setPages((current) =>
-      current.map((p, idx) => (idx === currentPageIndex ? { ...p, layers: [...p.layers, duplicatedObject] } : p)),
-    )
-    setSelectedId(duplicateId)
-    return duplicatedObject
+    return dispatchCommand({ type: 'duplicateObject', id }) as EditorObject | null
   }
 
   const toggleObjectLock = (id: number) => {
-    setPages((current) =>
-      current.map((p, idx) =>
-        idx === currentPageIndex
-          ? { ...p, layers: p.layers.map((obj) => (obj.id === id ? { ...obj, locked: !(obj.locked ?? false) } : obj)) }
-          : p,
-      ),
-    )
+    dispatchCommand({ type: 'toggleObjectLock', id })
   }
 
   const setZoom = (nextZoom: number) => {
@@ -285,27 +379,15 @@ export const useEditor = (initialTemplate?: TemplateContent | EditorObject[] | n
   }
 
   const addPage = (page: Partial<Page> = {}) => {
-    const newPage: Page = {
-      id: page.id || nextPageIdRef.current(),
-      width: page.width || 1024,
-      height: page.height || 768,
-      background: page.background || { color: '#ffffff' },
-      layers: page.layers || [],
-    }
-    setPages((current) => [...current, newPage])
-    setCurrentPageIndexState((prev) => prev + 1)
-    return newPage
+    return dispatchCommand({ type: 'addPage', page }) as Page
   }
 
   const setCurrentPageIndex = (index: number) => {
-    const safe = Math.max(0, Math.min(index, pages.length - 1))
-    setCurrentPageIndexState(safe)
+    dispatchCommand({ type: 'setCurrentPageIndex', index })
   }
 
   const setPageBackground = (bg: PageBackground) => {
-    setPages((current) =>
-      current.map((p, idx) => (idx === currentPageIndex ? { ...p, background: { ...(p.background || {}), ...bg } } : p)),
-    )
+    dispatchCommand({ type: 'setPageBackground', background: bg })
   }
 
   return {
@@ -328,6 +410,7 @@ export const useEditor = (initialTemplate?: TemplateContent | EditorObject[] | n
     setActiveTool,
     zoom,
     setZoom,
+    dispatchCommand,
     updateObject,
     addObject,
     addFrameLayer,

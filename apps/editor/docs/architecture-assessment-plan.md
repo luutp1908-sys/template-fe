@@ -25,7 +25,7 @@ Improve the editor architecture without disrupting current standalone and embedd
 
 ## Phase 3: Editor State Architecture
 
-- [ ] Define explicit editor commands for add, update, delete, duplicate, lock, and page operations.
+- [x] Define explicit editor commands for add, update, delete, duplicate, lock, and page operations.
 - [ ] Evaluate whether the current hook-based state should remain local or move to a reducer/store.
 - [ ] Add a clear boundary between editor domain state and app integration state.
 - [ ] Introduce a stable place for future undo and redo support.
