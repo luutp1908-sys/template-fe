@@ -1,15 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { PAGE_HEIGHT, PAGE_WIDTH, WORKSPACE_PADDING } from '../constants/editorGeometry'
 import { computeFitZoom } from './useEditor'
-import {
-  clearStoredActiveWorkspaceId,
-  fetchActiveWorkspaceIdFromBridge,
-  getStoredActiveWorkspaceId,
-  storeActiveWorkspaceId,
-} from '../workspaces/activeWorkspaceBridge'
 
 type UseAppRuntimeBootstrapInput = {
-  activeWorkspaceId: string | null
   setZoom: (nextZoom: number) => void
 }
 
@@ -19,12 +12,7 @@ const centerCanvasViewport = (viewportEl: HTMLDivElement) => {
   viewportEl.scrollTo({ left, top, behavior: 'auto' })
 }
 
-export const useAppRuntimeBootstrap = ({
-  activeWorkspaceId,
-  setZoom,
-}: UseAppRuntimeBootstrapInput) => {
-  const [bridgeWorkspaceId, setBridgeWorkspaceId] = useState<string | null>(() => getStoredActiveWorkspaceId())
-  const [bridgeWorkspaceResolved, setBridgeWorkspaceResolved] = useState(false)
+export const useAppRuntimeBootstrap = ({ setZoom }: UseAppRuntimeBootstrapInput) => {
   const canvasViewportRef = useRef<HTMLDivElement | null>(null)
   const hasAutoFitApplied = useRef(false)
 
@@ -57,49 +45,7 @@ export const useAppRuntimeBootstrap = ({
 
     return () => cancelAnimationFrame(frame)
   }, [setZoom])
-
-  useEffect(() => {
-    let cancelled = false
-
-    const run = async () => {
-      try {
-        const workspaceId = await fetchActiveWorkspaceIdFromBridge()
-        if (cancelled) return
-
-        if (workspaceId) {
-          setBridgeWorkspaceId(workspaceId)
-          return
-        }
-
-        setBridgeWorkspaceId((prev) => {
-          if (!prev) return null
-          clearStoredActiveWorkspaceId()
-          return null
-        })
-      } catch {
-        // Keep local fallback path when homepage bridge is unavailable.
-      } finally {
-        if (!cancelled) {
-          setBridgeWorkspaceResolved(true)
-        }
-      }
-    }
-
-    void run()
-
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!activeWorkspaceId) return
-    storeActiveWorkspaceId(activeWorkspaceId)
-  }, [activeWorkspaceId])
-
   return {
-    bridgeWorkspaceId,
-    bridgeWorkspaceResolved,
     canvasViewportRef,
   }
 }

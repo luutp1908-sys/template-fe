@@ -15,6 +15,7 @@ import FRAME_PRESETS from './data/framePresets'
 import AuthModal from './widgets/LoginPopup'
 import useAuth from './shared/hooks/useAuth'
 import useAppRuntimeBootstrap from './shared/hooks/useAppRuntimeBootstrap'
+import useResolvedWorkspaceContext from './shared/hooks/useResolvedWorkspaceContext'
 import { Sidebar } from './widgets/Sidebar'
 import { Canvas } from './features/canvas/Canvas'
 import type { EditorObject } from './shared/types/editor'
@@ -167,16 +168,15 @@ function App() {
   const exportPollRef = useRef<number | null>(null)
   const [localDraftId, setLocalDraftId] = useState<string | null>(null)
   const [sidebarPanel, setSidebarPanel] = useState<'none' | 'image' | 'background' | 'layers' | 'frames'>('none')
-  const activeWorkspaceId = (draft?.workspaceId || workspaceIdFromQuery || null)
   const {
-    bridgeWorkspaceId,
-    bridgeWorkspaceResolved,
-    canvasViewportRef,
-  } = useAppRuntimeBootstrap({
     activeWorkspaceId,
-    setZoom: editor.setZoom,
+    bridgeWorkspaceResolved,
+    resolvedActiveWorkspaceId,
+  } = useResolvedWorkspaceContext({
+    draftWorkspaceId: draft?.workspaceId,
+    workspaceIdFromQuery,
   })
-  const resolvedActiveWorkspaceId = bridgeWorkspaceId || activeWorkspaceId
+  const { canvasViewportRef } = useAppRuntimeBootstrap({ setZoom: editor.setZoom })
 
   useEffect(() => {
     if (draft?.id) setLocalDraftId(draft.id)

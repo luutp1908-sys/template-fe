@@ -10,7 +10,7 @@ Improve the editor architecture without disrupting current standalone and embedd
 
 - [x] Extract runtime bootstrapping concerns from the app shell into a dedicated hook.
 - [x] Extract URL and mode resolution into a dedicated hook for standalone versus embedded behavior.
-- [ ] Extract workspace resolution and persistence into a focused workspace context hook.
+- [x] Extract workspace resolution and persistence into a focused workspace context hook.
 - [ ] Extract draft save orchestration into a dedicated persistence hook.
 - [ ] Extract export job creation, polling, and download handling into a dedicated export hook.
 - [ ] Reduce the main app component to composition, layout, and wiring only.
