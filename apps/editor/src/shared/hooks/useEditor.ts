@@ -22,6 +22,7 @@ import {
   getNextObjectIdSeed,
   getNextPageIdSeed,
 } from './editorIdStrategy'
+import { toPersistedEditorContent } from './editorPersistence'
 import {
   createTemplateContentFromObjects,
   resolvePagesFromTemplateContent,
@@ -190,6 +191,7 @@ export const useEditor = (initialTemplate?: TemplateContent | EditorObject[] | n
 
   const objects = pages[currentPageIndex]?.layers || []
   const selectedObject = objects.find((obj) => obj.id === selectedId)
+  const persistedContent = useMemo(() => toPersistedEditorContent(pages), [pages])
 
   const updateObject = (id: number, updates: Partial<EditorObject>) => {
     setPages((current) =>
@@ -309,6 +311,7 @@ export const useEditor = (initialTemplate?: TemplateContent | EditorObject[] | n
   return {
     // page-level state
     pages,
+    persistedContent,
     currentPageIndex,
     setCurrentPageIndex,
     addPage,

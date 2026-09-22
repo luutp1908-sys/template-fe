@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { patchJson, postJson, putJson } from '../api/client'
-import type { Page } from '../types/editor'
+import type { PersistedEditorContent } from './editorPersistence'
 
 type TemplateSummary = {
   title?: string
@@ -15,7 +15,7 @@ type UseDraftPersistenceInput = {
   bridgeWorkspaceResolved: boolean
   draft: DraftSummary
   draftIdFromPath: string | null
-  editorPages: Page[]
+  persistedContent: PersistedEditorContent
   isAdminEditMode: boolean
   requestLoginPrompt: () => void
   resolvedActiveWorkspaceId: string | null
@@ -28,7 +28,7 @@ export const useDraftPersistence = ({
   bridgeWorkspaceResolved,
   draft,
   draftIdFromPath,
-  editorPages,
+  persistedContent,
   isAdminEditMode,
   requestLoginPrompt,
   resolvedActiveWorkspaceId,
@@ -75,7 +75,7 @@ export const useDraftPersistence = ({
         }
 
         await putJson(`/api/v1/template-content/${resolvedTemplateId}`, {
-          content: { pages: editorPages },
+          content: persistedContent,
         })
         console.info('Canonical template content saved')
         return
@@ -83,7 +83,7 @@ export const useDraftPersistence = ({
 
       const payload = {
         name: template?.title || template?.name || `Draft ${new Date().toISOString()}`,
-        content: { pages: editorPages },
+        content: persistedContent,
         ...(resolvedActiveWorkspaceId ? { workspaceId: resolvedActiveWorkspaceId } : {}),
       }
 
@@ -110,7 +110,7 @@ export const useDraftPersistence = ({
   }, [
     bridgeWorkspaceResolved,
     draftIdFromPath,
-    editorPages,
+    persistedContent,
     isAdminEditMode,
     localDraftId,
     requestLoginPrompt,

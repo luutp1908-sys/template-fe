@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { fetchBlob, fetchJson, postJson } from '../api/client'
-import type { Page } from '../types/editor'
+import type { PersistedEditorContent } from './editorPersistence'
 
 type TemplateSummary = {
   title?: string
@@ -13,7 +13,7 @@ type DraftSummary = {
 
 type UsePdfExportInput = {
   draft: DraftSummary
-  editorPages: Page[]
+  persistedContent: PersistedEditorContent
   requestLoginPrompt: () => void
   resolvedActiveWorkspaceId: string | null
   template: TemplateSummary
@@ -23,7 +23,7 @@ type UsePdfExportInput = {
 
 export const usePdfExport = ({
   draft,
-  editorPages,
+  persistedContent,
   requestLoginPrompt,
   resolvedActiveWorkspaceId,
   template,
@@ -49,7 +49,7 @@ export const usePdfExport = ({
 
     const payload = {
       format: 'pdf',
-      content: { pages: editorPages },
+      content: persistedContent,
       ...(draft?.id ? { draftId: draft.id } : {}),
       ...(templateIdFromQuery ? { templateId: templateIdFromQuery } : {}),
       ...(resolvedActiveWorkspaceId ? { workspaceId: resolvedActiveWorkspaceId } : {}),
@@ -115,7 +115,7 @@ export const usePdfExport = ({
     }
   }, [
     draft,
-    editorPages,
+    persistedContent,
     requestLoginPrompt,
     resolvedActiveWorkspaceId,
     stopExportPolling,

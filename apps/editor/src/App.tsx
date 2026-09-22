@@ -177,7 +177,7 @@ function App() {
     bridgeWorkspaceResolved,
     draft,
     draftIdFromPath,
-    editorPages: editor.pages,
+    persistedContent: editor.persistedContent,
     isAdminEditMode,
     requestLoginPrompt,
     resolvedActiveWorkspaceId,
@@ -191,7 +191,7 @@ function App() {
     isExporting,
   } = usePdfExport({
     draft,
-    editorPages: editor.pages,
+    persistedContent: editor.persistedContent,
     requestLoginPrompt,
     resolvedActiveWorkspaceId,
     template,
