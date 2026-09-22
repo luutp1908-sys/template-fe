@@ -44,7 +44,21 @@ Follow-up direction:
 - Preserve `useEditor` as the adapter that wires reducer state, derived selectors, and compatibility helpers for the UI.
 - [x] Add a clear boundary between editor domain state and app integration state.
 - [x] Introduce a stable place for future undo and redo support.
-- [ ] Document invariants for selection, page state, and object mutation behavior.
+- [x] Document invariants for selection, page state, and object mutation behavior.
+
+Invariants:
+- `selectedId` always refers to an object on the current page, or `null` when no object is selected.
+- `currentPageIndex` is always clamped to a valid page index when it is updated.
+- Object mutations apply only to the active page; they do not implicitly affect other pages.
+- Adding, duplicating, and deleting objects should keep selection stable or move it to a valid fallback object.
+- Page background changes only update the current page background state.
+- Page additions create a new page and move the active page index to that new page.
+- Commands that do not change page content, such as selection-only changes, should not create undo history entries.
+
+Expected behavior:
+- Delete the selected object and selection should move to the first remaining object on that page, or `null` if none remain.
+- Duplicate should create a new object with a new id and select the duplicate.
+- Undo and redo should restore domain state snapshots without altering the command vocabulary.
 
 ## Phase 4: Embedded Runtime Boundary
 
