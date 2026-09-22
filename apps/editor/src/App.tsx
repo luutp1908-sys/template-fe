@@ -1,11 +1,11 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import useDraftPersistence from './shared/hooks/useDraftPersistence'
+import usePdfExport from './shared/hooks/usePdfExport'
 import { useEditor } from './shared/hooks/useEditor'
 import { DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_HEIGHT, DEFAULT_TEXT_WIDTH, DEFAULT_TEXT_HEIGHT, DEFAULT_TEXT_COLOR, DEFAULT_TEXT_FONT_SIZE } from './shared/constants/editorGeometry'
 import useEditorRuntimeContext from './shared/hooks/useEditorRuntimeContext'
 import useTemplate from './shared/hooks/useTemplate'
-import { postJson, fetchJson, fetchBlob } from './shared/api/client'
 import {
   PAGE_HEIGHT,
   PAGE_WIDTH,
@@ -160,11 +160,7 @@ function App() {
   const { template, draft, error } = useTemplate(canonicalTemplateId, draftIdFromPath ?? undefined)
   if (error) console.error('Template load error: ', error)
 
-  const [exportError, setExportError] = useState<string | null>(null)
-  const [isExporting, setIsExporting] = useState(false)
-
   const editor = useEditor(template || defaultLocalTemplate)
-  const exportPollRef = useRef<number | null>(null)
   const [sidebarPanel, setSidebarPanel] = useState<'none' | 'image' | 'background' | 'layers' | 'frames'>('none')
   const {
     activeWorkspaceId,
@@ -186,6 +182,19 @@ function App() {
     draftIdFromPath,
     editorPages: editor.pages,
     isAdminEditMode,
+    requestLoginPrompt,
+    resolvedActiveWorkspaceId,
+    template,
+    templateIdFromQuery,
+    user,
+  })
+  const {
+    exportError,
+    handleDownloadPdf,
+    isExporting,
+  } = usePdfExport({
+    draft,
+    editorPages: editor.pages,
     requestLoginPrompt,
     resolvedActiveWorkspaceId,
     template,
@@ -298,102 +307,6 @@ function App() {
   const handleOpenBackgroundPanel = () => {
     setSidebarPanel('background')
   }
-
-  const stopExportPolling = useCallback(() => {
-    if (exportPollRef.current !== null) {
-      window.clearInterval(exportPollRef.current)
-      exportPollRef.current = null
-    }
-  }, [])
-
-  const handleDownloadPdf = useCallback(async () => {
-    if (!user) {
-      requestLoginPrompt()
-      return
-    }
-
-    const payload = {
-      format: 'pdf',
-      content: { pages: editor.pages },
-      ...(draft?.id ? { draftId: draft.id } : {}),
-      ...(templateIdFromQuery ? { templateId: templateIdFromQuery } : {}),
-      ...(resolvedActiveWorkspaceId ? { workspaceId: resolvedActiveWorkspaceId } : {}),
-      templateName: template?.title || template?.name || 'template',
-    }
-
-    setExportError(null)
-    setIsExporting(true)
-    try {
-      const created = await postJson('/api/v1/export/jobs', payload)
-      const jobId = created?.id ?? created?.data?.id
-      if (!jobId) {
-        throw new Error('Export job was not created')
-      }
-
-      const pollJob = async () => {
-        try {
-          const statusRes = await fetchJson(`/api/v1/export/jobs/${jobId}`)
-          const job = statusRes?.data ?? statusRes
-          const nextStatus = job?.status
-
-          if (nextStatus === 'completed') {
-            stopExportPolling()
-            setIsExporting(false)
-
-            try {
-              const blob = await fetchBlob(`/api/v1/export/jobs/${jobId}/download`)
-              const url = URL.createObjectURL(blob)
-              const link = document.createElement('a')
-              link.href = url
-              link.setAttribute('download', job?.fileName || `${payload.templateName || 'template'}.pdf`)
-              document.body.appendChild(link)
-              link.click()
-              link.remove()
-              URL.revokeObjectURL(url)
-              return
-            } catch (downloadError) {
-              console.error('Failed to download export PDF via fetch', downloadError)
-              setExportError(downloadError instanceof Error ? downloadError.message : 'Unable to download PDF export')
-            }
-            return
-          }
-
-          if (nextStatus === 'failed') {
-            stopExportPolling()
-            setIsExporting(false)
-            setExportError(job?.errorMessage || 'PDF export failed')
-          }
-        } catch (error) {
-          stopExportPolling()
-          setIsExporting(false)
-          setExportError(error instanceof Error ? error.message : 'Unable to track export job status')
-        }
-      }
-
-      await pollJob()
-      exportPollRef.current = window.setInterval(() => {
-        void pollJob()
-      }, 1500)
-    } catch (error) {
-      setIsExporting(false)
-      setExportError(error instanceof Error ? error.message : 'Unable to start PDF export')
-    }
-  }, [
-    requestLoginPrompt,
-    user,
-    draft,
-    template,
-    templateIdFromQuery,
-    resolvedActiveWorkspaceId,
-    editor.pages,
-    stopExportPolling,
-  ])
-
-  useEffect(() => {
-    return () => {
-      stopExportPolling()
-    }
-  }, [stopExportPolling])
 
   return (
     <AppShell data-editor-mode={runtimeMode} $withHeader={modeConfig.showHeader}>
