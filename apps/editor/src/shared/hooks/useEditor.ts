@@ -16,6 +16,10 @@ import {
   MAX_ZOOM,
   MIN_ZOOM,
 } from '../constants/editorGeometry'
+import {
+  createTemplateContentFromObjects,
+  resolvePagesFromTemplateContent,
+} from './editorTemplateConversions'
 import type {
   ActiveTool,
   EditorObject,
@@ -153,38 +157,10 @@ export const computeFitZoom = ({
 export const useEditor = (initialTemplate?: TemplateContent | EditorObject[] | null) => {
   // Normalize legacy input: if an array of EditorObject is provided, convert to TemplateContent
   const normalizedInitial: TemplateContent | null = useMemo(
-    () =>
-      Array.isArray(initialTemplate)
-        ? { pages: [{ id: 'page_1', width: 1024, height: 768, background: { color: '#ffffff' }, layers: initialTemplate }] }
-        : (initialTemplate as TemplateContent | null),
+    () => (Array.isArray(initialTemplate) ? createTemplateContentFromObjects(initialTemplate) : (initialTemplate ?? null)),
     [initialTemplate],
   )
-  const mapBlockToPage = (b: any): Page => {
-    const width = typeof b?.config?.width === 'string' ? parseInt(String(b.config.width).replace(/px$/, '')) || 1024 : b?.config?.width || 1024
-    const height = typeof b?.config?.height === 'string' ? parseInt(String(b.config.height).replace(/px$/, '')) || 768 : b?.config?.height || 768
-    const background: PageBackground = b?.config?.backgroundImg ? { image: { src: b.config.backgroundImg } } : { color: '#ffffff' }
-    return {
-      id: b?.uuid || `page_${Date.now()}`,
-      width,
-      height,
-      background,
-      layers: b?.layers || [],
-    }
-  }
-
-  const initialPages: Page[] = normalizedInitial?.blocks?.length
-    ? normalizedInitial.blocks.map(mapBlockToPage)
-    : normalizedInitial?.pages?.length
-    ? normalizedInitial.pages
-    : [
-        {
-          id: 'page_1',
-          width: 1024,
-          height: 768,
-          background: { color: '#ffffff' },
-          layers: [],
-        },
-      ]
+  const initialPages: Page[] = resolvePagesFromTemplateContent(normalizedInitial)
 
   const [pages, setPages] = useState<Page[]>(initialPages)
   const [currentPageIndex, setCurrentPageIndexState] = useState<number>(0)
@@ -197,18 +173,10 @@ export const useEditor = (initialTemplate?: TemplateContent | EditorObject[] | n
 
   useEffect(() => {
     if (!normalizedInitial) return
-    if (normalizedInitial.blocks && normalizedInitial.blocks.length > 0) {
-      const mapped = normalizedInitial.blocks.map(mapBlockToPage)
-      setPages(mapped)
-      setCurrentPageIndexState(0)
-      setSelectedId(mapped[0]?.layers?.[0]?.id || null)
-      return
-    }
-    if (normalizedInitial.pages && normalizedInitial.pages.length > 0) {
-      setPages(normalizedInitial.pages)
-      setCurrentPageIndexState(0)
-      setSelectedId(normalizedInitial.pages[0]?.layers?.[0]?.id || null)
-    }
+    const mappedPages = resolvePagesFromTemplateContent(normalizedInitial)
+    setPages(mappedPages)
+    setCurrentPageIndexState(0)
+    setSelectedId(mappedPages[0]?.layers?.[0]?.id || null)
   }, [normalizedInitial])
 
   const objects = pages[currentPageIndex]?.layers || []

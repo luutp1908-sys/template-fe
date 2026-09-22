@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { useEditor } from './useEditor'
-import type { EditorObject } from '../types/editor'
+import type { EditorObject, TemplateContent } from '../types/editor'
 
 const initialObjects: EditorObject[] = [
   {
@@ -225,5 +225,31 @@ describe('useEditor', () => {
     })
 
     expect(result.current.objects.find((obj) => obj.id === 1)?.locked).toBe(false)
+  })
+
+  it('maps block-based template content into page state via typed conversion helpers', () => {
+    const blockTemplate: TemplateContent = {
+      blocks: [
+        {
+          uuid: 'page_from_block',
+          config: {
+            width: '640px',
+            height: '480px',
+            backgroundImg: 'https://example.com/bg.png',
+          },
+          layers: initialObjects,
+        },
+      ],
+    }
+
+    const { result } = renderHook(() => useEditor(blockTemplate))
+
+    expect(result.current.pages).toHaveLength(1)
+    expect(result.current.pages[0]?.id).toBe('page_from_block')
+    expect(result.current.pages[0]?.width).toBe(640)
+    expect(result.current.pages[0]?.height).toBe(480)
+    expect(result.current.pages[0]?.background?.image?.src).toBe('https://example.com/bg.png')
+    expect(result.current.objects).toHaveLength(2)
+    expect(result.current.selectedId).toBe(1)
   })
 })
