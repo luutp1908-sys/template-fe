@@ -1,10 +1,11 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
+import useDraftPersistence from './shared/hooks/useDraftPersistence'
 import { useEditor } from './shared/hooks/useEditor'
 import { DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_HEIGHT, DEFAULT_TEXT_WIDTH, DEFAULT_TEXT_HEIGHT, DEFAULT_TEXT_COLOR, DEFAULT_TEXT_FONT_SIZE } from './shared/constants/editorGeometry'
 import useEditorRuntimeContext from './shared/hooks/useEditorRuntimeContext'
 import useTemplate from './shared/hooks/useTemplate'
-import { postJson, patchJson, putJson, fetchJson, fetchBlob } from './shared/api/client'
+import { postJson, fetchJson, fetchBlob } from './shared/api/client'
 import {
   PAGE_HEIGHT,
   PAGE_WIDTH,
@@ -159,14 +160,11 @@ function App() {
   const { template, draft, error } = useTemplate(canonicalTemplateId, draftIdFromPath ?? undefined)
   if (error) console.error('Template load error: ', error)
 
-  const [saveError, setSaveError] = useState<string | null>(null)
   const [exportError, setExportError] = useState<string | null>(null)
   const [isExporting, setIsExporting] = useState(false)
 
   const editor = useEditor(template || defaultLocalTemplate)
-  const [isSaving, setIsSaving] = useState(false)
   const exportPollRef = useRef<number | null>(null)
-  const [localDraftId, setLocalDraftId] = useState<string | null>(null)
   const [sidebarPanel, setSidebarPanel] = useState<'none' | 'image' | 'background' | 'layers' | 'frames'>('none')
   const {
     activeWorkspaceId,
@@ -177,10 +175,23 @@ function App() {
     workspaceIdFromQuery,
   })
   const { canvasViewportRef } = useAppRuntimeBootstrap({ setZoom: editor.setZoom })
-
-  useEffect(() => {
-    if (draft?.id) setLocalDraftId(draft.id)
-  }, [draft])
+  const {
+    handleSave,
+    isSaving,
+    saveError,
+    shouldSaveCanonical,
+  } = useDraftPersistence({
+    bridgeWorkspaceResolved,
+    draft,
+    draftIdFromPath,
+    editorPages: editor.pages,
+    isAdminEditMode,
+    requestLoginPrompt,
+    resolvedActiveWorkspaceId,
+    template,
+    templateIdFromQuery,
+    user,
+  })
 
   const handleAddShape = () => {
     editor.addObject('rect', {
@@ -295,80 +306,6 @@ function App() {
     }
   }, [])
 
-  const handleSave = useCallback(async () => {
-    const shouldSaveCanonical = !draftIdFromPath && isAdminEditMode && !!templateIdFromQuery
-    const isCreatingNewDraft = !localDraftId && !draftIdFromPath
-
-    if (!user && !shouldSaveCanonical) {
-      requestLoginPrompt()
-      return
-    }
-
-    if (!shouldSaveCanonical && isCreatingNewDraft && !resolvedActiveWorkspaceId) {
-      if (!bridgeWorkspaceResolved) {
-        setSaveError('Resolving active workspace context. Please try saving again in a moment.')
-        return
-      }
-
-      setSaveError('Please select a workspace before saving this template as a draft.')
-      return
-    }
-
-    setSaveError(null)
-    setIsSaving(true)
-    try {
-      if (shouldSaveCanonical) {
-        const resolvedTemplateId = templateIdFromQuery
-        if (!resolvedTemplateId) {
-          console.warn('No template loaded to save')
-          return
-        }
-
-        await putJson(`/api/v1/template-content/${resolvedTemplateId}`, {
-          content: { pages: editor.pages },
-        })
-        console.info('Canonical template content saved')
-        return
-      }
-
-      const payload = {
-        name: template?.title || template?.name || `Draft ${new Date().toISOString()}`,
-        content: { pages: editor.pages },
-        ...(resolvedActiveWorkspaceId ? { workspaceId: resolvedActiveWorkspaceId } : {}),
-      }
-      if (localDraftId) {
-        await patchJson(`/api/v1/user-draft/${localDraftId}`, payload)
-        console.info('Draft updated')
-        return
-      }
-
-      const res = await postJson('/api/v1/user-draft', payload)
-      const id = res?.data?.id ?? null
-      if (id) {
-        const nextPath = `/draft/${encodeURIComponent(id)}`
-        window.history.replaceState({}, '', nextPath)
-        setLocalDraftId(id)
-      }
-      console.info('Draft saved')
-    } catch (err) {
-      console.error('Save draft failed', err)
-      console.warn('Failed to save draft')
-    } finally {
-      setIsSaving(false)
-    }
-  }, [
-    requestLoginPrompt,
-    user,
-    draftIdFromPath,
-    isAdminEditMode,
-    templateIdFromQuery,
-    template,
-    editor.pages,
-    resolvedActiveWorkspaceId,
-    localDraftId,
-    bridgeWorkspaceResolved,
-  ])
-
   const handleDownloadPdf = useCallback(async () => {
     if (!user) {
       requestLoginPrompt()
@@ -457,8 +394,6 @@ function App() {
       stopExportPolling()
     }
   }, [stopExportPolling])
-
-  const shouldSaveCanonical = !draftIdFromPath && isAdminEditMode && !!templateIdFromQuery
 
   return (
     <AppShell data-editor-mode={runtimeMode} $withHeader={modeConfig.showHeader}>
