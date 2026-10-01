@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import * as Y from 'yjs'
 import {
   DEFAULT_IMAGE_CORNER_RADIUS,
   DEFAULT_IMAGE_HEIGHT,
@@ -38,6 +39,11 @@ import type {
   TemplateContent,
   TextLayer,
 } from '../types/editor'
+import {
+  createYjsEditorDocument,
+  syncPagesToYjsDocument,
+  toPlainPagesFromYjsDocument,
+} from '../collab/yjsEditorDocument'
 
 type DefaultLayerProps =
   | Omit<TextLayer, 'id'>
@@ -195,6 +201,45 @@ export const useEditorDomain = (initialTemplate?: TemplateContent | EditorObject
   const selectedObject = objects.find((obj) => obj.id === selectedId)
   const currentPageBackground = pages[currentPageIndex]?.background
   const persistedContent = useMemo(() => toPersistedEditorContent(pages), [pages])
+  const yjsDocRef = useRef<Y.Doc | null>(null)
+  const yjsDoc = yjsDocRef.current ?? createYjsEditorDocument(pages)
+  yjsDocRef.current = yjsDoc
+
+  useEffect(() => {
+    const nextPages = toPlainPagesFromYjsDocument(yjsDoc)
+    if (JSON.stringify(nextPages) !== JSON.stringify(pages)) {
+      syncPagesToYjsDocument(yjsDoc, pages)
+    }
+  }, [pages, yjsDoc])
+
+  useEffect(() => {
+    const handleYjsUpdate = () => {
+      const nextPages = toPlainPagesFromYjsDocument(yjsDoc)
+      if (JSON.stringify(nextPages) === JSON.stringify(pages)) {
+        return
+      }
+
+      updatePresent((current) => {
+        const safeIndex = Math.min(current.currentPageIndex, Math.max(nextPages.length - 1, 0))
+        const safeSelectedId = nextPages[safeIndex]?.layers?.some((obj) => obj.id === current.selectedId)
+          ? current.selectedId
+          : nextPages[safeIndex]?.layers?.[0]?.id ?? null
+
+        return {
+          ...current,
+          pages: nextPages,
+          currentPageIndex: safeIndex,
+          selectedId: safeSelectedId,
+        }
+      }, { trackHistory: false })
+    }
+
+    yjsDoc.on('update', handleYjsUpdate)
+
+    return () => {
+      yjsDoc.off('update', handleYjsUpdate)
+    }
+  }, [pages, updatePresent, yjsDoc])
 
   const dispatchCommand = (command: EditorCommand) => {
     switch (command.type) {
@@ -397,6 +442,7 @@ export const useEditorDomain = (initialTemplate?: TemplateContent | EditorObject
     currentPageBackground,
     setPageBackground,
     persistedContent,
+    yjsDoc,
     canUndo,
     canRedo,
     undo,

@@ -1,5 +1,9 @@
+/** @vitest-environment jsdom */
+
+import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import type { Page } from '../types/editor'
+import type { EditorObject, Page } from '../types/editor'
+import { useEditor } from '../hooks/useEditor'
 import { createYjsEditorDocument, syncPagesToYjsDocument, toPlainPagesFromYjsDocument } from './yjsEditorDocument'
 
 describe('yjsEditorDocument', () => {
@@ -85,5 +89,32 @@ describe('yjsEditorDocument', () => {
     syncPagesToYjsDocument(doc, updated)
 
     expect(toPlainPagesFromYjsDocument(doc)).toEqual(updated)
+  })
+
+  it('keeps the live editor state synced to the Yjs document', () => {
+    const initial: EditorObject[] = [
+      {
+        id: 1,
+        type: 'text',
+        x: 10,
+        y: 20,
+        width: 120,
+        height: 40,
+        rotate: 0,
+        text: 'before',
+        textColor: '#111827',
+      },
+    ]
+
+    const { result } = renderHook(() => useEditor(initial))
+
+    expect(result.current.yjsDoc).toBeTruthy()
+    expect(toPlainPagesFromYjsDocument(result.current.yjsDoc)).toEqual(result.current.pages)
+
+    act(() => {
+      result.current.updateObject(1, { x: 120, y: 180 })
+    })
+
+    expect(toPlainPagesFromYjsDocument(result.current.yjsDoc)).toEqual(result.current.pages)
   })
 })
