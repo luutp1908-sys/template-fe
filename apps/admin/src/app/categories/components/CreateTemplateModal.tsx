@@ -19,6 +19,14 @@ function toSlug(value: string) {
     .replace(/-+/g, '-')
 }
 
+function createIdempotencyKey() {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID()
+  }
+
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`
+}
+
 export default function CreateTemplateModal({ isOpen, onClose, onCreated }: CreateTemplateModalProps) {
   const [title, setTitle] = useState('')
   const [slug, setSlug] = useState('')
@@ -82,13 +90,14 @@ export default function CreateTemplateModal({ isOpen, onClose, onCreated }: Crea
     try {
       setSubmitting(true)
       setError(null)
+      const idempotencyKey = createIdempotencyKey()
 
       const createdTemplate = await createTemplate({
         title: title.trim(),
         slug: normalizedSlug,
         categoryId: selectedCategory.id,
         editorTypeId: selectedCategory.editorTypeId,
-      })
+      }, { idempotencyKey })
 
       setTitle('')
       setSlug('')

@@ -9,6 +9,14 @@ interface ApiEnvelope<T> {
 
 const API_BASE = import.meta.env.VITE_BE_API_BASE ?? 'http://localhost:4000/api/v1'
 
+function createIdempotencyKey() {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID()
+  }
+
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`
+}
+
 export interface TemplateListQuery {
   page?: number
   pageSize?: number
@@ -80,13 +88,18 @@ export async function fetchCategoryTemplates(categoryId: string): Promise<Templa
   return rows.map(toTemplateDTO)
 }
 
-export async function createTemplate(payload: CreateTemplateRequest): Promise<TemplateDTO> {
+export async function createTemplate(
+  payload: CreateTemplateRequest,
+  options?: { idempotencyKey?: string },
+): Promise<TemplateDTO> {
   const accessToken = sessionStorage.getItem('admin_access_token')
+  const idempotencyKey = options?.idempotencyKey ?? createIdempotencyKey()
   const response = await fetch(`${API_BASE}/template`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`
+      'Authorization': `Bearer ${accessToken}`,
+      'Idempotency-Key': idempotencyKey,
     },
     body: JSON.stringify(payload),
   })
