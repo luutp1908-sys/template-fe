@@ -2,6 +2,14 @@ import { useCallback, useEffect, useState } from 'react'
 import { patchJson, postJson, putJson } from '../api/client'
 import type { PersistedEditorContent } from './editorPersistence'
 
+const createIdempotencyKey = () => {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID()
+  }
+
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`
+}
+
 type TemplateSummary = {
   title?: string
   name?: string
@@ -88,12 +96,20 @@ export const useDraftPersistence = ({
       }
 
       if (localDraftId) {
-        await patchJson(`/api/v1/user-draft/${localDraftId}`, payload)
+        await patchJson(`/api/v1/user-draft/${localDraftId}`, payload, {
+          headers: {
+            'Idempotency-Key': createIdempotencyKey(),
+          },
+        })
         console.info('Draft updated')
         return
       }
 
-      const res = await postJson('/api/v1/user-draft', payload)
+      const res = await postJson('/api/v1/user-draft', payload, {
+        headers: {
+          'Idempotency-Key': createIdempotencyKey(),
+        },
+      })
       const id = res?.data?.id ?? null
       if (id) {
         const nextPath = `/draft/${encodeURIComponent(id)}`
